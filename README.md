@@ -2,13 +2,9 @@
 author:
 - Sergio Domínguez Cabrera y Enrique Carro Garrido
 title: |
-  [Asterix]{.smallcaps}\
-  *Impertative programming language*
----
+  [Asterix]
 
-![image](Abra_porteurs_SP-400x613.png)
-
-::: small
+![image](informe/Abra_porteurs_SP-400x613.png)
 
 ------------------------------------------------------------------------
 
@@ -16,9 +12,8 @@ En el presente texto se realiza una descripción detallada del lenguaje
 de programación imperativo `Asterix` .
 
 ------------------------------------------------------------------------
-:::
 
-# Introducción a Asterix {#introducción-a-asterix .unnumbered}
+# Introducción a Asterix 
 
 `Asterix` nace de la idea de ser un lenguaje de programación de
 paradigma imperativo, con tipado estático y portable. Los programas
@@ -28,53 +23,53 @@ sin `Obelix`? El compañerismo de la serie se traslada al lenguaje de
 forma que el compilador del mismo recibe el nombre de este gran
 compañero.
 
-# Tipos básicos y variables {#tipos-básicos-y-variables .unnumbered}
+# Tipos básicos y variables 
 
 Por defecto, `Asterix` es capaz de distinguir 4 tipos básicos:
 
--   [Integerix]{.smallcaps}: Representa el subconjunto finito de los
+-   [Integerix]: Representa el subconjunto finito de los
     números enteros que pueden ser expresados con 4 bytes. Para declarar
     una variable con este tipo hay que usar la palabra reservada
-    [intix]{.sans-serif}.
+    [intix].
 
--   [Charix]{.smallcaps}: Representa el conjunto de caracteres de la
+-   [Charix]: Representa el conjunto de caracteres de la
     codificación UTF-8. Para declarar una variable con este tipo hay que
-    usar la palabra reservada [charix]{.sans-serif}.
+    usar la palabra reservada [charix].
 
--   [Stringix]{.smallcaps}: Representa una lista de tamaño variable de
+-   [Stringix]: Representa una lista de tamaño variable de
     charix. Para declarar una variable con este tipo hay que usar la
-    palabra reservada [stringix]{.sans-serif}.
+    palabra reservada [stringix].
 
--   [Booleanix]{.smallcaps}: Representa los valores de lógica binaria,
+-   [Booleanix]: Representa los valores de lógica binaria,
     esto es dos valores, que en nuestro lenguaje representamos como
-    [galo]{.sans-serif} (true) y [romano]{.sans-serif} (false).
+    [galo] (true) y [romano] (false).
     Empleamos un byte para almacenar estos valores. Para declarar una
     variable con este tipo hay que usar la palabra reservada
-    [boolix]{.sans-serif}.
+    [boolix].
 
--   [Enumeratix]{.smallcaps}: Representa un tipo ordinal cuyo orden se
+-   [Enumeratix]: Representa un tipo ordinal cuyo orden se
     indica por la disposición de los valores en la definición. Para
     declarar una variable con este tipo hay que usar la palabra
-    reservada [enumix]{.sans-serif}.
+    reservada [enumix].
 
--   [Floatix]{.smallcaps}: Representa el subconjunto finito de los
+-   [Floatix]: Representa el subconjunto finito de los
     números racionales que pueden ser expresados con 8 bytes. Para
     declarar una variable con este tipo hay que usar la palabra
-    reservada [floatix]{.sans-serif}.
+    reservada [floatix].
 
-`Asterix` permite agrupar estos tipos en [vectix]{.smallcaps} que son
+`Asterix` permite agrupar estos tipos en [vectix] que son
 listas ordenadas de elementos de un único tipo (que también pueden ser
-[vectix]{.smallcaps}). Para declarar una variable como
-[vectix]{.smallcaps} hay que usar la palabra reservada
-[vectix]{.sans-serif}. Para acceder al elemento `i` del vectix se usa el
+[vectix]). Para declarar una variable como
+[vectix] hay que usar la palabra reservada
+[vectix]. Para acceder al elemento `i` del vectix se usa el
 operador \[\].
 
-`Asterix` también soporta la creación de [pots]{.smallcaps} [^1] que son
+`Asterix` también soporta la creación de [pots] [^1] que son
 una agrupación de variables que pueden ser de tipos distintos (incluso
-pueden contener otras [pots]{.smallcaps}). Para declarar una variable
-con este tipo hay que usar la palabra reservada [pot]{.sans-serif}.
+pueden contener otras [pots]). Para declarar una variable
+con este tipo hay que usar la palabra reservada [pot].
 
-## Declaración de variables {#declaración-de-variables .unnumbered}
+## Declaración de variables 
 
 Para declarar una variable hay que seguir el siguiente formato:
 
@@ -83,9 +78,9 @@ Para declarar una variable hay que seguir el siguiente formato:
 Las variables dentro de un mismo ámbito no pueden tener el mismo
 identificador. `Asterix` permite también la creación de variables
 globales. Para declarar una variable como global, se usa la palabra
-reservada [global]{.sans-serif} y se escriben fuera de la función main.
+reservada [global] y se escriben fuera de la función main.
 
-### Variables sin inicializar {#variables-sin-inicializar .unnumbered}
+### Variables sin inicializar 
 
 Empleamos el siguiente ejemplo para ilustrar su uso cuando las
 declaramos sin inicializar:
@@ -102,7 +97,7 @@ valor. Los intix se inicializan con el valor inicial 0, los floatix con
 0.0 y los charix con el caracter ASCII 'a'. `Asterix` no permite la
 creación de enumeratix sin valor inicial.
 
-### Variables inicializadas {#variables-inicializadas .unnumbered}
+### Variables inicializadas 
 
 Empleamos el siguiente ejemplo para visualizar la declaración de
 variables con valor inicial:
@@ -114,10 +109,10 @@ variables con valor inicial:
         stringix dia = "dia";
         vectix<intix>[3] numeros = {1,2,3};
 
-## Declaración de nuevos tipos {#declaración-de-nuevos-tipos .unnumbered}
+## Declaración de nuevos tipos 
 
 `Asterix` permite al programador la creacion de tipos mediante la
-palabra reservada [datix]{.sans-serif} seguida del identificador que
+palabra reservada [datix] seguida del identificador que
 queramos darle al nuevo tipo y del nuevo tipo. Vemos en el siguiente
 ejemplo cómo se usaría:
 
@@ -133,21 +128,21 @@ ejemplo cómo se usaría:
         datix matrix3 vectix<vectix<intix>[3]>[3];
         
 
-# Caracteres especiales {#caracteres-especiales .unnumbered}
+# Caracteres especiales 
 
 `Asterix` permite al programador añadir comentarios de una línea al
 código. Estos comentarios son ignorados en el proceso de compilación
 junto con los espacios, tabulaciones y saltos de línea. Los comentarios
 comienzan siempre con el identificador // y se ignora todo lo que haya
 escrito hasta el siguiente salto de línea. Como ya avanzamos en la
-sección anterior, empleamos el caracter [;]{.smallcaps} para separar las
+sección anterior, empleamos el caracter [;] para separar las
 instrucciones del programa. Mostramos ahora unos ejemplos de comentario
 para ayudar a comprender su uso:
 
         // Esto es un comentario
         intix variable; // Esta variable representa ...
 
-# Operadores {#operadores .unnumbered}
+# Operadores 
 
 `Asterix` cuenta con una serie de operadores binarios y unarios que
 facilitan la programación. Escribimos en la siguiente tabla los
@@ -157,7 +152,6 @@ aritméticos solo pueden ser aplicados sobre dos objetos del mismo tipo
 objetos de diferente tipo. No obstante, estos operadores tienen las
 mismas cualidades en ambos tipos.
 
-::: center
    Prioridad   Operador   Asociatividad   Aridad               Descripción
   ----------- ---------- --------------- --------- -----------------------------------
        0          ,         Izquierda     Binario             Operador coma
@@ -186,12 +180,12 @@ mismas cualidades en ambos tipos.
        9        $(*)$       Izquierda     Binario          Denota precedencia
 :::
 
-# Funciones {#funciones .unnumbered}
+# Funciones 
 
 `Asterix` permite dividir el trabajo que hace un programa en tareas más
 pequeñas separadas de la parte principal. Estas tareas son lo que
 conoceremos como pociones. Todo programa escrito en `Asterix` comienza
-su ejecución en la función [panoramix]{.sans-serif}[^2] y es ella la que
+su ejecución en la función [panoramix][^2] y es ella la que
 llama al resto de procedimientos. Las funciones siguen el siguiente
 esquema:
 
@@ -212,10 +206,10 @@ valor. Las variables `argi` son los parámetros que recibe la función y
 vienen escritas junto con su tipo `typei`. Si estamos pasando ese
 argumento por referencia, escribimos `&arg`.
 
-## Llamadas a función {#llamadas-a-función .unnumbered}
+## Llamadas a función 
 
 Habíamos definido las funciones para dividir el programa en subrutinas
-que se pueden llamar desde el [panoramix]{.sans-serif} o desde otra
+que se pueden llamar desde el [panoramix] o desde otra
 subrutina.
 
 Las funciones se pueden llamar desde cualquier sitio, teniendo en cuenta
@@ -234,7 +228,7 @@ Consideraciones a tener en cuenta:
     tanto en tipo, número y orden en el que aparecen. En caso contrario,
     deberá dar fallo de sintaxis.
 
-# Instrucciones {#instrucciones .unnumbered}
+# Instrucciones 
 
 En esta sección presentamos las instrucciones del lenguaje. Algunas de
 estas instrucciones dependen de una condición que ha de ser una
@@ -245,7 +239,7 @@ booleanix, y el valor de la expresión dependerá de su contenido. Se debe
 tener en cuenta que además de las variables también puede haber llamadas
 a pociones que devuelvan un valor.
 
-## Instrucciones condicionales {#instrucciones-condicionales .unnumbered}
+## Instrucciones condicionales 
 
 `Asterix` admite la estructura de bifurcación condicional, para
 determinar que acciones tomar dada o no cierta condición. La sintaxis
@@ -261,7 +255,7 @@ que sigue la estructura if-then-else es la siguiente:
 Para poder diferenciar unas con otras se obliga que se pongan llaves
 para indicar el ámbito de cada estructura.
 
-## Bucle whilix {#bucle-whilix .unnumbered}
+## Bucle whilix 
 
 El bucle whilix es un ciclo repetitivo basado en los resultados de una
 expresión lógica. El propósito es repetir un bloque de código mientras
@@ -272,9 +266,9 @@ estructura es:
             // Acciones a realizar mientras se cumpla la condición.
         }
 
-## Bucle forix {#bucle-forix .unnumbered}
+## Bucle forix 
 
-`Asterix` soporta la estructura [forix]{.sans-serif}, que nos permite
+`Asterix` soporta la estructura [forix], que nos permite
 ejecutar de manera iterativa un bloque de instrucciones, conociendo
 previamente un valor de inicio, un tamaño de paso y un valor final para
 el ciclo.
@@ -305,7 +299,7 @@ a la hora de recorrer vectix y es la siguiente:
 En este ejemplo realizamos una vez el bloque de instrucciones por cada
 elemento del vectix que instanciamos como `c` en cada iteración.
 
-## Más instrucciones del lenguaje {#más-instrucciones-del-lenguaje .unnumbered}
+## Más instrucciones del lenguaje 
 
 `Asterix` viene con más instrucciones por defecto:
 
@@ -315,15 +309,15 @@ elemento del vectix que instanciamos como `c` en cada iteración.
 -   `skip`: Instrucción vacía. El programa continua con la siguiente
     instrucción.
 
-# Entrada y salida {#entrada-y-salida .unnumbered}
+# Entrada y salida 
 
 Un programa `Asterix` puede realizar operaciones de entrada y salida. En
 esta sección supondremos que la entrada proviene del teclado y que las
 salidas se envían a la pantalla de un terminal.
 
-## Entrada con tabellae[^3] {#entrada-con-tabellae .unnumbered}
+## Entrada con tabellae[^3] 
 
-[tabellae]{.sans-serif} es el flujo de entrada estándar. La entrada se
+[tabellae] es el flujo de entrada estándar. La entrada se
 hace por teclado y para que el programa interprete la salida como un
 tipo concreto `Asterix` tiene distintas instrucciones que las reconoce
 por separado.
@@ -332,15 +326,15 @@ El formato general de todas esas instrucciones son:
 
             tabellae( Variable a leer );
 
-El tipo de la variable puede ser [charix]{.sans-serif},
-[intix]{.sans-serif}, o [floatix]{.sans-serif}. Lo que hace la sentencia
+El tipo de la variable puede ser [charix],
+[intix], o [floatix]. Lo que hace la sentencia
 anterior es leer un dato introducido por teclado, interpretarlo con el
 tipo correspondiente y almacenarlo en la variable.
 
-## Salida con stilus[^4] {#salida-con-stilus .unnumbered}
+## Salida con stilus[^4] 
 
 Los valores de variables se pueden enviar a la pantalla empleando
-[stilus]{.sans-serif}. El formato general es:
+[stilus]. El formato general es:
 
             stilus(Valor de una variable);
 
@@ -349,19 +343,19 @@ entre comillas, como por ejemplo,
 
             stilus ("Por Tutatis");
 
-o pueden ser variables de tipo [intix]{.sans-serif} y
-[floatix]{.sans-serif},
+o pueden ser variables de tipo [intix] y
+[floatix],
 
             intix x = 5;
             stilus (x); // Saca por consola el valor 5
 
-# Gestión de errores {#gestión-de-errores .unnumbered}
+# Gestión de errores 
 
 `Asterix` proporciona una gestión de errores básica indicando la línea y
 el motivo del error. El compilador intentará seguir con el análisis
 sintántico y semántico buscando posibles errores posteriores.
 
-# Ejemplos de código {#ejemplos-de-código .unnumbered}
+# Ejemplos de código 
 
 No sería un lenguaje de programación como Tutatis[^5] manda si no es
 capaz de recibir al programador con un \"Hola mundo\", aunque vamos a
