@@ -1,10 +1,4 @@
----
-author:
-- Sergio Domínguez Cabrera y Enrique Carro Garrido
-title: |
-  [Asterix]
-
-![image](informe/Abra_porteurs_SP-400x613.png)
+<center>![image](informe/Abra_porteurs_SP-400x613.png)</center>
 
 ------------------------------------------------------------------------
 
