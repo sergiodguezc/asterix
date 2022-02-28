@@ -144,8 +144,8 @@ mismas cualidades en ambos tipos.
   | Prioridad |  Operador  |  Asociatividad  | Aridad    |                Descripción          | 
   |-----------| ---------- | --------------- | --------- | ----------------------------------- |
   |     0     |     ,      |   Izquierda     |  Binario  |           Operador coma |
-  |     1     |    $=$     |    Derecha      |  Binario  |  Operador de asignación |
-  |     2     |    $\|$    |    Derecha      |  Binario  |  Operador or lógico |
+  |     1     |    =       |    Derecha      |  Binario  |  Operador de asignación |
+  |     2     |    \|\|    |    Derecha      |  Binario  |  Operador or lógico |
   |     3     |     &&     |    Derecha      |  Binario  |  Operador and lógico |
   |     4     |     ==     |    Derecha      |  Binario  |  Operador igual relacional |
   |     4     |     !=     |    Derecha      |  Binario  |  Operador distinto relacional |
@@ -156,17 +156,17 @@ mismas cualidades en ambos tipos.
   |     6     |     \+     |   Izquierda     |  Binario  |      Suma de dos elementos |
   |     6     |     \-     |   Izquierda     |  Binario  |     Resta de dos elementos |
   |     6     |     \#     |    Derecha      |  Binario  | Operador concatenación stringix |
-       7          \*        Izquierda     Binario       Producto de dos elementos |
-       7          /         Izquierda     Binario       División de dos elementos |
-       7          \%        Izquierda     Binario        Modulo de dos elementos |
-       7       $\wedge$      Derecha      Binario       Potencia de dos elementos |
-       8          !       No asociativo   Unario       Operador not lógico prefijo |
-       8          &        Asociativo     Unario     Paso de elemento por referencia |
-       8          ++       Asociativo     Unario    Incremento de prefijo (postfijo)|
-       8         $--$      Asociativo     Unario    Decremento de prefijo (postfijo)|
-       9          .         Izquierda     Binario      Acceso a elemento de un pot|
-       9        $[*]$       Izquierda     Binario    Acceso a elemento de un vectix|
-       9        $(*)$       Izquierda     Binario          Denota precedencia|
+  |     7     |     \*     |  Izquierda      |  Binario  |     Producto de dos elementos |
+  |     7     |     /      |     Izquierda   |  Binario  |     División de dos elementos |
+  |     7     |     \%     |   Izquierda     |  Binario  |      Modulo de dos elementos |
+  |     7     |     ^      |    Derecha      |  Binario  |     Potencia de dos elementos |
+  |     8     |    !       | No asociativo   |  Unario   |    Operador not lógico prefijo |
+  |     8     |     &      |  Asociativo     |  Unario   |  Paso de elemento por referencia |
+  |     8     |    ++      |  Asociativo     |  Unario   | Incremento de prefijo (postfijo)|
+  |     8     |    --      |   Asociativo    |  Unario   | Decremento de prefijo (postfijo)|
+  |     9     |     .      |   Izquierda     |  Binario  |    Acceso a elemento de un pot|
+  |     9     |   [*]      |   Izquierda     |  Binario  |  Acceso a elemento de un vectix|
+  |     9     |   (*)      |   Izquierda     |  Binario  |        Denota precedencia|
 
 # Funciones 
 
