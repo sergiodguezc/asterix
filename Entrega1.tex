@@ -25,7 +25,7 @@
 \begin{document}
     \maketitle   
     
-    % Que empieze la fiesta
+    % Que empiece la fiesta
     \begin{figure}[h]
         \centering
         \includegraphics{Abra_porteurs_SP-400x613.png}
@@ -57,12 +57,13 @@
 
     \section*{Introducción a Asterix}
     \atx nace de la idea de ser un lenguaje de programación de paradigma 
-    imperativo, con tipado estático y portable. Los programas escritos en este
-    lenguaje generan WebAssembly al compilarse pueden ser interpretados por 
-    un intérprete de este. Los programas escritos en \atx tienen que
-    tener la extensión .atx. La codificación de los ficheros .atx es UTF-8.
+    imperativo, con tipado estático y portable. Los programas escritos en \atx tienen que
+    tener la extensión .atx y la codificación de los ficheros .atx es UTF-8.
+    ¿Pero qué sería \atx sin \texttt{Obelix}? El compañerismo de la serie 
+    se traslada al lenguaje de forma que el compilador del mismo recibe el
+    nombre de este gran compañero. 
 
-    \section*{Tipos básicos}
+    \section*{Tipos básicos y variables}
     Por defecto, \atx es capaz de distinguir 4 tipos básicos:
     \begin{itemize}
         \item \textsc{Integerix}: Representa el subconjunto finito de los números
@@ -71,8 +72,11 @@
         \item \textsc{Charix}: Representa el conjunto de caracteres de la
             codificación UTF-8. Para declarar una variable con este tipo hay
             que usar la palabra reservada \textsf{charix}.
+        \item \textsc{Stringix}: Representa una lista de tamaño variable de
+            charix. Para declarar una variable con este tipo hay que usar la
+            palabra reservada \textsf{stringix}.
         \item \textsc{Booleanix}: Representa los valores de lógica binaria, esto
-            es dos valores, que en nurestro lenguaje represetamos como
+            es dos valores, que en nuestro lenguaje representamos como
             \textsf{galo} (true) y \textsf{romano} (false). Empleamos un byte
             para almacenar estos valores. Para declarar una variable con este
             tipo hay que usar la palabra reservada \textsf{boolix}.
@@ -85,42 +89,78 @@
     \end{itemize}
 
     \atx permite agrupar estos tipos en \textsc{vectix} que son listas ordenadas
-    de elementos de un único tipo (que también pueden ser \textsc{vectix}.
-    Para declarar una varible como \textsc{vectix} hay que usar la palabra 
-    reservada \textsf{vectix}.
+    de elementos de un único tipo (que también pueden ser \textsc{vectix}).
+    Para declarar una variable como \textsc{vectix} hay que usar la palabra 
+    reservada \textsf{vectix}. Para acceder al elemento \texttt{i} del vectix
+    se usa el operador [].
 
-    \atx también soporta la creacion de \textsc{calderix} que son una agrupación
-    de variables que pueden ser de tipos distintos (incluso pueden contener otros
-    \textsc{calderix}). Para declarar una variable con este tipo hay que usar la palabra 
-    reservada \textsf{caldix}.
+    \atx también soporta la creación de \textsc{pots} \footnote{La marmita o
+    \textit{pot} en inglés hace referencia a la marmita a la que se cayó
+    Obélix.} que son una agrupación de variables que pueden ser de tipos
+    distintos (incluso pueden contener otras \textsc{pots}). Para declarar una
+    variable con este tipo hay que usar la palabra reservada \textsf{pot}.
 
-    \section*{Declaración de variables}
-    Para declarar una variable hay que seguir el siguiente formato: lo primero
-    que escribimos es el tipo del que queremos que sea, seguidamente el identificador
-    y también tenemos la posibilidad de que tenga un valor inicial o no. Las variables
-    dentro de un mismo ámbito no pueden tener el mismo identificador. \atx permite
-    también la creacion de variables globales. Para declarar una variable como 
+    \subsection*{Declaración de variables}
+    Para declarar una variable hay que seguir el siguiente formato: 
+    \begin{verbatim}
+        tipo identificador (= valor inicial);
+    \end{verbatim}
+    
+    Las variables dentro de un mismo ámbito no pueden tener el mismo identificador. 
+    \atx permite también la creación de variables globales. Para declarar una variable como 
     global, se usa la palabra reservada \textsf{global} y se escriben fuera de
-    la función main. Empleamos el siguiente ejemplo para ilustrar su uso cuando
+    la función main. 
+
+    \subsubsection*{Variables sin inicializar}
+    Empleamos el siguiente ejemplo para ilustrar su uso cuando
     las declaramos sin inicializar:
 
     \begin{verbatim}
     global intix numero_global;
     intix num1;
     floatix num2;
-    enumix dias;
-    charix a;
+    charix c;
+    stringix str;
     vectix<vectix<intix>[3]>[3] matriz;
     \end{verbatim}
 
-    % TODO: declaracion de variables con valor inicial. Problema con los enums
-    % que no sé que poner. Podríamos quitarlos y añádir los char y tener string
-    % como si array de char.
-
     Estas variables sin inicializar, nosotros las vamos a guardar con un valor.
     Los intix se inicializan con el valor inicial 0, los floatix con 0.0 y los
-    charix con el caracter ASCII 'a'.
+    charix con el caracter ASCII 'a'. \atx no permite la creación de enumeratix
+    sin valor inicial.
     
+    \subsubsection*{Variables inicializadas}
+    Empleamos el siguiente ejemplo para visualizar la declaración de variables
+    con valor inicial:
+
+    \begin{verbatim}
+    global intix numero_global = 0;
+    floatix num2 = 1.0;
+    enumix dias_clase = {LUNES, MARTES, MIERCOLES, JUEVES, VIERNES};
+    charix a = 'a';
+    stringix dia = "dia";
+    vectix<intix>[3] numeros = {1,2,3};
+    \end{verbatim}
+
+    \subsection*{Declaración de nuevos tipos}
+    \atx permite al programador la creacion de tipos mediante la palabra reservada 
+    \textsf{datix} seguida del identificador que queramos darle al nuevo tipo
+    y del nuevo tipo. Vemos en el siguiente ejemplo cómo se usaría:
+
+    \begin{verbatim}
+    // Creamos un tipo de pares de enteros
+    pot par {
+        intix der;
+        intix izq;
+    }
+
+    datix parix par;
+
+    // Creamos el tipo matriz 3x3
+    datix matrix3 vectix<vectix<intix>[3]>[3];
+    
+    \end{verbatim}
+
 
     \section*{Caracteres especiales}
     \atx permite al programador añadir comentarios de una línea al código. Estos
@@ -133,22 +173,78 @@
 
     \begin{verbatim}
     // Esto es un comentario
-    int variable; // Esta variable representa ...
+    intix variable; // Esta variable representa ...
     \end{verbatim}
+
+    \section*{Operadores}
+    \atx cuenta con una serie de operadores binarios y unarios que facilitan
+    la programación. 
+    Escribimos en la siguiente tabla los operadores, su nivel de prioridad y 
+    su asociatividad. Los operadores aritméticos solo pueden ser aplicados 
+    sobre dos objetos del mismo tipo (y devuelven otro elemento de ese tipo),
+    es decir, no podemos operar objetos de diferente tipo. No obstante, estos
+    operadores tienen las mismas cualidades en ambos tipos.
+
+    \begin{table}[t]
+    \begin{center}
+    \begin{tabular}{| c | c | c | c | c |}
+    \hline
+        Prioridad & Operador & Asociatividad & Aridad & Descripción \\ \hline
+        0 & , & Izquierda & Binario & Operador coma \\ \hline
+        1 & $=$ & Derecha & Binario & Operador de asignación \\ \hline
+        2 & $\|$ & Derecha & Binario & Operador or lógico \\ \hline
+        3 & \&\& & Derecha & Binario & Operador and lógico \\ \hline
+        4 & == & Derecha & Binario & Operador igual relacional \\ \hline
+        4 & != & Derecha & Binario & Operador distinto relacional \\ \hline
+        5 & $<=$ & Derecha & Binario & Operador menor o igual relacional \\ \hline
+        5 & $>=$ & Derecha & Binario & Operador mayor o igual relacional \\ \hline
+        5 & $>$ & Derecha & Binario & Operador mayor relacional \\ \hline
+        5 & $<$ & Derecha & Binario & Operador menor relacional \\ \hline
+        6 & + & Izquierda & Binario & Suma de dos elementos \\ \hline
+        6 & - & Izquierda & Binario & Resta de dos elementos \\ \hline
+        6 & \# & Derecha & Binario & Operador concatenación stringix \\ \hline
+        7 & * & Izquierda & Binario & Producto de dos elementos \\ \hline
+        7 & / & Izquierda & Binario & División de dos elementos \\ \hline
+        7 & \% & Izquierda & Binario & Modulo de dos elementos \\ \hline
+        7 & $\wedge$ & Derecha & Binario & Potencia de dos elementos \\ \hline
+        8 & ! & No asociativo & Unario & Operador not lógico prefijo \\ \hline
+        8 & \& & Asociativo & Unario & Paso de elemento por referencia \\ \hline
+        8 & ++ & Asociativo & Unario & Incremento de prefijo (postfijo)\\ \hline
+        8 & $--$ & Asociativo & Unario & Decremento de prefijo (postfijo)\\ \hline
+        9 & . & Izquierda & Binario & Acceso a elemento de un pot \\ \hline
+        9 & $[*]$ & Izquierda & Binario & Acceso a elemento de un vectix \\ \hline
+        9 & $(*)$ & Izquierda & Binario & Denota precedencia \\ \hline
+        
+
+     
+    \hline
+    \end{tabular}
+    \end{center}
+    \end{table}
 
     \section*{Funciones}
     \atx permite dividir el trabajo que hace un programa en tareas más
-    pequeñas separadas de la parte principal. Estas tareas son lo que conocermos
+    pequeñas separadas de la parte principal. Estas tareas son lo que conoceremos
     como pociones. Todo programa escrito en \atx comienza su ejecución en la
     función \textsf{panoramix}\footnote{Panorámix, el druida. Creador de la
     poción mágica, el hombre más sabio del pueblo. En el primer libro, tiene su
     casa al lado de un manantial, y su cabaña tiene un palomar y una gran
-    chimenea. Su nombre proviene de panoramique (panorámico).} y es ella la que
-    llama al resto de procedimientos. Las funciones siguen el siguiente esquema: 
+    chimenea. Su nombre proviene de panoramique (panorámico). La razón de este
+    nombre para el main del programa es ser el creador de las pociones, que son
+    las subrutinas en \atx} y es ella la que llama al resto de procedimientos.
+    Las funciones siguen el siguiente esquema: 
 
     \begin{verbatim}
-    poc nombre_funcion(arg1 : type1,.., argn : typen) -> typer {
+    potion nombre_funcion(arg1 : type1,.., argn : typen) -> typer {
+        typer var;
         // Cuerpo de la función
+        return var; 
+    }
+    \end{verbatim}
+
+    \begin{verbatim}
+    potion nombre_procedimiento(arg1 : type1,.., argn : typen) {
+        // Cuerpo del procedimiento
     }
     \end{verbatim}
     
@@ -157,17 +253,38 @@
     devuelve la función, en su ausencia, significa que la función no devuelve
     ningún valor. Las variables \texttt{argi} son los parámetros que recibe la
     función y vienen escritas junto con su tipo \texttt{typei}. Si estamos
-    pasando ese arguento por referencia, escribimos \texttt{\&arg}. 
+    pasando ese argumento por referencia, escribimos \texttt{\&arg}.
+    
+    \subsection *{Llamadas a función}
+    Habíamos definido las funciones para dividir el programa en subrutinas que
+    se pueden llamar desde el \textsf{panoramix} o desde otra subrutina.
+    
+    Las funciones se pueden llamar desde cualquier sitio, teniendo en cuenta
+    que deben ser coherentes con su tipo.
+    
+    Para llamar a una función utilizaremos el siguiente formato:
+    \begin{verbatim}
+        nombre_funcion(arg1,arg2,...,argn)
+    \end{verbatim}
+    
+    Consideraciones a tener en cuenta:
+    \begin{itemize}
+        \item Se puede definir una función dentro de otra. Hay que tener en
+            cuenta que se ejecutará primero la función más interna.
+        \item Los argumentos de la llamada de la función, deben corresponderse
+            tanto en tipo, número y orden en el que aparecen. En caso
+            contrario, deberá dar fallo de sintaxis.
+    \end{itemize}
 
     \section*{Instrucciones}
     En esta sección presentamos las instrucciones del lenguaje. Algunas de estas
     instrucciones dependen de una condición que ha de ser una sentencia que
-    devuelva un valor booleanix, y esta puede ser el valor booleanix sí (galo),
-    (true) si la condición se cumple, o romano si esta no se cumple
-    (false). También puede contener el nombre de una variable booleanix, y el
-    valor de la expresión dependerá de su contenido. Se debe tener en cuenta
-    que además de las variables también puede haber llamadas a pociones que
-    devuelvan un valor.
+    devuelva un valor booleanix, y esta puede ser el valor lógico true (galo),
+    si la condición se cumple, o romano si esta no se cumple (false). También
+    puede contener el nombre de una variable booleanix, y el valor de la
+    expresión dependerá de su contenido. Se debe tener en cuenta que además de
+    las variables también puede haber llamadas a pociones que devuelvan un
+    valor.
 
     \subsection*{Instrucciones condicionales}
     \atx admite la estructura de bifurcación condicional, para determinar que
@@ -185,55 +302,193 @@
     
     Para poder diferenciar unas con otras se obliga que se pongan llaves para
     indicar el ámbito de cada estructura.
-    
-    \end{verbatim}
 
-    \subsection*{Bucle while}
-    El bucle while es un ciclo repetitivo basado en los resultados
-    de una expresión lógica . El propósito es repetir un bloque de código
+    \subsection*{Bucle whilix}
+    El bucle whilix es un ciclo repetitivo basado en los resultados
+    de una expresión lógica. El propósito es repetir un bloque de código
     mientras una condición se mantenga verdadera. La sintaxis que sigue esta
     estructura es:
 
     \begin{verbatim}
-    while ( condición ) {
+    whilix ( condición ) {
         // Acciones a realizar mientras se cumpla la condición.
     }
     \end{verbatim}
     
+    \subsection*{Bucle forix}
+    \atx soporta la estructura \textsf{forix}, que nos permite ejecutar de
+    manera iterativa un bloque de instrucciones, conociendo previamente un
+    valor de inicio, un tamaño de paso y un valor final para el ciclo.
+    
+    La sintaxis de esta instrucción viene expresada por el siguiente esquema:
+    
+    \begin{verbatim}
+    forix (inicializacion; condicion; incremento) {
+        // Bloque de instrucciones
+    }
+    \end{verbatim}
+    
+    La inicialización consiste en iniciar una variable que determina la
+    condición de parada del bucle. Esta variable se irá incrementando con un
+    cierto valor que denominaremos paso, que puede ser positivo, y por ello la
+    variable se incrementará en cada iteración o puede ser negativo, por lo que
+    irá decrementando en este caso.
+    
+    Tanto la inicialización como la condición de parada se evalúan al principio
+    de cada iteración y al final, el incremento.
 
+    Del mismo modo, \atx permite otra sintaxis para el forix más segura a la hora
+    de recorrer vectix y es la siguiente:
+
+    \begin{verbatim}
+    forix (type c : vectix<type>) {
+        // Bloque de instrucciones
+    }
+    \end{verbatim}
+
+    En este ejemplo realizamos una vez el bloque de instrucciones por cada
+    elemento del vectix que instanciamos como \texttt{c} en cada iteración.
+    
     \subsection*{Más instrucciones del lenguaje}
     \atx viene con más instrucciones por defecto:
     \begin{itemize}
         \item \texttt{return X}: Es obligatoria al final de las pociones que 
             devuelven un valor de un cierto tipo. Indica el valor que se devuelve.
         \item \texttt{skip}: Instrucción vacía. El programa continua con la
-            siguiente instrucción. 
-        \item \texttt{input()}: Esta función permite la entrada de cadenas de
-            texto por consola.
-        \item \texttt{print( vect<charix>() )}: Esta función permite la salida de cadenas de
-            texto por consola.
-    \end{itemize}
+            siguiente instrucción.
+    \end{itemize}  
+    
+    \section*{Entrada y salida}
+    
+    Un programa \atx puede realizar operaciones de entrada y salida. En esta
+    sección supondremos que la entrada proviene del teclado y que las salidas
+    se envían a la pantalla de un terminal.
+    
+    \subsection*{Entrada con tabellae\footnote{Hace referencia a las
+    \textit{tabellae ceratae} en latín o tablillas de cera, que eran la
+    herramienta que utilizaban los romanos para escribir notas o textos no muy
+    largos. Entendemos que la tabellae es realmente la consola y que realmente
+    leemos los datos de la tabellae.}}
+    
+    \textsf{tabellae} es el flujo de entrada estándar. La entrada se hace por
+    teclado y para que el programa interprete la salida como un tipo concreto
+    \atx tiene distintas instrucciones que las reconoce por separado.
+    
+    El formato general de todas esas instrucciones son:
+    
+    \begin{verbatim}
+        tabellae( Variable a leer );
+    \end{verbatim}
+    
+    El tipo de la variable  puede ser \textsf{charix}, \textsf{intix}, o
+    \textsf{floatix}. Lo que hace la sentencia anterior es leer un dato
+    introducido por teclado, interpretarlo con el tipo correspondiente y
+    almacenarlo en la variable. 
+
+    \subsection*{Salida con stilus\footnote{La herramienta que utilizaban los
+    romanos para escribir en estas \textit{tabellae}. Eran una especie de
+    punzones hechos de hierro, de bronce o de hueso, con un extremo puntiagudo
+    y el otro plano o redondeado. Se escribía sobre la capa de cera con el
+    extremo puntiagudo y con el otro, si era necesario, se borraba y la tableta
+    quedaba lista para volver a escribir. Es el antecedente directo de los
+    lápices actuales que llevan una goma de borrar fijada en un extremo.}}
+    
+     Los valores de variables se pueden enviar a la pantalla empleando
+     \textsf{stilus}. El formato general es:
+    
+    \begin{verbatim}
+        stilus(Valor de una variable);
+    \end{verbatim}
+    
+    El valor de variables pueden ser cadenas de caracteres que se expresen
+    entre comillas, como por ejemplo, 
+    
+    \begin{verbatim}
+        stilus ("Por Tutatis");
+    \end{verbatim}
+    
+    o pueden ser variables de tipo \textsf{intix} y \textsf{floatix},
+    
+    \begin{verbatim}
+        intix x = 5;
+        stilus (x); // Saca por consola el valor 5
+    \end{verbatim}
 
     \section*{Gestión de errores}
     \atx proporciona una gestión de errores básica indicando la línea y el motivo
     del error. El compilador intentará seguir con el análisis sintántico y semántico
     buscando posibles errores posteriores.
 
-    \section*{Ejemplo de código}
-    El primer ejemplo consiste en un programa que multiplica dos matrices 3x3.
+    \section*{Ejemplos de código}
+    No sería un lenguaje de programación como
+    Tutatis\footnote{\textbf{Teutates}, también llamado \textbf{Tutatis}, es la
+    deidad de la unidad tribal masculina del panteón galo, según la antigua
+    mitología celta. Hace referencia a la famosa frase que Ásterix repetía una
+    y otra vez: "Por Tutatis"} manda si no es capaz de recibir al programador
+    con un "Hola mundo", aunque vamos a intercambiar esta frase por otra.
+    ¿Adivinas cuál va a ser?
+    
     \begin{verbatim}
-    proc panoramix() {
-        vect<vect<intix>[3]>[3] mat1;
-        vect<vect<intix>[3]>[3] mat2;
-
-        multmatrix(ma)
-    }
-
-    proc multmatrix(mat1 : vect<vect<intix>[3]>[3],
-                    mat2 : vect<vect<intix>[3]>[3]) -> vect<vect<intix>[3]>[3] {
-        while 
-
+    potion panoramix() -> intix {
+        stilus("Por Tutatis \n");
+        return 0;
     }
     \end{verbatim}
+    
+    Veamos ahora como sería un programa que multiplica dos matrices 3x3.
+    \begin{verbatim}
+    // Programa para multiplicar dos matrices, una es una matriz global, la matriz A 
+    // y la otra la recibimos por consola, la matriz B.
+    datix matrix vectix<vectix<intix>[3]>[3];
+    global matrix A = {{1 2 3}, {1 2 3}, {1, 2, 3}};
+    
+    potion panoramix() -> intix {
+        matrix B;
+        matrix C; // C = A * B
+        
+        // Leemos la matriz B por consola
+        readmatrix(B);
+        
+        // Calculamos el producto
+        C = multmatrix(A, B);
+    
+        // Escribimos el resultado por consola
+        stilus("La matriz resultante de multiplicar A * B es: ");
 
+        writematrix(C);
+        
+        return 0;
+    }
+    
+    potion readmatrix(B : &matrix) {
+        for (intix i = 0; i < 3; i++) {
+            for (intix j = 0; j < 3; j++) {
+                intix tmp;
+                tabellae(tmp);
+                B[i][j] = tmp;
+            }
+        }
+    }
+    
+    potion writematrix(C : &matrix) {
+        for (intix i = 0; i < 3; i++) {
+            for (intix j = 0; j < 3; j++) {
+                stilus(C[i][j]);
+                stilus(" ");
+            }
+            stilus("\n");
+        }
+    }
+    potion multmatrix(A : matrix, B : matrix) -> matrix {
+        matrix C;
+        for (intix i = 0; i < 3; i++) {
+            for (intix j = 0; j < 3; j++) {
+                for (intix k = 0; k < 3; k++) {
+                    C[i][j] = C[i][j] + A[i][k]*B[k][j];
+                }
+            }
+        }
+        return C;
+    }
+    \end{verbatim}
 \end{document}
