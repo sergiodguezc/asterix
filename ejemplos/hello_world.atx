@@ -1,0 +1,4 @@
+potion panoramix() -> intix {
+    stilus("Por Tutatis \n");
+    return 0;
+}

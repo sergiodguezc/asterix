@@ -1,0 +1,54 @@
+// Programa para multiplicar dos matrices, una es una matriz global, la matriz A 
+// y la otra la recibimos por consola, la matriz B.
+
+datix matrix vectix<vectix<intix>[3]>[3];
+global matrix A = {{1 2 3}, {1 2 3}, {1, 2, 3}};
+
+potion panoramix() -> intix {
+    matrix B;
+    matrix C; // C = A * B
+    
+    // Leemos la matriz B por consola
+    readmatrix(B);
+    
+    // Calculamos el producto
+    C = multmatrix(A, B);
+
+    // Escribimos el resultado por consola
+    stilus("La matriz resultante de multiplicar A * B es: ");
+
+    writematrix(C);
+    
+    return 0;
+}
+
+potion readmatrix(B : &matrix) {
+    for (intix i = 0; i < 3; i++) {
+        for (intix j = 0; j < 3; j++) {
+            intix tmp;
+            tabellae(tmp);
+            B[i][j] = tmp;
+        }
+    }
+}
+
+potion writematrix(C : &matrix) {
+    for (intix i = 0; i < 3; i++) {
+        for (intix j = 0; j < 3; j++) {
+            stilus(C[i][j]);
+            stilus(" ");
+        }
+        stilus("\n");
+    }
+}
+potion multmatrix(A : matrix, B : matrix) -> matrix {
+    matrix C;
+    for (intix i = 0; i < 3; i++) {
+        for (intix j = 0; j < 3; j++) {
+            for (intix k = 0; k < 3; k++) {
+                C[i][j] = C[i][j] + A[i][k]*B[k][j];
+            }
+        }
+    }
+    return C;
+}
