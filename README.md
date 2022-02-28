@@ -1,11 +1,6 @@
-<center>![image](informe/Abra_porteurs_SP-400x613.png)</center>
-
-------------------------------------------------------------------------
 
 En el presente texto se realiza una descripción detallada del lenguaje
 de programación imperativo `Asterix` .
-
-------------------------------------------------------------------------
 
 # Introducción a Asterix 
 
@@ -146,8 +141,8 @@ aritméticos solo pueden ser aplicados sobre dos objetos del mismo tipo
 objetos de diferente tipo. No obstante, estos operadores tienen las
 mismas cualidades en ambos tipos.
 
-   Prioridad   Operador   Asociatividad   Aridad               Descripción
-  ----------- ---------- --------------- --------- -----------------------------------
+  | Prioridad |  Operador  |  Asociatividad  | Aridad    |                Descripción          | 
+  |-----------| ---------- | --------------- | --------- | ----------------------------------- |
        0          ,         Izquierda     Binario             Operador coma
        1         $=$         Derecha      Binario        Operador de asignación
        2         $\|$        Derecha      Binario          Operador or lógico
@@ -172,7 +167,6 @@ mismas cualidades en ambos tipos.
        9          .         Izquierda     Binario      Acceso a elemento de un pot
        9        $[*]$       Izquierda     Binario    Acceso a elemento de un vectix
        9        $(*)$       Izquierda     Binario          Denota precedencia
-:::
 
 # Funciones 
 
