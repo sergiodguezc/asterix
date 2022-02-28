@@ -149,10 +149,10 @@ mismas cualidades en ambos tipos.
   |     3     |     &&     |    Derecha      |  Binario  |  Operador and lógico |
   |     4     |     ==     |    Derecha      |  Binario  |  Operador igual relacional |
   |     4     |     !=     |    Derecha      |  Binario  |  Operador distinto relacional |
-  |     5     |    $<=$    |    Derecha      |  Binario  |  Operador menor o igual relacional |
-  |     5     |    $>=$    |    Derecha      |  Binario  |  Operador mayor o igual relacional |
-  |     5     |    $>$     |    Derecha      |  Binario  |    Operador mayor relacional |
-  |     5     |    $<$     |    Derecha      |  Binario  |    Operador menor relacional |
+  |     5     |    <=    |    Derecha      |  Binario  |  Operador menor o igual relacional |
+  |     5     |    >=    |    Derecha      |  Binario  |  Operador mayor o igual relacional |
+  |     5     |    >     |    Derecha      |  Binario  |    Operador mayor relacional |
+  |     5     |    <     |    Derecha      |  Binario  |    Operador menor relacional |
   |     6     |     \+     |   Izquierda     |  Binario  |      Suma de dos elementos |
   |     6     |     \-     |   Izquierda     |  Binario  |     Resta de dos elementos |
   |     6     |     \#     |    Derecha      |  Binario  | Operador concatenación stringix |
