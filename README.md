@@ -10,7 +10,7 @@ escritos en `Asterix` tienen que tener la extensión .atx y la
 codificación de los ficheros .atx es UTF-8. ¿Pero qué sería `Asterix`
 sin `Obelix`? El compañerismo de la serie se traslada al lenguaje de
 forma que el compilador del mismo recibe el nombre de este gran
-compañero.
+compañero. kdfjsdkf
 
 # Tipos básicos y variables 
 
