@@ -1,18 +1,24 @@
 package alex;
 
+import errors.GestionErroresAsterix;
+
 %%
-%char
+%cup
 %line
 %column
-%class AnalizadorLexicoTiny
-%type  UnidadLexica
+%class AnalizadorLexicoAsterix
 %unicode
+%public
 
 %{
   private ALexOperations ops;
+  private GestionErroresTiny errores;
   public String lexema() {return yytext();}
   public int fila() {return yyline+1;}
   public int columna() {return yycolumn+1;}
+  public void fijaGestionErrores(GestionErroresTiny errores) {
+   this.errores = errores;
+  }
 %}
 
 %eofval{
@@ -26,14 +32,12 @@ package alex;
 letra  = ([A-Z]|[a-z])
 digitoPositivo = [1-9]
 digito = ({digitoPositivo}|0)
-parteEntera = {digitoPositivo}{digito}*
 parteDecimal = {digito}* {digitoPositivo}
 separador = [ \t\r\b\n]
 comentario = \/\/[^\n]*
 
-
-operadorSuma = \+
-operadorResta = \-
+operadorMas = \+
+operadorMenos = -
 operadorMultiplicacion = \*
 operadorDivision = \/
 operadorIgual = \=\=
@@ -42,19 +46,16 @@ operadorAnd = &&
 operadorDistinto = \!\=
 operadorMenorIgual = \<\=
 operadorMayorIgual = \>\=
-operadorConcat = #
 operadorModulo = \%
 operadorPotencia = \^
 operadorNot = \!
 operadorReferencia = &
-operadorIncremento = \+\+
-operadorDecremento = \-\-
-operadorPunto = .
+operadorPunto = \.
 
 identificador = {letra}({letra}|{digito})*
-asignacion = \=
+operadorAsignacion = \=
 intix = intix
-integer =  [\+\-]?{parteEntera}
+integer = {digitoPositivo}{digito}*
 boolix = boolix
 galo = galo
 romano = romano
@@ -62,7 +63,7 @@ enumix = enumix
 coma  = ,
 puntoComa = \;
 floatix = floatix
-floating = [\+\-]?{parteEntera}\.{parteDecimal}
+floating = {integer}\.{parteDecimal}
 datix = datix
 
 pot = pot
@@ -73,8 +74,8 @@ corcheteAbierto = \[
 corcheteCerrado = \]
 llaveAbierto = \{
 llaveCerrado = \}
-parentesisApertura = \(
-parentesisCierre = \)
+parentesisAbierto = \(
+parentesisCerrado = \)
 
 if = if
 else = else
@@ -83,15 +84,12 @@ forix = forix
 panoramix = panoramix
 potion = potion
 dosPuntos = :
-flecha = \-\>
+flecha = -\>
 return = return
 skip = skip
 
 tabellae = tabellae
 stilus = stilus
-
-
-
 
 %%
 {separador}               {}
@@ -103,7 +101,6 @@ stilus = stilus
 {pot}                   {return ops.unidadPot();}
 {vectix}                   {return ops.unidadVectix();}
 {datix}                   {return ops.unidadDatix();}
-{asignacion}                   {return ops.unidadAsignacion();}
 {puntoComa}                   {return ops.unidadPuntoComa();}
 {coma}                   {return ops.unidadComa();}
 
@@ -118,50 +115,38 @@ stilus = stilus
 
 {parentesisAbierto}        {return ops.unidadParentesisAbierto();}
 {parentesisCerrado}        {return ops.unidadParentesisCerrado();}
-{operadorSuma}              {return ops.unidadOperadorSuma();}
-{operadorResta}              {return ops.unidadOperadorResta();}
+{llaveAbierto}        {return ops.unidadLlaveAbierto();}
+{llaveCerrado}        {return ops.unidadLlaveCerrada();}
+
+{operadorMas}              {return ops.unidadOperadorMas();}
+{operadorMenos}              {return ops.unidadOperadorMenos();}
 {operadorMultiplicacion}              {return ops.unidadOperadorMultiplicacion();}
 {operadorDivision}              {return ops.unidadOperadorDivision();}
 {operadorIgual}              {return ops.unidadOperadorIgual();}
+{operadorOr}              {return ops.unidadOr();}
+{operadorAnd}              {return ops.unidadAnd();}
+{operadorDistinto}              {return ops.unidadDistinto();}
+{operadorAsignacion}                   {return ops.unidadAsignacion();}
 {operadorMenorIgual}              {return ops.unidadOperadorMenorIgual();}
 {operadorMayorIgual}              {return ops.unidadOperadorMayorIgual();}
-{operadorConcat}              {return ops.unidadOperadorConcat();}
+{operadorModulo}              {return ops.unidadModulo();}
+{operadorPotencia}              {return ops.unidadPotencia();}
+{operadorNot}              {return ops.unidadNot();}
+{operadorReferencia}              {return ops.unidadReferencia();}
+{operadorPunto}              {return ops.unidadPunto();}
+{if}              {return ops.unidadIf();}
+{else}              {return ops.unidadElse();}
+{whilix}              {return ops.unidadWhilix();}
+{forix}              {return ops.unidadForix();}
+{panoramix}              {return ops.unidadPanoramix();}
+{potion}              {return ops.unidadPotion();}
+{dosPuntos}              {return ops.unidadDosPuntos();}
+{flecha}              {return ops.unidadFlecha();}
+{return}              {return ops.unidadReturn();}
+{skip}              {return ops.unidadSkip();}
+{tabellae}              {return ops.unidadTabellae();}
+{stilus}              {return ops.unidadStilus();}
 
+{identificador}                   {return ops.unidadId();}
 
-
-
-
-operadorSuma = \+
-operadorResta = \-
-operadorMultiplicacion = \*
-operadorDivision = \/
-operadorIgual = \=\=
-operadorOr = \|\|
-operadorAnd = &&
-operadorDistinto = \!\=
-operadorMenorIgual = \<\=
-operadorMayorIgual = \>\=
-operadorConcat = #
-operadorModulo = \%
-operadorPotencia = \^
-operadorNot = \!
-operadorReferencia = &
-operadorIncremento = \+\+
-operadorDecremento = \-\-
-operadorPunto = .
-
-
-
-
-{identificador}           {return ops.unidadId();}
-{numeroEntero}            {return ops.unidadEnt();}
-{numeroReal}              {return ops.unidadReal();}
-{operadorSuma}            {return ops.unidadSuma();}
-{operadorResta}           {return ops.unidadResta();}
-{operadorMultiplicacion}  {return ops.unidadMul();}
-{operadorDivision}        {return ops.unidadDiv();}
-{parentesisApertura}      {return ops.unidadPAp();}
-{parentesisCierre}        {return ops.unidadPCierre();} 
-{igual}                   {return ops.unidadIgual();} 
-{coma}                    {return ops.unidadComa();}
 [^]                       {ops.error();}  

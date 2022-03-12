@@ -7,7 +7,7 @@
 package asint;
 
 /** CUP generated class containing symbol constants. */
-public class ClaseLexica {
+public class sym {
   /* terminals */
   public static final int DOSPUNTOS = 46;
   public static final int FORIX = 43;
