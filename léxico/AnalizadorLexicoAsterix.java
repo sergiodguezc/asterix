@@ -391,11 +391,11 @@ public class AnalizadorLexicoAsterix implements java_cup.runtime.Scanner {
 
   /* user code: */
   private ALexOperations ops;
-  private GestionErroresTiny errores;
+  private GestionErroresAsterix errores;
   public String lexema() {return yytext();}
   public int fila() {return yyline+1;}
   public int columna() {return yycolumn+1;}
-  public void fijaGestionErrores(GestionErroresTiny errores) {
+  public void fijaGestionErrores(GestionErroresAsterix errores) {
    this.errores = errores;
   }
 

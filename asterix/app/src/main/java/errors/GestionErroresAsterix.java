@@ -2,7 +2,7 @@ package errors;
 
 import alex.UnidadLexica;
 
-public class GestionErroresTiny {
+public class GestionErroresAsterix {
    public void errorLexico(int fila, int columna, String lexema) {
      System.out.println("ERROR fila "+fila+" columna "+columna+": Caracter inesperado: "+lexema); 
      System.exit(1);

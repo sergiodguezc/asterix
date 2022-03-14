@@ -15,16 +15,16 @@ import java_cup.runtime.ComplexSymbolFactory.Location;
 /** CUP v0.11b beta 20140220 generated parser.
   * @version Sat Mar 12 18:34:06 CET 2022
   */
-public class parser extends java_cup.runtime.lr_parser {
+public class AnalizadorSintacticoAsterix extends java_cup.runtime.lr_parser {
 
   /** Default constructor. */
-  public parser() {super();}
+  public AnalizadorSintacticoAsterix() {super();}
 
   /** Constructor which sets the default scanner. */
-  public parser(java_cup.runtime.Scanner s) {super(s);}
+  public AnalizadorSintacticoAsterix(java_cup.runtime.Scanner s) {super(s);}
 
   /** Constructor which sets the default scanner. */
-  public parser(java_cup.runtime.Scanner s, java_cup.runtime.SymbolFactory sf) {super(s,sf);}
+  public AnalizadorSintacticoAsterix(java_cup.runtime.Scanner s, java_cup.runtime.SymbolFactory sf) {super(s,sf);}
 
   /** Production table. */
   protected static final short _production_table[][] = 
@@ -336,10 +336,10 @@ public class parser extends java_cup.runtime.lr_parser {
 
 /** Cup generated class to encapsulate user supplied action code.*/
 class CUP$parser$actions {
-  private final parser parser;
+  private final AnalizadorSintacticoAsterix parser;
 
   /** Constructor */
-  CUP$parser$actions(parser parser) {
+  CUP$parser$actions(AnalizadorSintacticoAsterix parser) {
     this.parser = parser;
   }
 
