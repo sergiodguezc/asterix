@@ -3,3 +3,8 @@ informe/Entrega1.aux
 informe/Entrega1.log
 informe/Entrega1.out
 informe/Entrega1.synctex.gz
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build

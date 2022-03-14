@@ -160,7 +160,7 @@ public class ALexOperations {
   public UnidadLexica unidadEof() {
      return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.EOF); 
   }
-  public UnidadLexica error(){
-      return new UnidadLexica(alex.fila(), alex.columna(), ClaseLexica.error);
+  public void error() {
+    System.err.println("***"+alex.fila()+", "+alex.columna()+" Caracter inexperado: "+alex.lexema());
   }
 }

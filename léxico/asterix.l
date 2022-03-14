@@ -7,6 +7,7 @@ import errors.GestionErroresAsterix;
 %line
 %column
 %class AnalizadorLexicoAsterix
+%type  UnidadLexica
 %unicode
 %public
 
