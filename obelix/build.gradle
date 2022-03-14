@@ -10,6 +10,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id "cup.gradle.cup-gradle-plugin" version "2.0"
+    id "org.xbib.gradle.plugin.jflex" version "1.4.0"
 }
 
 repositories {
@@ -18,14 +19,15 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
-    // testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
 }
 
 sourceSets {
     main {
+        jflex {
+            srcDir "src/main/resources/jflex"
+        }
         java {
-            srcDirs = ['src/java']
+            srcDirs = ['src/main/java/asint','src/main/java']
         }
         resources {
             srcDirs = ['src/resources']
@@ -38,7 +40,8 @@ application {
     mainClass = 'asint.Main'
 }
 
-// tasks.named('test') {
-//     // Use JUnit Platform for unit tests.
-//     useJUnitPlatform()
-// }
+cup {
+    sourceDir = 'src/main/resources/cup/source'
+    generateDir = 'src/main/java/asint'
+    args = ["-interface", "-locations", "-parser", "AnalizadorSintacticoAsterix", "-symbols", "ClaseLexica"]
+}
