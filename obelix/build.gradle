@@ -41,7 +41,7 @@ application {
 }
 
 cup {
-    sourceDir = 'src/main/resources/cup/source'
+    sourceDir = 'src/main/resources/cup'
     generateDir = 'src/main/java/asint'
     args = ["-interface", "-locations", "-parser", "AnalizadorSintacticoAsterix", "-symbols", "ClaseLexica"]
 }
