@@ -8,3 +8,4 @@ informe/Entrega1.synctex.gz
 
 # Ignore Gradle build output directory
 build
+/.metadata/

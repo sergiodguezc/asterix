@@ -1,0 +1,51 @@
+package asint;
+
+import java_cup.runtime.*;
+import alex.AnalizadorLexicoAsterix;
+import alex.UnidadLexica;
+import errors.GestionErroresAsterix;
+
+scan with {: return getScanner().next_token(); :};
+parser code {: 
+   private GestionErroresAsterix errores;
+   public void syntax_error(Symbol unidadLexica) {
+     errores.errorSintactico((UnidadLexica)unidadLexica);
+   }
+:};
+init with {: 
+   errores = new GestionErroresAsterix();
+   AnalizadorLexicoAsterix alex = (AnalizadorLexicoAsterix)getScanner();
+   alex.fijaGestionErrores(errores);
+:};
+
+
+terminal     INTIX, BOOLIX, ENUMIX, FLOATIX, POT, VECTIX, DATIX, PUNTOCOMA, COMA,
+             INTEGER, FLOATING, GALO, ROMANO, MENOR, MAYOR, CORA, CORC, PAA, PAC,
+             LLA, LLC, MAS, MENOS, MUL, DIV, IGUAL, OR, AND, DIS, ASIG, 
+             MEIGUAL, MAIGUAL, MOD, POW, NOT, REF, PUNT, IF, ELSE, WHILIX, PUNTO,
+             FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, SKIP, TABEL, STIL, ID;
+
+non terminal  S, S1, DECVAR, VALOR, EXP0, EXP1, EXP2, EXP3, EXP4, EXP5, EXP6, EXP7, EXP8,
+              LISTA, LISTAINT, ALIAS, TIPO, STRUCT, STRUCTINT;
+
+S ::= S1 PUNTOCOMA S  | S1 PUNTOCOMA;
+S1   ::=  DECVAR | ALIAS ;
+DECVAR ::= TIPO ID ASIG VALOR | TIPO ID | STRUCT;
+VALOR ::= EXP0 | LISTA ;
+
+EXP0 ::= EXP1 OR EXP0 | EXP1;
+EXP1 ::= EXP2 AND EXP1 | EXP2;
+EXP2 ::= EXP3 IGUAL EXP2 | EXP3 DIS EXP2 | EXP3;
+EXP3 ::= EXP4 MEIGUAL EXP3 | EXP4 MAIGUAL EXP3 | EXP4 MENOR EXP3 | EXP4 MAYOR EXP3 | EXP4;
+EXP4 ::= EXP4 MAS EXP5 | EXP4 MENOS EXP5 | EXP5;
+EXP5 ::= EXP5 MUL EXP6 | EXP5 DIV EXP6 | EXP5 MOD EXP6 | EXP6;
+EXP6 ::= NOT EXP7 | MENOS EXP6 | EXP7 POW EXP6 | EXP7;
+EXP7 ::= EXP7 PUNTO EXP8 | EXP7 CORA EXP8 CORC | EXP8;
+EXP8 ::= ID | INTEGER | FLOATING | GALO | ROMANO | PAA EXP0 PAC;
+
+LISTA ::= LLA LLC | LLA LISTAINT LLC;
+LISTAINT ::= VALOR | VALOR COMA LISTAINT ;
+ALIAS ::= DATIX ID TIPO | DATIX ID STRUCT;
+TIPO ::= INTIX | BOOLIX | ENUMIX | FLOATIX | VECTIX MENOR TIPO MAYOR CORA INTEGER CORC; 
+STRUCT ::= POT ID CORA STRUCTINT CORC;
+STRUCTINT ::= DECVAR PUNTOCOMA STRUCTINT | DECVAR;

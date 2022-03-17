@@ -5,8 +5,8 @@
 
 package asint;
 
-/** CUP generated interface containing symbol constants. */
-public interface ClaseLexica {
+/** CUP generated class containing symbol constants. */
+public class ClaseLexica {
   /* terminals */
   public static final int DOSPUNTOS = 46;
   public static final int FORIX = 43;
