@@ -56,7 +56,7 @@ operadorPunto = \.
 identificador = {letra}({letra}|{digito})*
 operadorAsignacion = \=
 intix = intix
-integer = {digitoPositivo}{digito}*
+integer = ({digitoPositivo}{digito}*|{digito})
 boolix = boolix
 galo = galo
 romano = romano
@@ -85,9 +85,8 @@ forix = forix
 panoramix = panoramix
 potion = potion
 dosPuntos = :
-flecha = -\>
+flecha = \-\>
 return = return
-skip = skip
 
 tabellae = tabellae
 stilus = stilus
@@ -104,6 +103,7 @@ stilus = stilus
 {datix}                   {return ops.unidadDatix();}
 {puntoComa}                   {return ops.unidadPuntoComa();}
 {coma}                   {return ops.unidadComa();}
+{flecha}              {return ops.unidadFlecha();}
 
 {integer}                   {return ops.unidadInteger();}
 {floating}                   {return ops.unidadFloating();}
@@ -142,9 +142,7 @@ stilus = stilus
 {panoramix}              {return ops.unidadPanoramix();}
 {potion}              {return ops.unidadPotion();}
 {dosPuntos}              {return ops.unidadDosPuntos();}
-{flecha}              {return ops.unidadFlecha();}
 {return}              {return ops.unidadReturn();}
-{skip}              {return ops.unidadSkip();}
 {tabellae}              {return ops.unidadTabellae();}
 {stilus}              {return ops.unidadStilus();}
 

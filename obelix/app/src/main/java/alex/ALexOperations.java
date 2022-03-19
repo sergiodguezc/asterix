@@ -122,13 +122,10 @@ public class ALexOperations {
      return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.OR); 
   } 
   public UnidadLexica unidadFlecha() {
-     return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.AND); 
+     return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.FLECHA); 
   } 
   public UnidadLexica unidadComa() {
      return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.COMA); 
-  } 
-  public UnidadLexica unidadSkip() {
-     return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.SKIP); 
   } 
   public UnidadLexica unidadDatix() {
      return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.DATIX); 

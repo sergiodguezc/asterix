@@ -8,15 +8,15 @@ package asint;
 /** CUP generated class containing symbol constants. */
 public class ClaseLexica {
   /* terminals */
-  public static final int DOSPUNTOS = 46;
-  public static final int FORIX = 43;
+  public static final int DOSPUNTOS = 45;
+  public static final int FORIX = 42;
   public static final int POW = 35;
   public static final int MAIGUAL = 33;
   public static final int POT = 6;
-  public static final int RET = 48;
-  public static final int POTION = 45;
+  public static final int RET = 47;
+  public static final int POTION = 44;
   public static final int MEIGUAL = 32;
-  public static final int PANOR = 44;
+  public static final int PANOR = 43;
   public static final int INTEGER = 11;
   public static final int PUNTOCOMA = 9;
   public static final int REF = 37;
@@ -27,8 +27,8 @@ public class ClaseLexica {
   public static final int OR = 28;
   public static final int DIV = 26;
   public static final int DIS = 30;
-  public static final int IF = 39;
-  public static final int ID = 52;
+  public static final int IF = 38;
+  public static final int ID = 50;
   public static final int ENUMIX = 4;
   public static final int FLOATING = 12;
   public static final int EOF = 0;
@@ -43,17 +43,15 @@ public class ClaseLexica {
   public static final int MENOR = 15;
   public static final int MOD = 34;
   public static final int DATIX = 8;
-  public static final int WHILIX = 41;
-  public static final int PUNT = 38;
+  public static final int WHILIX = 40;
   public static final int MAYOR = 16;
-  public static final int FLECHA = 47;
+  public static final int FLECHA = 46;
   public static final int LLC = 22;
-  public static final int ELSE = 40;
+  public static final int ELSE = 39;
   public static final int LLA = 21;
-  public static final int STIL = 51;
-  public static final int SKIP = 49;
-  public static final int PUNTO = 42;
-  public static final int TABEL = 50;
+  public static final int STIL = 49;
+  public static final int PUNTO = 41;
+  public static final int TABEL = 48;
   public static final int PAC = 20;
   public static final int PAA = 19;
   public static final int CORC = 18;
@@ -100,7 +98,6 @@ public class ClaseLexica {
   "POW",
   "NOT",
   "REF",
-  "PUNT",
   "IF",
   "ELSE",
   "WHILIX",
@@ -111,7 +108,6 @@ public class ClaseLexica {
   "DOSPUNTOS",
   "FLECHA",
   "RET",
-  "SKIP",
   "TABEL",
   "STIL",
   "ID"
