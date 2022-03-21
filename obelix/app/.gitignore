@@ -3,6 +3,7 @@
 
 # Ignore Eclipse settings
 .settings
+.classpath
 
 # Ignore Gradle build output directory
 build
