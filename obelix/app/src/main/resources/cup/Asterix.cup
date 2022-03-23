@@ -3,6 +3,7 @@ package asint;
 import java_cup.runtime.*;
 import alex.AnalizadorLexicoAsterix;
 import alex.UnidadLexica;
+import alex.TokenValue;
 import errors.GestionErroresAsterix;
 
 scan with {: return getScanner().next_token(); :};
@@ -19,11 +20,11 @@ init with {:
 :};
 
 
-terminal     INTIX, BOOLIX, ENUMIX, FLOATIX, POT, VECTIX, DATIX, PUNTOCOMA, COMA,
-             INTEGER, FLOATING, GALO, ROMANO, MENOR, MAYOR, CORA, CORC, PAA, PAC,
-             LLA, LLC, MAS, MENOS, MUL, DIV, IGUAL, OR, AND, DIS, ASIG, 
-             MEIGUAL, MAIGUAL, MOD, POW, NOT, REF, IF, ELSE, WHILIX, PUNTO,
-             FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, TABEL, STIL, ID;
+terminal TokenValue     intix, boolix, enumix, floatix, pot, vectix, datix, puntocoma, coma,
+             integer, floating, galo, romano, menor, mayor, cora, corc, paa, pac,
+             lla, llc, mas, menos, mul, div, igual, or, and, dis, asig, 
+             meigual, maigual, mod, pow, not, ref, ift, elset, whilix, punto,
+             forix, panor, potion, dospuntos, flecha, ret, tabel, stil, id;
 
 non terminal  S, I, DECVAR, VALOR, EXP0, EXP1, EXP2, EXP3, EXP4, EXP5, EXP6, EXP7, EXP8,
               LISTA, LISTAINT, ALIAS, TIPO, STRUCT, STRUCTINT, PROGRAMA, CUERPO,
@@ -33,38 +34,38 @@ non terminal  S, I, DECVAR, VALOR, EXP0, EXP1, EXP2, EXP3, EXP4, EXP5, EXP6, EXP
 PROGRAMA ::= DEF CUERPO | CUERPO;
 CUERPO ::= MAIN | SUBPROGRAMAS MAIN;
 SUBPROGRAMAS ::= SUBPROGRAMA | SUBPROGRAMAS SUBPROGRAMA ;
-MAIN ::= POTION PANOR PAA PAC FLECHA INTIX LLA S RET EXP0 PUNTOCOMA LLC;
-DEF ::= DECVAR PUNTOCOMA | DECVAR PUNTOCOMA DEF;
-DECVAR ::= TIPO ID ASIG VALOR | TIPO ID | STRUCT | ALIAS | ASIGNATION; 
-ASIGNATION ::= EXP0 ASIG VALOR; 
-S ::= I PUNTOCOMA S  | I PUNTOCOMA;
+MAIN ::= potion panor paa pac flecha intix lla S ret EXP0 puntocoma llc;
+DEF ::= DECVAR puntocoma | DECVAR puntocoma DEF;
+DECVAR ::= TIPO id asig VALOR | TIPO id | STRUCT | ALIAS | ASIGNATION; 
+ASIGNATION ::= EXP0 asig VALOR; 
+S ::= I puntocoma S  | I puntocoma;
 I  ::=  DECVAR | FOR | WHILE | IFELSE | STILUS | TAB | CALLF;
 VALOR ::= EXP0 | LISTA ;
-LISTA ::= LLA LLC | LLA LISTAINT LLC;
-LISTAINT ::= VALOR | VALOR COMA LISTAINT ;
-ALIAS ::= DATIX ID TIPO | DATIX ID STRUCT | ID ID ASIG VALOR | ID ID ;
-TIPO ::= INTIX | BOOLIX | ENUMIX | FLOATIX | VECTIX MENOR TIPO MAYOR CORA INTEGER CORC; 
-STRUCT ::= POT ID CORA STRUCTINT CORC;
-STRUCTINT ::= DECVAR PUNTOCOMA STRUCTINT | DECVAR;
-SUBPROGRAMA ::= POTION ID LARGP LLA S LLC | POTION ID LARGP FLECHA TIPO LLA S RET EXP0 PUNTOCOMA LLC;
-LARGP ::= PAA PAC | PAA ARG PAC;
-ARG ::= ID DOSPUNTOS VALREF COMA ARG | ID DOSPUNTOS VALREF;
-VALREF ::= TIPO | REF TIPO | ID | REF ID;
-CALLF ::= ID PAA PAC | ID PAA LARGC PAC;
-LARGC ::= LARGC COMA EXP0 | EXP0;
-IFELSE ::= IF PAA EXP0 PAC LLA S LLC | IF PAA EXP0 PAC LLA S LLC ELSE LLA S LLC;
-WHILE ::= WHILIX PAA EXP0 PAC LLA S LLC;
-FOR ::= FORIX PAA TIPO ID DOSPUNTOS ID PAC LLA S LLC;
-TAB ::= TABEL PAA EXP0 PAC;
-STILUS ::= STIL PAA EXP0 PAC;
+LISTA ::= lla llc | lla LISTAINT llc;
+LISTAINT ::= VALOR | VALOR coma LISTAINT ;
+ALIAS ::= datix id TIPO | datix id STRUCT | id id asig VALOR | id id ;
+TIPO ::= intix | boolix | enumix | floatix | vectix menor TIPO mayor cora integer corc; 
+STRUCT ::= pot id cora STRUCTINT corc;
+STRUCTINT ::= DECVAR puntocoma STRUCTINT | DECVAR;
+SUBPROGRAMA ::= potion id LARGP lla S llc | potion id LARGP flecha TIPO lla S ret EXP0 puntocoma llc;
+LARGP ::= paa pac | paa ARG pac;
+ARG ::= id dospuntos VALREF coma ARG | id dospuntos VALREF;
+VALREF ::= TIPO | ref TIPO | id | ref id;
+CALLF ::= id paa pac | id paa LARGC pac;
+LARGC ::= LARGC coma EXP0 | EXP0;
+IFELSE ::= ift paa EXP0 pac lla S llc | ift paa EXP0 pac lla S llc elset lla S llc;
+WHILE ::= whilix paa EXP0 pac lla S llc;
+FOR ::= forix paa TIPO id dospuntos id pac lla S llc;
+TAB ::= tabel paa EXP0 pac;
+STILUS ::= stil paa EXP0 pac;
 
-EXP0 ::= EXP1 OR EXP0 | EXP1;
-EXP1 ::= EXP2 AND EXP1 | EXP2;
-EXP2 ::= EXP3 IGUAL EXP2 | EXP3 DIS EXP2 | EXP3;
-EXP3 ::= EXP4 MEIGUAL EXP3 | EXP4 MAIGUAL EXP3 | EXP4 MENOR EXP3 | EXP4 MAYOR EXP3 | EXP4;
-EXP4 ::= EXP4 MAS EXP5 | EXP4 MENOS EXP5 | EXP5;
-EXP5 ::= EXP5 MUL EXP6 | EXP5 DIV EXP6 | EXP5 MOD EXP6 | EXP6;
-EXP6 ::= NOT EXP7 | MENOS EXP6 | EXP7 POW EXP6 | EXP7;
-EXP7 ::= EXP7 PUNTO EXP8 | EXP7 CORA EXP8 CORC | EXP8;
-EXP8 ::= ID | INTEGER | FLOATING | GALO | ROMANO | CALLF | PAA EXP0 PAC;
+EXP0 ::= EXP1 or EXP0 | EXP1;
+EXP1 ::= EXP2 and EXP1 | EXP2;
+EXP2 ::= EXP3 igual EXP2 | EXP3 dis EXP2 | EXP3;
+EXP3 ::= EXP4 meigual EXP3 | EXP4 maigual EXP3 | EXP4 menor EXP3 | EXP4 mayor EXP3 | EXP4;
+EXP4 ::= EXP4 mas EXP5 | EXP4 menos EXP5 | EXP5;
+EXP5 ::= EXP5 mul EXP6 | EXP5 div EXP6 | EXP5 mod EXP6 | EXP6;
+EXP6 ::= not EXP7 | menos EXP6 | EXP7 pow EXP6 | EXP7;
+EXP7 ::= EXP7 punto EXP8 | EXP7 cora EXP8 corc | EXP8;
+EXP8 ::= id | integer | floating | galo | romano | CALLF | paa EXP0 pac;
 

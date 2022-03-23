@@ -8,109 +8,109 @@ package asint;
 /** CUP generated class containing symbol constants. */
 public class ClaseLexica {
   /* terminals */
-  public static final int DOSPUNTOS = 45;
-  public static final int FORIX = 42;
-  public static final int POW = 35;
-  public static final int MAIGUAL = 33;
-  public static final int POT = 6;
-  public static final int RET = 47;
-  public static final int POTION = 44;
-  public static final int MEIGUAL = 32;
-  public static final int PANOR = 43;
-  public static final int INTEGER = 11;
-  public static final int PUNTOCOMA = 9;
-  public static final int REF = 37;
-  public static final int NOT = 36;
-  public static final int BOOLIX = 3;
-  public static final int AND = 29;
-  public static final int IGUAL = 27;
-  public static final int OR = 28;
-  public static final int DIV = 26;
-  public static final int DIS = 30;
-  public static final int IF = 38;
-  public static final int ID = 50;
-  public static final int ENUMIX = 4;
-  public static final int FLOATING = 12;
+  public static final int panor = 43;
+  public static final int whilix = 40;
+  public static final int mul = 25;
+  public static final int mod = 34;
+  public static final int flecha = 46;
+  public static final int asig = 31;
+  public static final int elset = 39;
+  public static final int coma = 10;
+  public static final int igual = 27;
+  public static final int llc = 22;
+  public static final int lla = 21;
+  public static final int ift = 38;
+  public static final int pac = 20;
+  public static final int paa = 19;
+  public static final int stil = 49;
+  public static final int floating = 12;
+  public static final int intix = 2;
+  public static final int menos = 24;
+  public static final int floatix = 5;
+  public static final int menor = 15;
   public static final int EOF = 0;
-  public static final int ROMANO = 14;
-  public static final int ASIG = 31;
+  public static final int datix = 8;
+  public static final int potion = 44;
+  public static final int mas = 23;
   public static final int error = 1;
-  public static final int VECTIX = 7;
-  public static final int MUL = 25;
-  public static final int COMA = 10;
-  public static final int INTIX = 2;
-  public static final int MENOS = 24;
-  public static final int MENOR = 15;
-  public static final int MOD = 34;
-  public static final int DATIX = 8;
-  public static final int WHILIX = 40;
-  public static final int MAYOR = 16;
-  public static final int FLECHA = 46;
-  public static final int LLC = 22;
-  public static final int ELSE = 39;
-  public static final int LLA = 21;
-  public static final int STIL = 49;
-  public static final int PUNTO = 41;
-  public static final int TABEL = 48;
-  public static final int PAC = 20;
-  public static final int PAA = 19;
-  public static final int CORC = 18;
-  public static final int CORA = 17;
-  public static final int FLOATIX = 5;
-  public static final int GALO = 13;
-  public static final int MAS = 23;
+  public static final int maigual = 33;
+  public static final int corc = 18;
+  public static final int pow = 35;
+  public static final int mayor = 16;
+  public static final int cora = 17;
+  public static final int or = 28;
+  public static final int pot = 6;
+  public static final int meigual = 32;
+  public static final int ret = 47;
+  public static final int punto = 41;
+  public static final int tabel = 48;
+  public static final int dospuntos = 45;
+  public static final int galo = 13;
+  public static final int integer = 11;
+  public static final int id = 50;
+  public static final int boolix = 3;
+  public static final int ref = 37;
+  public static final int not = 36;
+  public static final int and = 29;
+  public static final int puntocoma = 9;
+  public static final int romano = 14;
+  public static final int enumix = 4;
+  public static final int div = 26;
+  public static final int forix = 42;
+  public static final int vectix = 7;
+  public static final int dis = 30;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
-  "INTIX",
-  "BOOLIX",
-  "ENUMIX",
-  "FLOATIX",
-  "POT",
-  "VECTIX",
-  "DATIX",
-  "PUNTOCOMA",
-  "COMA",
-  "INTEGER",
-  "FLOATING",
-  "GALO",
-  "ROMANO",
-  "MENOR",
-  "MAYOR",
-  "CORA",
-  "CORC",
-  "PAA",
-  "PAC",
-  "LLA",
-  "LLC",
-  "MAS",
-  "MENOS",
-  "MUL",
-  "DIV",
-  "IGUAL",
-  "OR",
-  "AND",
-  "DIS",
-  "ASIG",
-  "MEIGUAL",
-  "MAIGUAL",
-  "MOD",
-  "POW",
-  "NOT",
-  "REF",
-  "IF",
-  "ELSE",
-  "WHILIX",
-  "PUNTO",
-  "FORIX",
-  "PANOR",
-  "POTION",
-  "DOSPUNTOS",
-  "FLECHA",
-  "RET",
-  "TABEL",
-  "STIL",
-  "ID"
+  "intix",
+  "boolix",
+  "enumix",
+  "floatix",
+  "pot",
+  "vectix",
+  "datix",
+  "puntocoma",
+  "coma",
+  "integer",
+  "floating",
+  "galo",
+  "romano",
+  "menor",
+  "mayor",
+  "cora",
+  "corc",
+  "paa",
+  "pac",
+  "lla",
+  "llc",
+  "mas",
+  "menos",
+  "mul",
+  "div",
+  "igual",
+  "or",
+  "and",
+  "dis",
+  "asig",
+  "meigual",
+  "maigual",
+  "mod",
+  "pow",
+  "not",
+  "ref",
+  "ift",
+  "elset",
+  "whilix",
+  "punto",
+  "forix",
+  "panor",
+  "potion",
+  "dospuntos",
+  "flecha",
+  "ret",
+  "tabel",
+  "stil",
+  "id"
   };
 }
 
