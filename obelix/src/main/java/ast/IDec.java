@@ -1,8 +1,7 @@
 package ast;
 
 public class IDec extends I{
-
-    @Override
+    public
     public KindI kind() {
         return null;
     }

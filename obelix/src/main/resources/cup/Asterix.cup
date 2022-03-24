@@ -27,14 +27,13 @@ terminal TokenValue    INTIX, BOOLIX, ENUMIX, FLOATIX, POT, VECTIX, DATIX, PUNTO
 
 non terminal  s, i, dec, exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8,
               lista, listaint, alias, tipo, struct, structint, programa, cuerpo,
-              subprogramas, main, def, subprograma, largp, arg, callf, largc, ifelse,
+              main, subprograma, largp, arg, callf, largc, ifelse,
               while, for, tab, stilus, valref, asignation;
 
 programa ::= main | cuerpo main;
-cuerpo ::= subprogramas | dec | subprogramas cuerpo | dec cuerpo;
+cuerpo ::= subprograma | dec |  subprograma cuerpo  |  dec cuerpo ;
 s ::= i PUNTOCOMA s  | i PUNTOCOMA;
 i  ::=  dec | for | while | ifelse | stilus | tab | callf;
-subprogramas ::= subprograma | subprogramas subprograma ;
 main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s RET exp0 PUNTOCOMA LLC;
 dec ::= tipo ID ASIG exp0 | tipo ID | struct | alias | asignation;
 asignation ::= exp0 ASIG exp0;
@@ -49,7 +48,7 @@ largp ::= PAA PAC | PAA arg PAC;
 arg ::= ID DOSPUNTOS valref COMA arg | ID DOSPUNTOS valref;
 valref ::= tipo | REF tipo | ID | REF ID;
 callf ::= ID PAA PAC | ID PAA largc PAC;
-largc ::= largc COMA exp0 | exp0;
+largc ::= exp0 COMA largc | exp0;
 ifelse ::= IF PAA exp0 PAC LLA s LLC | IF PAA exp0 PAC LLA s LLC ELSE LLA s LLC;
 while ::= WHILIX PAA exp0 PAC LLA s LLC;
 for ::= FORIX PAA tipo ID DOSPUNTOS ID PAC LLA s LLC;
