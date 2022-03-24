@@ -20,52 +20,51 @@ init with {:
 :};
 
 
-terminal TokenValue     intix, boolix, enumix, floatix, pot, vectix, datix, puntocoma, coma,
-             integer, floating, galo, romano, menor, mayor, cora, corc, paa, pac,
-             lla, llc, mas, menos, mul, div, igual, or, and, dis, asig, 
-             meigual, maigual, mod, pow, not, ref, ift, elset, whilix, punto,
-             forix, panor, potion, dospuntos, flecha, ret, tabel, stil, id;
+terminal TokenValue    INTIX, BOOLIX, ENUMIX, FLOATIX, POT, VECTIX, DATIX, PUNTOCOMA, COMA,
+             INTEGER, FLOATING, GALO, ROMANO, MENOR, MAYOR, CORA, CORC, PAA, PAC,
+             LLA, LLC, MAS, MENOS, MUL, DIV, IGUAL, OR, AND, DIS, ASIG, 
+             MEIGUAL, MAIGUAL, MOD, POW, NOT, REF, IF, ELSE, WHILIX, PUNTO,
+             FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, TABEL, STIL, ID;
 
-non terminal  S, I, DECVAR, VALOR, EXP0, EXP1, EXP2, EXP3, EXP4, EXP5, EXP6, EXP7, EXP8,
-              LISTA, LISTAINT, ALIAS, TIPO, STRUCT, STRUCTINT, PROGRAMA, CUERPO,
-              SUBPROGRAMAS, MAIN, DEF, SUBPROGRAMA, LARGP, ARG, CALLF, LARGC, IFELSE,
-              WHILE, FOR, TAB, STILUS, VALREF, ASIGNATION;
+non terminal  s, i, decvar, valor, exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8,
+              lista, listaint, alias, tipo, struct, structint, programa, cuerpo,
+              subprogramas, main, def, subprograma, largp, arg, callf, largc, ifelse,
+              while, for, tab, stilus, valref, asignation;
 
-PROGRAMA ::= DEF CUERPO | CUERPO;
-CUERPO ::= MAIN | SUBPROGRAMAS MAIN;
-SUBPROGRAMAS ::= SUBPROGRAMA | SUBPROGRAMAS SUBPROGRAMA ;
-MAIN ::= potion panor paa pac flecha intix lla S ret EXP0 puntocoma llc;
-DEF ::= DECVAR puntocoma | DECVAR puntocoma DEF;
-DECVAR ::= TIPO id asig VALOR | TIPO id | STRUCT | ALIAS | ASIGNATION; 
-ASIGNATION ::= EXP0 asig VALOR; 
-S ::= I puntocoma S  | I puntocoma;
-I  ::=  DECVAR | FOR | WHILE | IFELSE | STILUS | TAB | CALLF;
-VALOR ::= EXP0 | LISTA ;
-LISTA ::= lla llc | lla LISTAINT llc;
-LISTAINT ::= VALOR | VALOR coma LISTAINT ;
-ALIAS ::= datix id TIPO | datix id STRUCT | id id asig VALOR | id id ;
-TIPO ::= intix | boolix | enumix | floatix | vectix menor TIPO mayor cora integer corc; 
-STRUCT ::= pot id cora STRUCTINT corc;
-STRUCTINT ::= DECVAR puntocoma STRUCTINT | DECVAR;
-SUBPROGRAMA ::= potion id LARGP lla S llc | potion id LARGP flecha TIPO lla S ret EXP0 puntocoma llc;
-LARGP ::= paa pac | paa ARG pac;
-ARG ::= id dospuntos VALREF coma ARG | id dospuntos VALREF;
-VALREF ::= TIPO | ref TIPO | id | ref id;
-CALLF ::= id paa pac | id paa LARGC pac;
-LARGC ::= LARGC coma EXP0 | EXP0;
-IFELSE ::= ift paa EXP0 pac lla S llc | ift paa EXP0 pac lla S llc elset lla S llc;
-WHILE ::= whilix paa EXP0 pac lla S llc;
-FOR ::= forix paa TIPO id dospuntos id pac lla S llc;
-TAB ::= tabel paa EXP0 pac;
-STILUS ::= stil paa EXP0 pac;
+programa ::= def cuerpo | cuerpo;
+cuerpo ::= main | subprogramas main;
+subprogramas ::= subprograma | subprogramas subprograma ;
+main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s RET exp0 PUNTOCOMA LLC;
+def ::= decvar PUNTOCOMA | decvar PUNTOCOMA def;
+decvar ::= tipo ID ASIG valor | tipo ID | struct | alias | asignation; 
+asignation ::= exp0 ASIG valor; 
+s ::= i PUNTOCOMA s  | i PUNTOCOMA;
+i  ::=  decvar | for | while | ifelse | stilus | tab | callf;
+valor ::= exp0 | lista ;
+lista ::= LLA LLC | LLA listaint LLC;
+listaint ::= valor | valor COMA listaint ;
+alias ::= DATIX ID tipo | DATIX ID struct | ID ID ASIG valor | ID ID ;
+tipo ::= INTIX | BOOLIX | ENUMIX | FLOATIX | VECTIX MENOR tipo MAYOR CORA INTEGER CORC; 
+struct ::= POT ID CORA structint CORC;
+structint ::= decvar PUNTOCOMA structint | decvar;
+subprograma ::= POTION ID largp LLA s LLC | POTION ID largp FLECHA tipo LLA s RET exp0 PUNTOCOMA LLC;
+largp ::= PAA PAC | PAA arg PAC;
+arg ::= ID DOSPUNTOS valref COMA arg | ID DOSPUNTOS valref;
+valref ::= tipo | REF tipo | ID | REF ID;
+callf ::= ID PAA PAC | ID PAA largc PAC;
+largc ::= largc COMA exp0 | exp0;
+ifelse ::= IF PAA exp0 PAC LLA s LLC | IF PAA exp0 PAC LLA s LLC ELSE LLA s LLC;
+while ::= WHILIX PAA exp0 PAC LLA s LLC;
+for ::= FORIX PAA tipo ID DOSPUNTOS ID PAC LLA s LLC;
+tab ::= TABEL PAA exp0 PAC;
+stilus ::= STIL PAA exp0 PAC;
 
-EXP0 ::= EXP1 or EXP0 | EXP1;
-EXP1 ::= EXP2 and EXP1 | EXP2;
-EXP2 ::= EXP3 igual EXP2 | EXP3 dis EXP2 | EXP3;
-EXP3 ::= EXP4 meigual EXP3 | EXP4 maigual EXP3 | EXP4 menor EXP3 | EXP4 mayor EXP3 | EXP4;
-EXP4 ::= EXP4 mas EXP5 | EXP4 menos EXP5 | EXP5;
-EXP5 ::= EXP5 mul EXP6 | EXP5 div EXP6 | EXP5 mod EXP6 | EXP6;
-EXP6 ::= not EXP7 | menos EXP6 | EXP7 pow EXP6 | EXP7;
-EXP7 ::= EXP7 punto EXP8 | EXP7 cora EXP8 corc | EXP8;
-EXP8 ::= id | integer | floating | galo | romano | CALLF | paa EXP0 pac;
-
+exp0 ::= exp1 OR exp0 | exp1;
+exp1 ::= exp2 AND exp1 | exp2;
+exp2 ::= exp3 IGUAL exp2 | exp3 DIS exp2 | exp3;
+exp3 ::= exp4 MEIGUAL exp3 | exp4 MAIGUAL exp3 | exp4 MENOR exp3 | exp4 MAYOR exp3 | exp4;
+exp4 ::= exp4 MAS exp5 | exp4 MENOS exp5 | exp5;
+exp5 ::= exp5 MUL exp6 | exp5 DIV exp6 | exp5 MOD exp6 | exp6;
+exp6 ::= NOT exp7 | MENOS exp6 | exp7 POW exp6 | exp7;
+exp7 ::= exp7 PUNTO exp8 | exp7 CORA exp8 CORC | exp8;
+exp8 ::= ID | INTEGER | FLOATING | GALO | ROMANO | callf | PAA exp0 PAC;

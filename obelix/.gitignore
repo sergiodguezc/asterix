@@ -4,5 +4,8 @@
 # Ignore Eclipse settings
 .settings
 
+# Ignore Ideapad settings
+.idea
+
 # Ignore Gradle build output directory
 build
