@@ -9,6 +9,7 @@ import java_cup.runtime.*;
 import alex.AnalizadorLexicoAsterix;
 import alex.UnidadLexica;
 import alex.TokenValue;
+import ast.TablaEtiquetas;
 import errors.GestionErroresAsterix;
 import java_cup.runtime.XMLElement;
 
@@ -533,6 +534,7 @@ public class AnalizadorSintacticoAsterix extends java_cup.runtime.lr_parser {
     {
  
    errores = new GestionErroresAsterix();
+   etiquetas = new TablaEtiquetas();
    AnalizadorLexicoAsterix alex = (AnalizadorLexicoAsterix)getScanner();
    alex.fijaGestionErrores(errores);
 
@@ -547,6 +549,7 @@ public class AnalizadorSintacticoAsterix extends java_cup.runtime.lr_parser {
 
  
    private GestionErroresAsterix errores;
+   private TablaEtiquetas etiquetas;
    public void syntax_error(Symbol unidadLexica) {
      errores.errorSintactico((UnidadLexica)unidadLexica);
    }

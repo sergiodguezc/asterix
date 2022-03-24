@@ -4,17 +4,20 @@ import java_cup.runtime.*;
 import alex.AnalizadorLexicoAsterix;
 import alex.UnidadLexica;
 import alex.TokenValue;
+import ast.TablaEtiquetas;
 import errors.GestionErroresAsterix;
 
 scan with {: return getScanner().next_token(); :};
 parser code {: 
    private GestionErroresAsterix errores;
+   private TablaEtiquetas etiquetas;
    public void syntax_error(Symbol unidadLexica) {
      errores.errorSintactico((UnidadLexica)unidadLexica);
    }
 :};
 init with {: 
    errores = new GestionErroresAsterix();
+   etiquetas = new TablaEtiquetas();
    AnalizadorLexicoAsterix alex = (AnalizadorLexicoAsterix)getScanner();
    alex.fijaGestionErrores(errores);
 :};
