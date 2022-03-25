@@ -1,8 +1,7 @@
 package ast;
 
-public class IDec extends I{
-    public
+public class IDec extends I {
     public KindI kind() {
-        return null;
+        return KindI.DEC;
     }
 }
