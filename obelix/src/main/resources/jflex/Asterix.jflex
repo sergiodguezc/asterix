@@ -61,7 +61,6 @@ integer = ({digitoPositivo}{digito}*|{digito})
 boolix = boolix
 galo = galo
 romano = romano
-enumix = enumix
 coma  = ,
 puntoComa = \;
 floatix = floatix
@@ -97,7 +96,6 @@ stilus = stilus
 {comentario}              {}
 {intix}                   {return ops.unidadIntix();}
 {boolix}                   {return ops.unidadBoolix();}
-{enumix}                   {return ops.unidadEnumix();}
 {floatix}                   {return ops.unidadFloatix();}
 {pot}                   {return ops.unidadPot();}
 {vectix}                   {return ops.unidadVectix();}

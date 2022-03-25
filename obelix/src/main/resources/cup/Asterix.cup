@@ -19,28 +19,32 @@ init with {:
    alex.fijaGestionErrores(errores);
 :};
 
-terminal TokenValue    INTIX, BOOLIX, ENUMIX, FLOATIX, POT, VECTIX, DATIX, PUNTOCOMA, COMA,
-             INTEGER, FLOATING, GALO, ROMANO, MENOR, MAYOR, CORA, CORC, PAA, PAC,
-             LLA, LLC, MAS, MENOS, MUL, DIV, IGUAL, OR, AND, DIS, ASIG, 
-             MEIGUAL, MAIGUAL, MOD, POW, NOT, REF, IF, ELSE, WHILIX, PUNTO,
-             FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, TABEL, STIL, ID;
+terminal TokenValue DATIX, PUNTOCOMA, COMA, INTEGER, FLOATING, GALO, ROMANO,
+    MENOR, MAYOR, CORA, CORC, PAA, PAC, LLA, LLC, MAS, MENOS, MUL, DIV, IGUAL, OR,
+    AND, DIS, ASIG, MEIGUAL, MAIGUAL, MOD, POW, NOT, REF, IF, ELSE, WHILIX, PUNTO,
+    FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, TABEL, STIL, ID;
 
+terminal T INTIX, BOOLIX, FLOATIX, POT, VECTIX;;
+
+non terminal P programa, subprograma, main;
 non terminal  s, i, dec, exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8,
-              lista, listaint, alias, tipo, struct, structint, programa, cuerpo,
-              main, subprograma, largp, arg, callf, largc, ifelse,
+              lista, listaint, alias, tipo, struct, structint, cuerpo,
+              largp, arg, callf, largc, ifelse,
               while, for, tab, stilus, valref, asignation;
 
-programa ::= main | cuerpo main;
+programa ::= main 
+programa ::= cuerpo main;
+
 cuerpo ::= subprograma | dec PUNTOCOMA | cuerpo subprograma |  cuerpo dec PUNTOCOMA ;
 s ::= i PUNTOCOMA s  | i PUNTOCOMA;
-i  ::=  dec | for | while | ifelse | stilus | tab | callf | asignation;
+i  ::=  dec | for | while | ifelse | stilus | tab | alias | callf | asignation;
 main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s RET exp0 PUNTOCOMA LLC;
-dec ::= tipo ID ASIG exp0 | tipo ID | struct | alias;
+dec ::= tipo ID ASIG exp0 | tipo ID | struct | ID ID ASIG exp0 | ID ID ;
 asignation ::= exp0 ASIG exp0;
 lista ::= LLA LLC | LLA listaint LLC;
 listaint ::= exp0 | listaint COMA exp0 ;
-alias ::= DATIX ID tipo | DATIX ID struct | ID ID ASIG exp0 | ID ID ;
-tipo ::= INTIX | BOOLIX | ENUMIX | FLOATIX | VECTIX MENOR tipo MAYOR CORA INTEGER CORC; 
+alias ::= DATIX ID tipo | DATIX ID struct; 
+tipo ::= INTIX | BOOLIX | FLOATIX | VECTIX MENOR tipo MAYOR CORA INTEGER CORC; 
 struct ::= POT ID CORA structint CORC;
 structint ::= structint dec PUNTOCOMA  | dec PUNTOCOMA;
 subprograma ::= POTION ID largp LLA s LLC | POTION ID largp FLECHA tipo LLA s RET exp0 PUNTOCOMA LLC;
