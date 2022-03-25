@@ -1,7 +1,5 @@
 package ast;
 
-import java.util.List;
-
 public class IES extends I {
     private E valor;
     private String label;

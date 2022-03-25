@@ -2,17 +2,18 @@ package ast;
 
 import java.util.List;
 
-public class P implements ASTNode{
-    private List<IDec> declaraciones;
+public class P implements ASTNode {
+    private List<DefSub> defsubs;
 
-    public P(List<IDec> declaraciones) {
-        this.declaraciones = declaraciones;
+    public P(List<DefSub> defsubs, DefSub nuevo) {
+        this.defsubs = defsubs;
+        defsubs.add(nuevo);
     }
 	public NodeKind nodeKind() {
 		return NodeKind.PROGRAMA;
 	}
 
 	public String toString() {
-		return "P("+")";
+		return "P("+defsubs.toString()+")";
 	}
 }

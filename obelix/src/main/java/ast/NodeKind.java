@@ -4,7 +4,7 @@ public enum NodeKind {
   PROGRAMA,
   EXPRESION,
   INSTRUCCION,
-  POTION,
+  SUBPROGRAMA,
   TIPO,
-  PARAM
+  ARG
 }
