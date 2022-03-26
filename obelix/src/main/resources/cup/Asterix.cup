@@ -5,6 +5,8 @@ import alex.AnalizadorLexicoAsterix;
 import alexop.UnidadLexica;
 import alexop.TokenValue;
 import errors.GestionErroresAsterix;
+import java.util.List;
+import ast.*;
 
 scan with {: return getScanner().next_token(); :};
 parser code {: 
@@ -24,18 +26,41 @@ terminal TokenValue DATIX, PUNTOCOMA, COMA, INTEGER, FLOATING, GALO, ROMANO,
     AND, DIS, ASIG, MEIGUAL, MAIGUAL, MOD, POW, NOT, REF, IF, ELSE, WHILIX, PUNTO,
     FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, TABEL, STIL, ID;
 
-terminal T INTIX, BOOLIX, FLOATIX, POT, VECTIX;;
+terminal T INTIX, BOOLIX, FLOATIX, POT, VECTIX;
 
-non terminal P programa, subprograma, main;
-non terminal  s, i, dec, exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8,
-              lista, listaint, alias, tipo, struct, structint, cuerpo,
-              largp, arg, callf, largc, ifelse,
-              while, for, tab, stilus, valref, asignation;
+non terminal P programa;
+non terminal Sub subprograma, main;
+non terminal I i, dec, alias, ifelse, struct,while, for, tab, stilus, asignation, callf;
+non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8;
+non terminal Arg arg;
+non terminal T tipo;
 
-programa ::= main 
-programa ::= cuerpo main;
+non terminal List<IDec> structint;
+non terminal List<I> s;
+non terminal List <DefSub> cuerpo;
 
-cuerpo ::= subprograma | dec PUNTOCOMA | cuerpo subprograma |  cuerpo dec PUNTOCOMA ;
+
+non terminal List<E> lista, largc;
+non terminal List<Arg> largp;
+non terminal valref,listaint;
+
+programa ::= main : submain
+    {:RESULT = new P(new List<DefSub>(), submain); :};
+programa ::= cuerpo: listadefsub main: submain
+    {:RESULT = new P(listadefsub, submain); :};
+
+
+cuerpo ::= subprograma:nuevo
+    {:RESULT = new P(new List<DefSub>(), nuevo); :};
+cuerpo ::= dec:nuevo PUNTOCOMA
+    {:RESULT = new P(new List<DefSub>(), nuevo); :};
+cuerpo ::= cuerpo:listadefSub subprograma:nuevo
+    {:RESULT = new P(listadefSub, nuevo); :};
+cuerpo ::= cuerpo:listadefSub dec:nuevo PUNTOCOMA
+    {:RESULT = new P(listadefSub, nuevo); :};
+
+
+
 s ::= i PUNTOCOMA s  | i PUNTOCOMA;
 i  ::=  dec | for | while | ifelse | stilus | tab | alias | callf | asignation;
 main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s RET exp0 PUNTOCOMA LLC;

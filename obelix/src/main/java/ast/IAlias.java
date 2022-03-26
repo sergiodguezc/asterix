@@ -24,13 +24,14 @@ public class IAlias extends I implements DefSub {
     }
 
 	public KindI kind() {
-		return KindI.DEC;
+		return KindI.ALIAS;
 	}
 
     public String toString() {
         if (isId) {
-            return '';
+            return "alias(" + id.toString() + "," + ids.toString() + ")";
         }
+        return "alias(" + id.toString() + "," + tipo.toString() + ")";
     }
     
 }

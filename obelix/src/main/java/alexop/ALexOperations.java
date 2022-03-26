@@ -137,9 +137,7 @@ public class ALexOperations {
   public UnidadLexica unidadBoolix() {
      return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.BOOLIX); 
   } 
-  public UnidadLexica unidadEnumix() {
-     return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.ENUMIX); 
-  } 
+
   public UnidadLexica unidadStilus() {
      return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.STIL); 
   } 
