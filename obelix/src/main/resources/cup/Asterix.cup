@@ -6,6 +6,7 @@ import alexop.UnidadLexica;
 import alexop.TokenValue;
 import errors.GestionErroresAsterix;
 import java.util.List;
+import java.util.ArrayList;
 import ast.*;
 
 scan with {: return getScanner().next_token(); :};
@@ -30,14 +31,14 @@ terminal T INTIX, BOOLIX, FLOATIX, POT, VECTIX;
 
 non terminal P programa;
 non terminal Sub subprograma, main;
-non terminal I i, dec, alias, ifelse, struct,while, for, tab, stilus, asignation, callf;
+non terminal I i, dec, alias, ifelse, struct, while, for, tab, stilus, asignation, callf;
 non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8;
 non terminal Arg arg;
 non terminal T tipo;
 
 non terminal List<IDec> structint;
 non terminal List<I> s;
-non terminal List <DefSub> cuerpo;
+non terminal List<DefSub> cuerpo;
 
 
 non terminal List<E> lista, largc;
@@ -45,15 +46,15 @@ non terminal List<Arg> largp;
 non terminal valref,listaint;
 
 programa ::= main : submain
-    {:RESULT = new P(new List<DefSub>(), submain); :};
+    {:RESULT = new P(new ArrayList<DefSub>(), submain); :};
 programa ::= cuerpo: listadefsub main: submain
     {:RESULT = new P(listadefsub, submain); :};
 
 
 cuerpo ::= subprograma:nuevo
-    {:RESULT = new P(new List<DefSub>(), nuevo); :};
+    {:RESULT = new P(new ArrayList<DefSub>(), nuevo); :};
 cuerpo ::= dec:nuevo PUNTOCOMA
-    {:RESULT = new P(new List<DefSub>(), nuevo); :};
+    {:RESULT = new P(new ArrayList<DefSub>(), nuevo); :};
 cuerpo ::= cuerpo:listadefSub subprograma:nuevo
     {:RESULT = new P(listadefSub, nuevo); :};
 cuerpo ::= cuerpo:listadefSub dec:nuevo PUNTOCOMA
