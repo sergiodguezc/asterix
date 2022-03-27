@@ -156,6 +156,9 @@ public class ALexOperations {
   public UnidadLexica unidadEof() {
      return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.EOF); 
   }
+  public UnidadLexica unidadCall() {
+     return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.CALL); 
+  }
   public void error() {
     System.err.println("***"+alex.fila()+", "+alex.columna()+" Caracter inexperado: "+alex.lexema());
   }
