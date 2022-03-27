@@ -33,23 +33,19 @@ non terminal P programa;
 non terminal Sub subprograma, main;
 non terminal I i, dec, alias, ifelse, struct, while, for, tab, stilus, asignation, callf;
 non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8;
-non terminal Arg arg;
 non terminal T tipo;
 
 non terminal List<IDec> structint;
 non terminal List<I> s;
 non terminal List<DefSub> cuerpo;
 
-
-non terminal List<E> lista, largc;
-non terminal List<Arg> largp;
-non terminal valref,listaint;
+non terminal List<E> lista, largc, listaint;
+non terminal List<Arg> largp, args;
 
 programa ::= main : submain
     {:RESULT = new P(new ArrayList<DefSub>(), submain); :};
 programa ::= cuerpo: listadefsub main: submain
     {:RESULT = new P(listadefsub, submain); :};
-
 
 cuerpo ::= subprograma:nuevo
     {:RESULT = new P(new ArrayList<DefSub>(), nuevo); :};
@@ -60,37 +56,220 @@ cuerpo ::= cuerpo:listadefSub subprograma:nuevo
 cuerpo ::= cuerpo:listadefSub dec:nuevo PUNTOCOMA
     {:RESULT = new P(listadefSub, nuevo); :};
 
+s ::= s:listains PUNTOCOMA i:nuevo
+    {: listains.add(nuevo);
+        RESULT = listains; :};
+s ::=  i:ins PUNTOCOMA
+    {: List<I> listains = new List<I>();
+       listains.add(ins);
+       RESULT = listains; :};
 
+i ::= dec:idec
+    {: RESULT = idec; :};
+i ::= for:ifor
+    {: RESULT = ifor; :};
+i ::= while:iwhile
+    {: RESULT = iwhile; :};
+i ::= ifelse:iif
+    {: RESULT = iif; :};
+i ::= stilus:istilus
+    {: RESULT = istilus; :};
+i ::= tab:itab
+    {: RESULT = itab; :};
+i ::= alias:ialias
+    {: RESULT = ialias; :};
+i ::= callf:icallf
+    {: RESULT = icallf; :};
+i ::= asignation:iasig
+    {: RESULT = iasig; :};
 
-s ::= i PUNTOCOMA s  | i PUNTOCOMA;
-i  ::=  dec | for | while | ifelse | stilus | tab | alias | callf | asignation;
-main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s RET exp0 PUNTOCOMA LLC;
-dec ::= tipo ID ASIG exp0 | tipo ID | struct | ID ID ASIG exp0 | ID ID ;
-asignation ::= exp0 ASIG exp0;
-lista ::= LLA LLC | LLA listaint LLC;
-listaint ::= exp0 | listaint COMA exp0 ;
-alias ::= DATIX ID tipo | DATIX ID struct; 
-tipo ::= INTIX | BOOLIX | FLOATIX | VECTIX MENOR tipo MAYOR CORA INTEGER CORC; 
-struct ::= POT ID CORA structint CORC;
-structint ::= structint dec PUNTOCOMA  | dec PUNTOCOMA;
-subprograma ::= POTION ID largp LLA s LLC | POTION ID largp FLECHA tipo LLA s RET exp0 PUNTOCOMA LLC;
-largp ::= PAA PAC | PAA arg PAC;
-arg ::= arg COMA ID DOSPUNTOS valref | ID DOSPUNTOS valref;
-valref ::= tipo | REF tipo | ID | REF ID;
-callf ::= ID PAA PAC | ID PAA largc PAC;
-largc ::= largc COMA exp0 | exp0;
-ifelse ::= IF PAA exp0 PAC LLA s LLC | IF PAA exp0 PAC LLA s LLC ELSE LLA s LLC;
-while ::= WHILIX PAA exp0 PAC LLA s LLC;
-for ::= FORIX PAA tipo ID DOSPUNTOS ID PAC LLA s LLC;
-tab ::= TABEL PAA exp0 PAC;
-stilus ::= STIL PAA exp0 PAC;
+main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s:cuerpo RET exp0:vRet PUNTOCOMA LLC
+    {: RESULT = new  Sub(cuerpo,vRet); :};
 
-exp0 ::= exp1 OR exp0 | exp1;
-exp1 ::= exp2 AND exp1 | exp2;
-exp2 ::= exp3 IGUAL exp2 | exp3 DIS exp2 | exp3;
-exp3 ::= exp4 MEIGUAL exp3 | exp4 MAIGUAL exp3 | exp4 MENOR exp3 | exp4 MAYOR exp3 | exp4;
-exp4 ::= exp4 MAS exp5 | exp4 MENOS exp5 | exp5;
-exp5 ::= exp5 MUL exp6 | exp5 DIV exp6 | exp5 MOD exp6 | exp6;
-exp6 ::= NOT exp7 | MENOS exp6 | exp7 POW exp6 | exp7;
-exp7 ::= exp7 PUNTO exp8 | exp7 CORA exp8 CORC | exp8;
-exp8 ::= ID | INTEGER | FLOATING | GALO | ROMANO | lista | callf | PAA exp0 PAC;
+dec ::= tipo:type ID:id ASIG exp0:valor
+    {: RESULT = new IDecVar(type, id.lexema, valor); :};
+dec ::= tipo:type ID:id
+    {: RESULT = new IDecVar(type, id.lexema); :};
+dec ::= struct:decStruct
+    {: RESULT = decStruct; :};
+dec ::= ID:idA ID:id ASIG exp0:valor
+    {: RESULT = new IDecVar(idA.lexema, id.lexema, valor); :};
+dec ::= ID:idA ID:id
+    {: RESULT = new IDecVar(idA.lexema, id.lexema); :};
+
+asignation ::= exp0: ASIG exp0
+    {: RESULT = new IAsig(idA.lexema, id.lexema, valor); :};
+
+lista ::= LLA LLC
+    {: RESULT = new ArrayList(); :};
+lista ::= LLA listaint:listaexp LLC
+    {: RESULT = listaexp; :};
+
+listaint ::= exp0:nuevo
+    {: List<E> listaexp = new ArrayList();
+       listaexp.add(nuevo);
+       RESULT = listaexp; :};
+listaint ::= listaint:listaexp COMA exp0:nuevo
+    {: listaexp.add(nuevo);
+       RESULT = listaexp; :};
+
+alias ::= DATIX ID:id tipo:type
+    {: RESULT = new IAlias(id.lexema, type); :};
+alias ::= DATIX ID:id ID:idA
+    {: RESULT = new IAlias(id.lexema, idA.lexema); :};
+
+tipo ::= INTIX:ent
+    {: RESULT = new T(ent.lexema); :};
+tipo ::= BOOLIX:bool
+    {: RESULT = new T(bool.lexema); :};
+tipo ::= FLOATIX:real
+    {: RESULT = new T(real.lexema); :};
+tipo ::= VECTIX MENOR tipo:type MAYOR CORA INTEGER:tam CORC
+    {: RESULT = new T(type, tam.lexema); :};
+
+struct ::= POT ID:id CORA structint:listdec CORC
+    {: RESULT = new IDecVar(id.lexema, listdec);:};
+
+structint ::= structint:listadec dec:nuevo PUNTOCOMA
+    {: listadec.add(nuevo);
+       RESULT = new IDecVar(id.lexema, listdec);:};
+structint ::= dec:nuevo PUNTOCOMA
+    {: List<IDec> listadec= new ArrayList<IDec>();
+       listadec.add(nuevo);
+       RESULT = listadec;:};
+
+subprograma ::= POTION ID:id largp:args LLA s:cuerpo LLC
+    {:RESULT = new Sub(cuerpo, args, id.lexema);:};
+subprograma ::= POTION ID:id largp:args FLECHA tipo:tRet LLA s:cuerpo RET exp0:vRet PUNTOCOMA LLC
+    {:RESULT = new Sub(cuerpo, args, id.lexema, tRet, vRet);:};
+
+largp ::= PAA PAC
+    {:RESULT = new ArrayList<Arg>();:};
+largp ::= PAA args:listargs PAC
+    {:RESULT = listargs;:};
+
+args ::= args:lista COMA ID:id DOSPUNTOS tipo:t
+    {:RESULT = args.add(new Arg(t,id.lexema,false));:};
+args ::= args:lista COMA ID:id DOSPUNTOS REF tipo:t
+    {:RESULT = args.add(new Arg(t,id.lexema,true));:};
+args ::= args:lista COMA ID:id DOSPUNTOS REF ID:idA
+    {:RESULT = args.add(new Arg(idA.lexema,id.lexema,true));:};
+args ::= args:lista COMA ID:id DOSPUNTOS ID:idA
+    {:RESULT = args.add(new Arg(idA.lexema,id.lexema,false));:};
+args ::= ID:id DOSPUNTOS tipo:t
+    {: List<Arg> args = new ArrayList<Arg>();
+    RESULT = args.add(new Arg(t,id.lexema,false));:};
+args ::= ID DOSPUNTOS REF tipo
+    {: List<Arg> args = new ArrayList<Arg>();
+    RESULT = args.add(new Arg(t,id.lexema,true));:};
+arg ::= ID:id DOSPUNTOS ID:idA
+    {: List<Arg> args = new ArrayList<Arg>();
+    RESULT = args.add(new Arg(idA.lexema,id.lexema,false));:};
+args ::= ID:id DOSPUNTOS REF ID:idA
+    {: List<Arg> args = new ArrayList<Arg>();
+    RESULT = args.add(new Arg(idA.lexema,id.lexema,true));:};
+
+callf ::= ID:id PAA PAC
+    {:RESULT = new ICall(id.lexema);:};
+callf ::= ID:id PAA largc:params PAC
+    {:RESULT = new ICall(params, id.lexema);:};
+
+largc ::= largc:lista COMA exp0:valor
+    {:RESULT = lista.add(valor):};
+largc ::= exp0:valor
+    {: List<E> lista = new ArrayList<E>();
+    RESULT = lista.add(valor); :};
+
+ifelse ::= IF PAA exp0:cond PAC LLA s:cuerpo LLC
+    {:RESULT = new IIf(cond,cuerpo);:};
+ifelse ::= IF PAA exp0 PAC LLA s:cuerpoIf LLC ELSE LLA s:cuerpoElse LLC
+    {:RESULT = new IIf(cond,cuerpoIf,cuerpoElse);:};
+
+while ::= WHILIX PAA exp0:cond PAC LLA s:cuerpo LLC
+    {:RESULT = new IWhile(cond,cuerpo);:};
+
+for ::= FORIX PAA tipo:t ID:id DOSPUNTOS ID PAC LLA s:cuerpo LLC
+    {:RESULT = new IFor(t,id.lexema,cuerpo);:};
+
+tab ::= TABEL:op PAA exp0:valor PAC
+    {:RESULT = new IES(valor,op.lexema);:};
+
+stilus ::= STIL:op PAA exp0:valor PAC
+    {:RESULT = new IES(valor,op.lexema);:};
+
+exp0 ::= exp1:valor1 OR:op exp0:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp0 ::= exp1:valor
+    {:RESULT = valor;:};
+
+exp1 ::= exp2:valor1 AND:op exp1:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp1 ::= exp2:valor
+    {:RESULT = valor;:};
+
+exp2 ::= exp3:valor1 IGUAL:op exp2:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp2 ::= exp3:valor1 DIS:op exp2:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp2 ::= exp3:valor
+    {:RESULT = valor;:};
+
+exp3 ::= exp4:valor1 MEIGUAL:op exp3:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp3 ::= exp4:valor1 MAIGUAL:op exp3:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp3 ::= exp4:valor1 MENOR:op exp3:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp3 ::= exp4:valor1 MAYOR:op exp3:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp3 ::= exp4:valor
+    {:RESULT = valor;:};
+
+exp4 ::= exp4:valor1 MAS:op exp5:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp4 ::= exp4:valor1 MENOS:op exp5:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp4 ::= exp5:valor
+    {:RESULT = valor;:};
+
+exp5 ::= exp5:valor1 MUL:op exp6:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp5 ::= exp5:valor1 DIV:op exp6:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp5 ::= exp5:valor1 MOD:op exp6:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp5 ::= exp6:valor
+    {:RESULT = valor;:};
+
+exp6 ::= NOT:op exp7:valor
+    {:RESULT = new EUn(valor, op.lexema);:};
+exp6 ::= MENOS:op exp6:valor
+    {:RESULT = new EUn(valor, op.lexema);:};
+exp6 ::= exp7:valor1 POW:op exp6:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp6 ::= exp7:valor
+    {:RESULT = valor;:};
+
+exp7 ::= exp7:valor1 PUNTO:op exp8:valor2
+    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp7 ::= exp7:valor1 CORA exp8:valor2 CORC
+    {:RESULT = new EBin(valor1,valor2, "accesoArray");:};
+exp7 ::= exp8:valor
+    {:RESULT = valor;:};
+
+exp8 ::= ID:id
+    {: RESULT = new ECte(id.lexema);:};
+exp8 ::= INTEGER:valor
+    {: RESULT = new ECte(valor.lexema);:};
+exp8 ::= FLOATING:valor
+    {: RESULT = new ECte(valor.lexema);:};
+exp8 ::= GALO:valor
+    {: RESULT = new ECte(valor.lexema);:};
+exp8 ::= ROMANO:valor
+    {: RESULT = new ECte(valor.lexema);:};
+exp8 ::= lista:valor
+    {: RESULT = new ECte(valor.lexema);:};
+exp8 ::= callf:llamada
+    {: RESULT = llamada;:};
+exp8 ::= PAA exp0:valor PAC
+    {: RESULT = valor;:};

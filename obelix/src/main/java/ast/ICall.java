@@ -4,12 +4,17 @@ import java.util.List;
 
 public class ICall extends I {
     private List<E> params;
-    private E id;
+    private String id;
+    private Boolean noParams;
 
-    public ICall(List<E> params, E id, E nuevo) {
+    public ICall(List<E> params, String id) {
         this.params = params;
         this.id = id;
-        params.add(nuevo);
+        noParams = false;
+    }
+    public ICall(String id) {
+        this.id = id;
+        noParams = true;
     }
 
     public KindI kind() {
@@ -17,7 +22,9 @@ public class ICall extends I {
     }
 
     public String toString() {
-        return "call("+id.toString()+","+params.toString()+")";
+        if (noParams)
+            return "call("+id +")";
+        return "call("+id+","+params.toString()+")";
     }
 
 }

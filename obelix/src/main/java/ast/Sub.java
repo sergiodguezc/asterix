@@ -7,11 +7,11 @@ public class Sub implements ASTNode, DefSub {
     private List<Arg> args;
     private boolean isFunction;
     private boolean isMain;
-    private E id;
+    private String id;
     private T tRet;
     private E vRet;
 
-    public Sub(List<I> cuerpo, List<Arg> args,E id, T tRet, E vRet) {
+    public Sub(List<I> cuerpo, List<Arg> args,String id, T tRet, E vRet) {
         this.cuerpo = cuerpo;
         this.args = args;
         this.id = id;
@@ -21,7 +21,7 @@ public class Sub implements ASTNode, DefSub {
         isMain = false;
     }
 
-    public Sub(List<I> cuerpo, List<Arg> args, E id) {
+    public Sub(List<I> cuerpo, List<Arg> args, String id) {
         this.cuerpo = cuerpo;
         this.id = id;
         this.args = args;
@@ -29,8 +29,9 @@ public class Sub implements ASTNode, DefSub {
         isFunction = false;
     }
 
-    public Sub(List<I> cuerpo) {
+    public Sub(List<I> cuerpo, E vRet) {
         this.cuerpo = cuerpo;
+        this.vRet = vRet;
         isMain = true;
     }
 
@@ -40,12 +41,12 @@ public class Sub implements ASTNode, DefSub {
 
     public String toString() {
         if (isMain) {
-            return "main("+cuerpo.toString()+")";
+            return "main("+cuerpo.toString()+"," + vRet.toString() + ")";
         }
         if (isFunction) {
-            return "fun("+id.toString()+","+args.toString()+","+cuerpo.toString()+","+tRet.toString()+","+vRet.toString()+")";
+            return "fun("+id+","+args.toString()+","+cuerpo.toString()+","+tRet.toString()+","+vRet.toString()+")";
         }
-        return "proc("+id.toString()+","+args.toString()+","+cuerpo.toString()+")";
+        return "proc("+id+","+args.toString()+","+cuerpo.toString()+")";
     }
     
 }

@@ -4,10 +4,10 @@ import java.util.List;
 
 public class IFor extends I {
     private T tipo; 
-    private E id; 
+    private String id;
     private List<I> cuerpoFor;
 
-    public IFor(T tipo, E id, List<I> cuerpoFor) {
+    public IFor(T tipo, String id, List<I> cuerpoFor) {
         this.tipo = tipo;
         this.id = id;
         this.cuerpoFor = cuerpoFor;
@@ -18,7 +18,7 @@ public class IFor extends I {
 	}
 
     public String toString() {
-        return "for("+tipo.toString()+","+id.toString()+","+cuerpoFor.toString()+")";
+        return "for("+tipo.toString()+","+id+","+cuerpoFor.toString()+")";
     }
 
     

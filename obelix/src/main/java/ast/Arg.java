@@ -2,18 +2,18 @@ package ast;
 
 public class Arg implements ASTNode {
     private T tipo;
-    private E idA;
-    private E id;
+    private String idA;
+    private String id;
     private boolean ref;
     private boolean isAlias;
 
-    public Arg (T tipo, E id, boolean ref){
+    public Arg (T tipo, String id, boolean ref){
         this.tipo = tipo;
         this.id = id;
         this.ref = ref;
         isAlias = false;
     }
-    public Arg (E idA, E id, boolean ref){
+    public Arg (String idA, String id, boolean ref){
         this.idA = idA;
         this.id = id;
         this.ref = ref;

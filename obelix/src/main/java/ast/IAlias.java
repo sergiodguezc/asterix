@@ -1,7 +1,7 @@
 package ast;
 
 public class IAlias extends I implements DefSub {
-    private E id, ids;
+    private String id, ids;
     private T tipo;
     private boolean isId; // Sirve para diferenciar los casos
                           // pot par {
@@ -12,12 +12,12 @@ public class IAlias extends I implements DefSub {
                           // y el caso 
                           // datix numero intix;
 
-    public IAlias(E id, T tipo) {
+    public IAlias(String id, T tipo) {
         this.id = id;
         this.tipo = tipo;
         isId = false;
     }
-    public IAlias(E id, E ids) {
+    public IAlias(String id, String ids) {
         this.id = id;
         this.ids = ids;
         isId = false;
@@ -29,9 +29,9 @@ public class IAlias extends I implements DefSub {
 
     public String toString() {
         if (isId) {
-            return "alias(" + id.toString() + "," + ids.toString() + ")";
+            return "alias(" + id + "," + ids + ")";
         }
-        return "alias(" + id.toString() + "," + tipo.toString() + ")";
+        return "alias(" + id + "," + tipo.toString() + ")";
     }
     
 }
