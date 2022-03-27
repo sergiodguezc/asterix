@@ -25,14 +25,14 @@ init with {:
 terminal TokenValue DATIX, PUNTOCOMA, COMA, INTEGER, FLOATING, GALO, ROMANO,
     MENOR, MAYOR, CORA, CORC, PAA, PAC, LLA, LLC, MAS, MENOS, MUL, DIV, IGUAL, OR,
     AND, DIS, ASIG, MEIGUAL, MAIGUAL, MOD, POW, NOT, REF, IF, ELSE, WHILIX, PUNTO,
-    FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, TABEL, STIL, ID;
+    FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, TABEL, STIL, ID, CALL;
 
 terminal T INTIX, BOOLIX, FLOATIX, POT, VECTIX;
 
 non terminal P programa;
 non terminal Sub subprograma, main;
-non terminal I i, dec, alias, ifelse, struct, while, for, tab, stilus, asignation;
-non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8, callf;
+non terminal I i, dec, alias, ifelse, struct, while, for, tab, stilus, asignation, callf;
+non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8;
 non terminal T tipo;
 
 non terminal List<IDec> structint;
@@ -80,6 +80,8 @@ i ::= alias:ialias
     {: RESULT = ialias; :};
 i ::= asignation:iasig
     {: RESULT = iasig; :};
+i ::= callf:icall
+    {: RESULT = icall; :};
 
 main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s:cuerpo RET exp0:vRet PUNTOCOMA LLC
     {: RESULT = new  Sub(cuerpo,vRet); :};
@@ -167,9 +169,9 @@ args ::= ID:id DOSPUNTOS REF ID:idA
     {: List<Arg> args = new ArrayList<Arg>();
     RESULT = args.add(new Arg(idA.lexema,id.lexema,true));:};
 
-callf ::= ID:id PAA PAC
+callf ::= CALL ID:id PAA PAC
     {:RESULT = new ICall(id.lexema);:};
-callf ::= ID:id PAA largc:params PAC
+callf ::= CALL ID:id PAA largc:params PAC
     {:RESULT = new ICall(params, id.lexema);:};
 
 largc ::= largc:lista COMA exp0:valor
@@ -265,9 +267,9 @@ exp8 ::= ROMANO:valor
     {: RESULT = new ECte(valor.lexema);:};
 exp8 ::= lista:valor
     {: RESULT = new ECte(valor.lexema);:};
-exp8 ::= ID:id PAA PAC
+exp8 ::= CALL ID:id PAA PAC
     {: RESULT = new ECall(id.lexema);:};
-exp8 ::= ID:id PAA largc:params PAC
+exp8 ::= CALL ID:id PAA largc:params PAC
     {: RESULT = new ECall(id.lexema, params);:};
 exp8 ::= ID:id
     {: RESULT = new ECte(id.lexema);:};
