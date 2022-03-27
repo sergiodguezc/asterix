@@ -128,9 +128,6 @@ public class ALexOperations {
   public UnidadLexica unidadComa() {
      return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.COMA); 
   } 
-  public UnidadLexica unidadDatix() {
-     return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.DATIX); 
-  } 
   public UnidadLexica unidadIntix() {
      return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.INTIX); 
   } 

@@ -22,7 +22,7 @@ init with {:
    alex.fijaGestionErrores(errores);
 :};
 
-terminal TokenValue DATIX, PUNTOCOMA, COMA, INTEGER, FLOATING, GALO, ROMANO,
+terminal TokenValue PUNTOCOMA, COMA, INTEGER, FLOATING, GALO, ROMANO,
     MENOR, MAYOR, CORA, CORC, PAA, PAC, LLA, LLC, MAS, MENOS, MUL, DIV, IGUAL, OR,
     AND, DIS, ASIG, MEIGUAL, MAIGUAL, MOD, POW, NOT, REF, IF, ELSE, WHILIX, PUNTO,
     FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, TABEL, STIL, ID, CALL;
@@ -31,7 +31,8 @@ terminal T INTIX, BOOLIX, FLOATIX, POT, VECTIX;
 
 non terminal P programa;
 non terminal Sub subprograma, main;
-non terminal I i, dec, alias, ifelse, struct, while, for, tab, stilus, asignation, callf;
+non terminal I i, ifelse, struct, while, for, tab, stilus, asignation, callf;
+non terminal IDec dec;
 non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8;
 non terminal T tipo;
 
@@ -48,19 +49,21 @@ programa ::= cuerpo: listadefsub main: submain
     {:RESULT = new P(listadefsub, submain); :};
 
 cuerpo ::= subprograma:nuevo
-    {:RESULT = new P(new ArrayList<DefSub>(), nuevo); :};
+    {: List<DefSub> lista = new ArrayList<DefSub>();
+    RESULT = lista.add(nuevo); :};
 cuerpo ::= dec:nuevo PUNTOCOMA
-    {:RESULT = new P(new ArrayList<DefSub>(), nuevo); :};
+    {: List<DefSub> lista = new ArrayList<DefSub>();
+    RESULT = lista.add(nuevo); :};
 cuerpo ::= cuerpo:listadefSub subprograma:nuevo
-    {:RESULT = new P(listadefSub, nuevo); :};
+    {:RESULT = listadefSub.add(nuevo); :};
 cuerpo ::= cuerpo:listadefSub dec:nuevo PUNTOCOMA
-    {:RESULT = new P(listadefSub, nuevo); :};
+    {:RESULT = listadefSub.add(nuevo); :};
 
 s ::= s:listains i:nuevo PUNTOCOMA
     {: listains.add(nuevo);
         RESULT = listains; :};
 s ::=  i:ins PUNTOCOMA
-    {: List<I> listains = new List<I>();
+    {: List<I> listains = new ArrayList<I>();
        listains.add(ins);
        RESULT = listains; :};
 
@@ -76,8 +79,6 @@ i ::= stilus:istilus
     {: RESULT = istilus; :};
 i ::= tab:itab
     {: RESULT = itab; :};
-i ::= alias:ialias
-    {: RESULT = ialias; :};
 i ::= asignation:iasig
     {: RESULT = iasig; :};
 i ::= callf:icall
@@ -92,13 +93,9 @@ dec ::= tipo:type ID:id
     {: RESULT = new IDecVar(type, id.lexema); :};
 dec ::= struct:decStruct
     {: RESULT = decStruct; :};
-dec ::= ID:idA ID:id ASIG exp0:valor
-    {: RESULT = new IDecVar(idA.lexema, id.lexema, valor); :};
-dec ::= ID:idA ID:id
-    {: RESULT = new IDecVar(idA.lexema, id.lexema); :};
 
-asignation ::= exp0: ASIG exp0
-    {: RESULT = new IAsig(idA.lexema, id.lexema, valor); :};
+asignation ::= exp0:id ASIG exp0
+    {: RESULT = new IAsig(id.lexema, id.lexema, valor); :};
 
 lista ::= LLA LLC
     {: RESULT = new ArrayList(); :};
@@ -112,11 +109,6 @@ listaint ::= exp0:nuevo
 listaint ::= listaint:listaexp COMA exp0:nuevo
     {: listaexp.add(nuevo);
        RESULT = listaexp; :};
-
-alias ::= DATIX ID:id tipo:type
-    {: RESULT = new IAlias(id.lexema, type); :};
-alias ::= DATIX ID:id ID:idA
-    {: RESULT = new IAlias(id.lexema, idA.lexema); :};
 
 tipo ::= INTIX:ent
     {: RESULT = new T(ent.lexema); :};
@@ -152,22 +144,12 @@ args ::= args:lista COMA ID:id DOSPUNTOS tipo:t
     {:RESULT = args.add(new Arg(t,id.lexema,false));:};
 args ::= args:lista COMA ID:id DOSPUNTOS REF tipo:t
     {:RESULT = args.add(new Arg(t,id.lexema,true));:};
-args ::= args:lista COMA ID:id DOSPUNTOS REF ID:idA
-    {:RESULT = args.add(new Arg(idA.lexema,id.lexema,true));:};
-args ::= args:lista COMA ID:id DOSPUNTOS ID:idA
-    {:RESULT = args.add(new Arg(idA.lexema,id.lexema,false));:};
 args ::= ID:id DOSPUNTOS tipo:t
     {: List<Arg> args = new ArrayList<Arg>();
     RESULT = args.add(new Arg(t,id.lexema,false));:};
 args ::= ID DOSPUNTOS REF tipo
     {: List<Arg> args = new ArrayList<Arg>();
     RESULT = args.add(new Arg(t,id.lexema,true));:};
-args ::= ID:id DOSPUNTOS ID:idA
-    {: List<Arg> args = new ArrayList<Arg>();
-    RESULT = args.add(new Arg(idA.lexema,id.lexema,false));:};
-args ::= ID:id DOSPUNTOS REF ID:idA
-    {: List<Arg> args = new ArrayList<Arg>();
-    RESULT = args.add(new Arg(idA.lexema,id.lexema,true));:};
 
 callf ::= CALL ID:id PAA PAC
     {:RESULT = new ICall(id.lexema);:};
@@ -243,8 +225,6 @@ exp5 ::= exp6:valor
 
 exp6 ::= NOT exp7:valor
     {:RESULT = new EUn(valor, "not");:};
-exp6 ::= MENOS:op exp6:valor
-    {:RESULT = new EUn(valor, "menos");:};
 exp6 ::= exp7:valor1 POW exp6:valor2
     {:RESULT = new EBin(valor1,valor2, "pow");:};
 exp6 ::= exp7:valor

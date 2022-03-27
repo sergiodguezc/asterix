@@ -1,6 +1,6 @@
 package ast;
 
-public abstract class EBin extends E {
+public class EBin extends E {
    private E opnd1;
    private E opnd2;
    private String op;
