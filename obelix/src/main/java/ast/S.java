@@ -2,7 +2,7 @@ package ast;
 
 import java.util.List;
 
-public class Sub implements ASTNode, DefSub {
+public class S implements ASTNode, DefSub {
     private List<I> cuerpo;
     private List<Arg> args;
     private boolean isFunction;
@@ -11,7 +11,7 @@ public class Sub implements ASTNode, DefSub {
     private T tRet;
     private E vRet;
 
-    public Sub(List<I> cuerpo, List<Arg> args,String id, T tRet, E vRet) {
+    public S(List<I> cuerpo, List<Arg> args, String id, T tRet, E vRet) {
         this.cuerpo = cuerpo;
         this.args = args;
         this.id = id;
@@ -21,7 +21,7 @@ public class Sub implements ASTNode, DefSub {
         isMain = false;
     }
 
-    public Sub(List<I> cuerpo, List<Arg> args, String id) {
+    public S(List<I> cuerpo, List<Arg> args, String id) {
         this.cuerpo = cuerpo;
         this.id = id;
         this.args = args;
@@ -29,7 +29,7 @@ public class Sub implements ASTNode, DefSub {
         isFunction = false;
     }
 
-    public Sub(List<I> cuerpo, E vRet) {
+    public S(List<I> cuerpo, E vRet) {
         this.cuerpo = cuerpo;
         this.vRet = vRet;
         isMain = true;

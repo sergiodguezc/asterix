@@ -30,7 +30,7 @@ terminal TokenValue DATIX, PUNTOCOMA, COMA, INTEGER, FLOATING, GALO, ROMANO,
 terminal T INTIX, BOOLIX, FLOATIX, POT, VECTIX;
 
 non terminal P programa;
-non terminal Sub subprograma, main;
+non terminal S subprograma, main;
 non terminal I i, dec, alias, ifelse, struct, while, for, tab, stilus, asignation;
 non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8, callf;
 non terminal T tipo;
