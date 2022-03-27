@@ -31,8 +31,8 @@ terminal T INTIX, BOOLIX, FLOATIX, POT, VECTIX;
 
 non terminal P programa;
 non terminal Sub subprograma, main;
-non terminal I i, dec, alias, ifelse, struct, while, for, tab, stilus, asignation, callf;
-non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8;
+non terminal I i, dec, alias, ifelse, struct, while, for, tab, stilus, asignation;
+non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8, callf;
 non terminal T tipo;
 
 non terminal List<IDec> structint;
@@ -56,7 +56,7 @@ cuerpo ::= cuerpo:listadefSub subprograma:nuevo
 cuerpo ::= cuerpo:listadefSub dec:nuevo PUNTOCOMA
     {:RESULT = new P(listadefSub, nuevo); :};
 
-s ::= s:listains PUNTOCOMA i:nuevo
+s ::= s:listains i:nuevo PUNTOCOMA
     {: listains.add(nuevo);
         RESULT = listains; :};
 s ::=  i:ins PUNTOCOMA
@@ -78,8 +78,6 @@ i ::= tab:itab
     {: RESULT = itab; :};
 i ::= alias:ialias
     {: RESULT = ialias; :};
-i ::= callf:icallf
-    {: RESULT = icallf; :};
 i ::= asignation:iasig
     {: RESULT = iasig; :};
 
@@ -162,7 +160,7 @@ args ::= ID:id DOSPUNTOS tipo:t
 args ::= ID DOSPUNTOS REF tipo
     {: List<Arg> args = new ArrayList<Arg>();
     RESULT = args.add(new Arg(t,id.lexema,true));:};
-arg ::= ID:id DOSPUNTOS ID:idA
+args ::= ID:id DOSPUNTOS ID:idA
     {: List<Arg> args = new ArrayList<Arg>();
     RESULT = args.add(new Arg(idA.lexema,id.lexema,false));:};
 args ::= ID:id DOSPUNTOS REF ID:idA
@@ -175,10 +173,10 @@ callf ::= ID:id PAA largc:params PAC
     {:RESULT = new ICall(params, id.lexema);:};
 
 largc ::= largc:lista COMA exp0:valor
-    {:RESULT = lista.add(valor):};
+    {:RESULT = lista.add(valor);:};
 largc ::= exp0:valor
     {: List<E> lista = new ArrayList<E>();
-    RESULT = lista.add(valor); :};
+       RESULT = lista.add(valor); :};
 
 ifelse ::= IF PAA exp0:cond PAC LLA s:cuerpo LLC
     {:RESULT = new IIf(cond,cuerpo);:};
@@ -197,68 +195,66 @@ tab ::= TABEL:op PAA exp0:valor PAC
 stilus ::= STIL:op PAA exp0:valor PAC
     {:RESULT = new IES(valor,op.lexema);:};
 
-exp0 ::= exp1:valor1 OR:op exp0:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp0 ::= exp1:valor1 OR exp0:valor2
+    {:RESULT = new EBin(valor1,valor2, "or");:};
 exp0 ::= exp1:valor
     {:RESULT = valor;:};
 
-exp1 ::= exp2:valor1 AND:op exp1:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp1 ::= exp2:valor1 AND exp1:valor2
+    {:RESULT = new EBin(valor1,valor2, "and");:};
 exp1 ::= exp2:valor
     {:RESULT = valor;:};
 
-exp2 ::= exp3:valor1 IGUAL:op exp2:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp2 ::= exp3:valor1 IGUAL exp2:valor2
+    {:RESULT = new EBin(valor1,valor2, "igual");:};
 exp2 ::= exp3:valor1 DIS:op exp2:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+    {:RESULT = new EBin(valor1,valor2, "dis");:};
 exp2 ::= exp3:valor
     {:RESULT = valor;:};
 
-exp3 ::= exp4:valor1 MEIGUAL:op exp3:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
-exp3 ::= exp4:valor1 MAIGUAL:op exp3:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
-exp3 ::= exp4:valor1 MENOR:op exp3:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
-exp3 ::= exp4:valor1 MAYOR:op exp3:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp3 ::= exp4:valor1 MEIGUAL exp3:valor2
+    {:RESULT = new EBin(valor1,valor2, "leq");:};
+exp3 ::= exp4:valor1 MAIGUAL exp3:valor2
+    {:RESULT = new EBin(valor1,valor2, "geq");:};
+exp3 ::= exp4:valor1 MENOR exp3:valor2
+    {:RESULT = new EBin(valor1,valor2, "menor");:};
+exp3 ::= exp4:valor1 MAYOR exp3:valor2
+    {:RESULT = new EBin(valor1,valor2, "mayor");:};
 exp3 ::= exp4:valor
     {:RESULT = valor;:};
 
-exp4 ::= exp4:valor1 MAS:op exp5:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
-exp4 ::= exp4:valor1 MENOS:op exp5:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp4 ::= exp4:valor1 MAS exp5:valor2
+    {:RESULT = new EBin(valor1,valor2, "mas");:};
+exp4 ::= exp4:valor1 MENOS exp5:valor2
+    {:RESULT = new EBin(valor1,valor2, "menos");:};
 exp4 ::= exp5:valor
     {:RESULT = valor;:};
 
-exp5 ::= exp5:valor1 MUL:op exp6:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
-exp5 ::= exp5:valor1 DIV:op exp6:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+exp5 ::= exp5:valor1 MUL exp6:valor2
+    {:RESULT = new EBin(valor1,valor2, "mul");:};
+exp5 ::= exp5:valor1 DIV exp6:valor2
+    {:RESULT = new EBin(valor1,valor2, "div");:};
 exp5 ::= exp5:valor1 MOD:op exp6:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+    {:RESULT = new EBin(valor1,valor2, "mod");:};
 exp5 ::= exp6:valor
     {:RESULT = valor;:};
 
-exp6 ::= NOT:op exp7:valor
-    {:RESULT = new EUn(valor, op.lexema);:};
+exp6 ::= NOT exp7:valor
+    {:RESULT = new EUn(valor, "not");:};
 exp6 ::= MENOS:op exp6:valor
-    {:RESULT = new EUn(valor, op.lexema);:};
-exp6 ::= exp7:valor1 POW:op exp6:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+    {:RESULT = new EUn(valor, "menos");:};
+exp6 ::= exp7:valor1 POW exp6:valor2
+    {:RESULT = new EBin(valor1,valor2, "pow");:};
 exp6 ::= exp7:valor
     {:RESULT = valor;:};
 
 exp7 ::= exp7:valor1 PUNTO:op exp8:valor2
-    {:RESULT = new EBin(valor1,valor2, op.lexema);:};
+    {:RESULT = new EBin(valor1,valor2, "accS");:};
 exp7 ::= exp7:valor1 CORA exp8:valor2 CORC
-    {:RESULT = new EBin(valor1,valor2, "accesoArray");:};
+    {:RESULT = new EBin(valor1,valor2, "accA");:};
 exp7 ::= exp8:valor
     {:RESULT = valor;:};
 
-exp8 ::= ID:id
-    {: RESULT = new ECte(id.lexema);:};
 exp8 ::= INTEGER:valor
     {: RESULT = new ECte(valor.lexema);:};
 exp8 ::= FLOATING:valor
@@ -269,7 +265,11 @@ exp8 ::= ROMANO:valor
     {: RESULT = new ECte(valor.lexema);:};
 exp8 ::= lista:valor
     {: RESULT = new ECte(valor.lexema);:};
-exp8 ::= callf:llamada
-    {: RESULT = llamada;:};
+exp8 ::= ID:id PAA PAC
+    {: RESULT = new ECall(id.lexema);:};
+exp8 ::= ID:id PAA largc:params PAC
+    {: RESULT = new ECall(id.lexema, params);:};
+exp8 ::= ID:id
+    {: RESULT = new ECte(id.lexema);:};
 exp8 ::= PAA exp0:valor PAC
     {: RESULT = valor;:};
