@@ -32,6 +32,7 @@ non terminal P programa;
 non terminal S subprograma, main;
 non terminal I i, ifelse, while, for, tab, stilus, asignation, callf;
 non terminal IDec dec,struct;
+non terminal IAlias alias;
 non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8, exp9;
 non terminal T tipo;
 
@@ -51,14 +52,21 @@ cuerpo ::= subprograma:nuevo
     {: List<DefSub> lista = new ArrayList<DefSub>();
        lista.add(nuevo);
        RESULT = lista; :};
-cuerpo ::= dec:nuevo PUNTOCOMA
+cuerpo ::= dec:nuevo
+    {: List<DefSub> lista = new ArrayList<DefSub>();
+       lista.add(nuevo);
+       RESULT = lista; :};
+cuerpo ::= alias:nuevo
     {: List<DefSub> lista = new ArrayList<DefSub>();
        lista.add(nuevo);
        RESULT = lista; :};
 cuerpo ::= cuerpo:listadefSub subprograma:nuevo
     {: listadefSub.add(nuevo);
     RESULT = listadefSub; :};
-cuerpo ::= cuerpo:listadefSub dec:nuevo PUNTOCOMA
+cuerpo ::= cuerpo:listadefSub dec:nuevo
+    {: listadefSub.add(nuevo);
+    RESULT = listadefSub; :};
+cuerpo ::= cuerpo:listadefSub alias:nuevo
     {: listadefSub.add(nuevo);
     RESULT = listadefSub; :};
 
@@ -87,7 +95,7 @@ i ::= asignation:iasig PUNTOCOMA
 i ::= callf:icall PUNTOCOMA
     {: RESULT = icall; :};
 i ::= alias:ialias PUNTOCOMA
-    {: RESULT = ialias :};
+    {: RESULT = ialias; :};
 
 main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s:cuerpo RET exp0:vRet PUNTOCOMA LLC
     {: RESULT = new  S(cuerpo,vRet); :};
@@ -164,7 +172,6 @@ args ::= ID:id DOSPUNTOS REF tipo:t
     {: List<Arg> args = new ArrayList<Arg>();
        args.add(new Arg(t,id.lexema,true));
     RESULT = args;:};
-args ::= ID:id
 
 callf ::= ID:id PAA PAC
     {:RESULT = new ICall(id.lexema);:};
