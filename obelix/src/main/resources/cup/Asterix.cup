@@ -25,14 +25,13 @@ init with {:
 terminal TokenValue PUNTOCOMA, COMA, INTEGER, FLOATING, GALO, ROMANO,
     MENOR, MAYOR, CORA, CORC, PAA, PAC, LLA, LLC, MAS, MENOS, MUL, DIV, IGUAL, OR,
     AND, DIS, ASIG, MEIGUAL, MAIGUAL, MOD, POW, NOT, REF, IF, ELSE, WHILIX, PUNTO,
-    FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, TABEL, STIL, ID, CALL;
-
-terminal T INTIX, BOOLIX, FLOATIX, POT, VECTIX;
+    FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, TABEL, STIL, ID,
+    INTIX, BOOLIX, FLOATIX, POT, VECTIX;
 
 non terminal P programa;
 non terminal Sub subprograma, main;
-non terminal I i, ifelse, struct, while, for, tab, stilus, asignation, callf;
-non terminal IDec dec;
+non terminal I i, ifelse, while, for, tab, stilus, asignation, callf;
+non terminal IDec dec,struct;
 non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8;
 non terminal T tipo;
 
@@ -50,14 +49,18 @@ programa ::= cuerpo: listadefsub main: submain
 
 cuerpo ::= subprograma:nuevo
     {: List<DefSub> lista = new ArrayList<DefSub>();
-    RESULT = lista.add(nuevo); :};
+       lista.add(nuevo);
+       RESULT = lista; :};
 cuerpo ::= dec:nuevo PUNTOCOMA
     {: List<DefSub> lista = new ArrayList<DefSub>();
-    RESULT = lista.add(nuevo); :};
+       lista.add(nuevo);
+       RESULT = lista; :};
 cuerpo ::= cuerpo:listadefSub subprograma:nuevo
-    {:RESULT = listadefSub.add(nuevo); :};
+    {: listadefSub.add(nuevo);
+    RESULT = listadefSub; :};
 cuerpo ::= cuerpo:listadefSub dec:nuevo PUNTOCOMA
-    {:RESULT = listadefSub.add(nuevo); :};
+    {: listadefSub.add(nuevo);
+    RESULT = listadefSub; :};
 
 s ::= s:listains i:nuevo PUNTOCOMA
     {: listains.add(nuevo);
@@ -94,8 +97,8 @@ dec ::= tipo:type ID:id
 dec ::= struct:decStruct
     {: RESULT = decStruct; :};
 
-asignation ::= exp0:id ASIG exp0
-    {: RESULT = new IAsig(id.lexema, id.lexema, valor); :};
+asignation ::= exp0:id ASIG exp0:valor
+    {: RESULT = new IAsig(id, valor); :};
 
 lista ::= LLA LLC
     {: RESULT = new ArrayList(); :};
@@ -119,12 +122,12 @@ tipo ::= FLOATIX:real
 tipo ::= VECTIX MENOR tipo:type MAYOR CORA INTEGER:tam CORC
     {: RESULT = new T(type, tam.lexema); :};
 
-struct ::= POT ID:id CORA structint:listdec CORC
-    {: RESULT = new IDecVar(id.lexema, listdec);:};
+struct ::= POT ID:id LLA structint:listdec LLC
+    {: RESULT = new IDecStruct(id.lexema, listdec);:};
 
 structint ::= structint:listadec dec:nuevo PUNTOCOMA
     {: listadec.add(nuevo);
-       RESULT = new IDecVar(id.lexema, listdec);:};
+       RESULT = listadec;:};
 structint ::= dec:nuevo PUNTOCOMA
     {: List<IDec> listadec= new ArrayList<IDec>();
        listadec.add(nuevo);
@@ -141,30 +144,36 @@ largp ::= PAA args:listargs PAC
     {:RESULT = listargs;:};
 
 args ::= args:lista COMA ID:id DOSPUNTOS tipo:t
-    {:RESULT = args.add(new Arg(t,id.lexema,false));:};
+    {:lista.add(new Arg(t,id.lexema,false));
+    RESULT = lista;:};
 args ::= args:lista COMA ID:id DOSPUNTOS REF tipo:t
-    {:RESULT = args.add(new Arg(t,id.lexema,true));:};
+    {:lista.add(new Arg(t,id.lexema,true));
+    RESULT = lista;:};
 args ::= ID:id DOSPUNTOS tipo:t
     {: List<Arg> args = new ArrayList<Arg>();
-    RESULT = args.add(new Arg(t,id.lexema,false));:};
-args ::= ID DOSPUNTOS REF tipo
+       args.add(new Arg(t,id.lexema,false));
+    RESULT = args;:};
+args ::= ID:id DOSPUNTOS REF tipo:t
     {: List<Arg> args = new ArrayList<Arg>();
-    RESULT = args.add(new Arg(t,id.lexema,true));:};
+       args.add(new Arg(t,id.lexema,true));
+    RESULT = args;:};
 
-callf ::= CALL ID:id PAA PAC
+callf ::= ID:id PAA PAC
     {:RESULT = new ICall(id.lexema);:};
-callf ::= CALL ID:id PAA largc:params PAC
+callf ::= ID:id PAA largc:params PAC
     {:RESULT = new ICall(params, id.lexema);:};
 
 largc ::= largc:lista COMA exp0:valor
-    {:RESULT = lista.add(valor);:};
+    {: lista.add(valor);
+    RESULT = lista;:};
 largc ::= exp0:valor
     {: List<E> lista = new ArrayList<E>();
-       RESULT = lista.add(valor); :};
+       lista.add(valor);
+       RESULT = lista; :};
 
 ifelse ::= IF PAA exp0:cond PAC LLA s:cuerpo LLC
     {:RESULT = new IIf(cond,cuerpo);:};
-ifelse ::= IF PAA exp0 PAC LLA s:cuerpoIf LLC ELSE LLA s:cuerpoElse LLC
+ifelse ::= IF PAA exp0:cond PAC LLA s:cuerpoIf LLC ELSE LLA s:cuerpoElse LLC
     {:RESULT = new IIf(cond,cuerpoIf,cuerpoElse);:};
 
 while ::= WHILIX PAA exp0:cond PAC LLA s:cuerpo LLC
@@ -232,7 +241,7 @@ exp6 ::= exp7:valor
 
 exp7 ::= exp7:valor1 PUNTO:op exp8:valor2
     {:RESULT = new EBin(valor1,valor2, "accS");:};
-exp7 ::= exp7:valor1 CORA exp8:valor2 CORC
+exp7 ::= exp7:valor1 CORA exp0:valor2 CORC
     {:RESULT = new EBin(valor1,valor2, "accA");:};
 exp7 ::= exp8:valor
     {:RESULT = valor;:};
@@ -246,11 +255,11 @@ exp8 ::= GALO:valor
 exp8 ::= ROMANO:valor
     {: RESULT = new ECte(valor.lexema);:};
 exp8 ::= lista:valor
-    {: RESULT = new ECte(valor.lexema);:};
-exp8 ::= CALL ID:id PAA PAC
+    {: RESULT = new ELista(valor);:};
+exp8 ::= ID:id PAA PAC
     {: RESULT = new ECall(id.lexema);:};
-exp8 ::= CALL ID:id PAA largc:params PAC
-    {: RESULT = new ECall(id.lexema, params);:};
+exp8 ::= ID:id PAA largc:params PAC
+    {: RESULT = new ECall(params,id.lexema);:};
 exp8 ::= ID:id
     {: RESULT = new ECte(id.lexema);:};
 exp8 ::= PAA exp0:valor PAC

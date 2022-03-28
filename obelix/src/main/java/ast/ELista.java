@@ -3,13 +3,10 @@ package ast;
 import java.util.List;
 
 public class ELista extends E {
-    private E N; // Indica el tamaño inicial del vector
     private List<E> V;
 
-    public ELista(E N, E valor, List<E> V) {
-        this.N = N;
+    public ELista(List<E> V) {
         this.V = V;
-        V.add(valor);
     }
 
     public KindE kind() {
@@ -17,7 +14,7 @@ public class ELista extends E {
     }
 
     public String toString() {
-        return "vector(" + N.toString() + "," + V.toString() + ")";
+        return "vector("+V.toString() + ")";
     }
 
 }

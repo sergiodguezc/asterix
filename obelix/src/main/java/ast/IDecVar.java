@@ -1,6 +1,6 @@
 package ast;
 
-public class IDecVar extends I{
+public class IDecVar extends IDec {
     private T type;
     private String id;
     private String idA; // Identificador del tipo (alias)

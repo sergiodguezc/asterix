@@ -1,0 +1,44 @@
+// Programa para implementar la busqueda binaria
+
+pot sol {
+	intix x;
+	boolix encontrado = romano;
+};
+
+potion binarySearch(N : intix, V: vectix<intix>[10], x : intix) -> boolix {
+	intix mitad;
+	intix ini = 0;
+	intix fin = N - 1;
+	boolix encontrado = romano;
+	
+	whilix (!encontrado && ini <= fin) {
+		mitad = (ini + fin)/2;
+		if(x == V[mitad]) {
+			encontrado = galo;
+		}
+		else {
+			if(x < V[mitad]) {
+				fin = mitad - 1;
+			}
+			else {
+				ini = mitad + 1;
+			};
+		};
+	};
+	
+	return encontrado;
+}
+
+potion panoramix() -> intix {
+	vectix<intix>[10] V = {1,2,3,4,5,6,7,8,9};
+	
+	// Pide el numero por entrada
+	tabellae(sol.x);
+	
+	// Saca por consola
+	// galo = si x se encuentra en V
+	// romano = si x no se encuentra en V
+	stilus(binarySearch(10,V,x));
+
+	return 0;
+}

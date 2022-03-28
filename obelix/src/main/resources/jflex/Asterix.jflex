@@ -61,7 +61,6 @@ integer = ({digitoPositivo}{digito}*|{digito})
 boolix = boolix
 galo = galo
 romano = romano
-call = call
 coma  = ,
 puntoComa = \;
 floatix = floatix
@@ -100,7 +99,6 @@ stilus = stilus
 {floatix}                   {return ops.unidadFloatix();}
 {pot}                   {return ops.unidadPot();}
 {vectix}                   {return ops.unidadVectix();}
-{datix}                   {return ops.unidadDatix();}
 {puntoComa}                   {return ops.unidadPuntoComa();}
 {coma}                   {return ops.unidadComa();}
 {flecha}              {return ops.unidadFlecha();}
@@ -145,7 +143,6 @@ stilus = stilus
 {return}              {return ops.unidadReturn();}
 {tabellae}              {return ops.unidadTabellae();}
 {stilus}              {return ops.unidadStilus();}
-{call}              {return ops.unidadCall();}
 
 {identificador}                   {return ops.unidadId();}
 
