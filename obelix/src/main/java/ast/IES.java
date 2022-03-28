@@ -1,5 +1,7 @@
 package ast;
 
+import org.json.simple.JSONObject;
+
 public class IES extends I {
     private E valor;
     private String label;
@@ -12,6 +14,14 @@ public class IES extends I {
 	public KindI kind() {
 		return KindI.ES;
 	}
+
+    public JSONObject getJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("node", "INSTRUCCION E/S");
+        obj.put("E/S", label);
+        obj.put("valor", valor.getJSON());
+        return obj;
+    }
 
     public String toString() {
         return label+"("+valor.toString()+")";

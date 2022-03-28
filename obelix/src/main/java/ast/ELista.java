@@ -19,6 +19,8 @@ public class ELista extends E {
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "EXPRESION LISTA");
+        if (V.isEmpty())
+            return obj;
         JSONArray arr = new JSONArray();
         for(E v: V)
             arr.add(v.getJSON());

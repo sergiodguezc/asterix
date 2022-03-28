@@ -1,5 +1,7 @@
 package ast;
 
+import org.json.simple.JSONObject;
+
 public class T implements ASTNode {
     private String kindT;
     private String N; // Longitud del vector
@@ -20,5 +22,15 @@ public class T implements ASTNode {
         if (isVector)
             return "vectix(" + tipo.toString() + "," + N + ")";
         return kindT;
+    }
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("node", "TIPO");
+        obj.put("kindT", kindT);
+        if(isVector)
+            obj.put("longitud", N);
+        return obj;
     }
 }
