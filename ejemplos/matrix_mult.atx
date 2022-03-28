@@ -1,37 +1,38 @@
 // Programa para multiplicar dos matrices, una es una matriz global, la matriz
 // A y la otra la recibimos por consola, la matriz B.
 
-vectix<vectix<intix>[3]>[3] A = {{1, 2, 3}, {1, 2, 3}, {1, 2, 3}};
+datix matrix vectix<vectix<intix>[3]>[3];
+matrix A = {{1, 2, 3}, {1, 2, 3}, {1, 2, 3}};
 
-potion readmatrix(B : &vectix<vectix<intix>[3]>[3]) {
+potion readmatrix(B : &matrix) {
     forix (vectix<intix>[3] fila : B) {
         forix (intix elem : fila) {
             tabellae(elem);
-        };
-    };
+        }
+    }
 }
 
-potion printmatrix(C : vectix<vectix<intix>[3]>[3]) {
+potion printmatrix(C : matrix) {
     forix (vectix<intix>[3] fila : B) {
         forix (intix elem : fila) {
             stilus(elem);
-        };
-    };
+        }
+    }
 }
 
-potion isInside(valor : intix, C : vectix<vectix<intix>[3]>[3]) -> boolix {
+potion isInside(valor : intix, C : matrix) -> boolix {
     boolix pertenece = romano; 
     forix (vectix<intix>[3] fila : B) {
         forix (intix elem : fila) {
             if (elem == valor) {
                     pertenece = galo;
-            };
-        };
-    };
+            }
+        }
+    }
     return pertenece;
 }
 
-potion multmatrix(A : vectix<vectix<intix>[3]>[3], B : vectix<vectix<intix>[3]>[3], C : &vectix<vectix<intix>[3]>[3]) {
+potion multmatrix(A : matrix, B : matrix, C : &matrix) {
     intix i = 0;
     intix j = 0;
     intix k = 0;
@@ -40,16 +41,16 @@ potion multmatrix(A : vectix<vectix<intix>[3]>[3], B : vectix<vectix<intix>[3]>[
             whilix (k < 3) {
                 C[i][j] = C[i][j] + A[i][k]*B[k][j];
                 k = k+1;
-            };
+            }
             j = j+1;
-        };
+        }
         i = i+1;
-    };
+    }
 }
 
 potion panoramix() -> intix {
-    vectix<vectix<intix>[3]>[3] B;
-    vectix<vectix<intix>[3]>[3] C; // C = A * B
+    matrix B;
+    matrix C; // C = A * B
     
     // Leemos la matriz B por consola
     readmatrix(B);

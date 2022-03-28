@@ -22,9 +22,9 @@ potion binarySearch(N : intix, V: vectix<intix>[10], x : intix) -> boolix {
 			}
 			else {
 				ini = mitad + 1;
-			};
-		};
-	};
+			}
+		}
+	}
 	
 	return encontrado;
 }

@@ -1,5 +1,7 @@
 package ast;
 
+import org.json.simple.JSONObject;
+
 public class Arg implements ASTNode {
     private T tipo;
     private String id;
