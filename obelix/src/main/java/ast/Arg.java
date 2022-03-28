@@ -1,6 +1,5 @@
 package ast;
 
-
 import org.json.simple.JSONObject;
 
 public class Arg implements ASTNode {

@@ -114,7 +114,8 @@
 
     Estas variables sin inicializar, nosotros las vamos a guardar con un valor.
     Los intix se inicializan con el valor inicial 0, los floatix con 0.0 y los
-    charix con el valor inicial romano.
+    charix con el caracter ASCII 'a'. \atx no permite la creación de enumeratix
+    sin valor inicial.
     
     \subsubsection*{Variables inicializadas}
     Empleamos el siguiente ejemplo para visualizar la declaración de variables
@@ -123,6 +124,25 @@
     \begin{verbatim}
     floatix num2 = 1.0;
     vectix<intix>[3] numeros = {1,2,3};
+    \end{verbatim}
+
+    \subsection*{Declaración de nuevos tipos}
+    \atx permite al programador la creacion de tipos mediante la palabra reservada 
+    \textsf{datix} seguida del identificador que queramos darle al nuevo tipo
+    y del nuevo tipo. Vemos en el siguiente ejemplo cómo se usaría:
+
+    \begin{verbatim}
+    // Creamos un tipo de pares de enteros
+    pot par {
+        intix der;
+        intix izq;
+    }
+
+    datix parix par;
+
+    // Creamos el tipo matriz 3x3
+    datix matrix3 vectix<vectix<intix>[3]>[3];
+    
     \end{verbatim}
 
 
@@ -154,27 +174,24 @@
     \begin{tabular}{| c | c | c | c | c |}
     \hline
         Prioridad & Operador & Asociatividad & Aridad & Descripción \\ \hline
-        0 & , & Izquierda & Binario & Operador coma \\ \hline
-        1 & $=$ & Derecha & Binario & Operador de asignación \\ \hline
-        2 & $\|$ & Derecha & Binario & Operador or lógico \\ \hline
-        3 & \&\& & Derecha & Binario & Operador and lógico \\ \hline
-        4 & == & Derecha & Binario & Operador igual relacional \\ \hline
-        4 & != & Derecha & Binario & Operador distinto relacional \\ \hline
-        5 & $<=$ & Derecha & Binario & Operador menor o igual relacional \\ \hline
-        5 & $>=$ & Derecha & Binario & Operador mayor o igual relacional \\ \hline
-        5 & $>$ & Derecha & Binario & Operador mayor relacional \\ \hline
-        5 & $<$ & Derecha & Binario & Operador menor relacional \\ \hline
-        6 & + & Izquierda & Binario & Suma de dos elementos \\ \hline
-        6 & - & Izquierda & Binario & Resta de dos elementos \\ \hline
-        6 & \# & Derecha & Binario & Operador concatenación stringix \\ \hline
-        7 & * & Izquierda & Binario & Producto de dos elementos \\ \hline
-        7 & / & Izquierda & Binario & División de dos elementos \\ \hline
-        7 & \% & Izquierda & Binario & Modulo de dos elementos \\ \hline
-        7 & $\wedge$ & Derecha & Binario & Potencia de dos elementos \\ \hline
-        8 & ! & No asociativo & Unario & Operador not lógico prefijo \\ \hline
-        8 & \& & Asociativo & Unario & Paso de elemento por referencia \\ \hline
-        9 & . & Izquierda & Binario & Acceso a elemento de un pot \\ \hline
-        9 & $[*]$ & Izquierda & Binario & Acceso a elemento de un vectix \\ \hline
+        0 & $\|$ & Derecha & Binario & Operador or lógico \\ \hline
+        1 & \&\& & Derecha & Binario & Operador and lógico \\ \hline
+        2 & == & Derecha & Binario & Operador igual relacional \\ \hline
+        2 & != & Derecha & Binario & Operador distinto relacional \\ \hline
+        3 & $<=$ & Derecha & Binario & Operador menor o igual relacional \\ \hline
+        3 & $>=$ & Derecha & Binario & Operador mayor o igual relacional \\ \hline
+        3 & $>$ & Derecha & Binario & Operador mayor relacional \\ \hline
+        3 & $<$ & Derecha & Binario & Operador menor relacional \\ \hline
+        4 & + & Izquierda & Binario & Suma de dos elementos \\ \hline
+        4 & - & Izquierda & Binario & Resta de dos elementos \\ \hline
+        5 & * & Izquierda & Binario & Producto de dos elementos \\ \hline
+        5 & / & Izquierda & Binario & División de dos elementos \\ \hline
+        5 & \% & Izquierda & Binario & Modulo de dos elementos \\ \hline
+        6 & $\wedge$ & Derecha & Binario & Potencia de dos elementos \\ \hline
+        6 & ! & No asociativo & Unario & Operador not lógico prefijo \\ \hline
+        7 & . & Izquierda & Binario & Acceso a elemento de un pot \\ \hline
+        7 & $[*]$ & Izquierda & Binario & Acceso a elemento de un vectix \\ \hline
+        8 & - & Izquierda & Unario & Resta de un elemento \\ \hline
         9 & $(*)$ & Izquierda & Binario & Denota precedencia \\ \hline
         
 
@@ -261,7 +278,7 @@
     }
 
     // If sin else
-    if (condición ) {
+    if (condición) {
         // Acciones a realizar si se cumple la condición.
     }
     \end{verbatim}
@@ -282,8 +299,8 @@
     \end{verbatim}
     
     \subsection*{Bucle forix}
-    \atx soporta la estructura \textsf{forix} que permite otra sintaxis para el
-    forix más segura a la hora de recorrer vectix y es la siguiente:
+    \atx soporta la estructura \textsf{forix} que nos permite recorrer los
+    elementos de un vectix y es la siguiente:
 
     \begin{verbatim}
     forix (type c : vectix<type>) {
@@ -343,7 +360,8 @@
         stilus(Valor de una variable);
     \end{verbatim}
     
-    El valor de variables deben ser variables de tipo \textsf{intix} y \textsf{floatix},
+    El valor de variables pueden ser constantes o variables     
+    de tipo \textsf{intix}, \textsf{floatix} y \textsf{boolix}
     
     \begin{verbatim}
         intix x = 5;
@@ -356,18 +374,44 @@
     buscando posibles errores posteriores.
 
     \section*{Ejemplos de código}
-    No sería un lenguaje de programación como
-    Tutatis\footnote{\textbf{Teutates}, también llamado \textbf{Tutatis}, es la
-    deidad de la unidad tribal masculina del panteón galo, según la antigua
-    mitología celta. Hace referencia a la famosa frase que Ásterix repetía una
-    y otra vez: "Por Tutatis"} manda si no es capaz de recibir al programador
-    con un "Hola mundo", aunque vamos a intercambiar esta frase por otra.
+    Veamos ahora una serie de ejemplos de código que ilustren el uso del lenguaje
+    \atx. Empezamos con el ejemplo del bubblesort.
     
     \begin{verbatim}
-    potion panoramix() -> intix {
-        stilus(1.0);
-        return 0;
+potion swap(xp : &intix, yp : &intix) {
+    intix temp = xp;
+    xp = yp;
+    yp = temp;
+}
+ 
+// bubble sort
+potion bubbleSort(v : &vectix<intix>[5]) {
+    intix i = 0;
+    intix j = 0;
+    whilix (i < 5-1) {
+        whilix (j < 5-i-1) {
+            if (v[j] > v[j+1]) {
+                swap(v[j], v[j+1]);
+            }
+            j=j--1;
+        }
+        i=i+1;
     }
+}
+ 
+// Función para imprimir el array 
+potion printArray(v : vectix<intix>[5]) {
+    forix (intix i : v) {
+        stilus(i);
+    }
+}
+ 
+potion panoramix() -> intix {
+    vectix<intix>[5] v = {-64, 34, 25, 12, 22};
+    bubbleSort(v);
+    printArray(v);
+    return 0;
+}
     \end{verbatim}
     
     Veamos ahora como sería un programa que multiplica dos matrices 3x3.
@@ -375,38 +419,38 @@
 // Programa para multiplicar dos matrices, una es una matriz global, la matriz
 // A y la otra la recibimos por consola, la matriz B.
 
-vectix<vectix<intix>[3]>[3] A = {{1, 2, 3}, {1, 2, 3}, {1, 2, 3}};
+datix matrix vectix<vectix<intix>[3]>[3];
+matrix A = {{1, 2, 3}, {1, 2, 3}, {1, 2, 3}};
 
-potion readmatrix(B : &vectix<vectix<intix>[3]>[3]) {
+potion readmatrix(B : &matrix) {
     forix (vectix<intix>[3] fila : B) {
         forix (intix elem : fila) {
             tabellae(elem);
-        };
-    };
+        }
+    }
 }
 
-potion printmatrix(C : vectix<vectix<intix>[3]>[3]) {
+potion printmatrix(C : matrix) {
     forix (vectix<intix>[3] fila : B) {
         forix (intix elem : fila) {
             stilus(elem);
-        };
-    };
+        }
+    }
 }
 
-potion isInside(valor : intix, C : vectix<vectix<intix>[3]>[3]) -> boolix {
+potion isInside(valor : intix, C : matrix) -> boolix {
     boolix pertenece = romano; 
     forix (vectix<intix>[3] fila : B) {
         forix (intix elem : fila) {
             if (elem == valor) {
                     pertenece = galo;
-            };
-        };
-    };
+            }
+        }
+    }
     return pertenece;
 }
 
-potion multmatrix(A : vectix<vectix<intix>[3]>[3], 
-       B : vectix<vectix<intix>[3]>[3], C : &vectix<vectix<intix>[3]>[3]) {
+potion multmatrix(A : matrix, B : matrix, C : &matrix) {
     intix i = 0;
     intix j = 0;
     intix k = 0;
@@ -415,16 +459,16 @@ potion multmatrix(A : vectix<vectix<intix>[3]>[3],
             whilix (k < 3) {
                 C[i][j] = C[i][j] + A[i][k]*B[k][j];
                 k = k+1;
-            };
+            }
             j = j+1;
-        };
+        }
         i = i+1;
-    };
+    }
 }
 
 potion panoramix() -> intix {
-    vectix<vectix<intix>[3]>[3] B;
-    vectix<vectix<intix>[3]>[3] C; // C = A * B
+    matrix B;
+    matrix C; // C = A * B
     
     // Leemos la matriz B por consola
     readmatrix(B);

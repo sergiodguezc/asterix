@@ -1,5 +1,7 @@
 package ast;
 
+import org.json.simple.JSONObject;
+
 import java.util.List;
 
 public class P implements ASTNode {
@@ -15,5 +17,10 @@ public class P implements ASTNode {
 
 	public String toString() {
 		return "P("+defsubs.toString()+")";
+	}
+
+	@Override
+	public JSONObject getJSON() {
+		return null;
 	}
 }
