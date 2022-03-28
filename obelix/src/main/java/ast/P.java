@@ -3,6 +3,8 @@ package ast;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.List;
 
 public class P implements ASTNode {
@@ -17,7 +19,16 @@ public class P implements ASTNode {
 	}
 
 	public String toString() {
-		return "P("+defsubs.toString()+")";
+        try (FileWriter file = new FileWriter("salida.json")) {
+			try {
+				file.write(getJSON().toJSONString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+        return getJSON().toJSONString();
 	}
 
 	@Override
