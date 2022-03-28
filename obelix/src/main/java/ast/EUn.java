@@ -13,7 +13,7 @@ public class EUn extends E {
    }
 
    public String toString() {
-     return op+"("+opnd().toString()+")";
+     return getJSON().toJSONString();
    }
    public KindE kind() {return KindE.EUn;}
 

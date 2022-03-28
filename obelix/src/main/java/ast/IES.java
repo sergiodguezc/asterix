@@ -17,13 +17,13 @@ public class IES extends I {
 
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
-        obj.put("node", "INSTRUCCION E/S");
-        obj.put("E/S", label);
+        obj.put("node", "INSTRUCCION ES");
+        obj.put("ES", label);
         obj.put("valor", valor.getJSON());
         return obj;
     }
 
     public String toString() {
-        return label+"("+valor.toString()+")";
+        return getJSON().toJSONString();
     } 
 }

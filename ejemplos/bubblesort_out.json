@@ -1,0 +1,398 @@
+{
+    "node": "PROGRAMA",
+    "DefSub": [
+        {
+            "args": [
+                {
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "id": "xp",
+                    "referencia": "SI",
+                    "nodo": "ARGUMENTO"
+                },
+                {
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "id": "yp",
+                    "referencia": "SI",
+                    "nodo": "ARGUMENTO"
+                }
+            ],
+            "node": "SUBPROGRAMA",
+            "id": "swap",
+            "cuerpo": [
+                {
+                    "node": "INSTRUCCION DECLARACION",
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "valor": {
+                        "node": "EXPRESION CONSTANTE",
+                        "valor": "xp"
+                    },
+                    "id": "temp"
+                },
+                {
+                    "node": "INSTRUCCION ASIGNACION",
+                    "variable": {
+                        "node": "EXPRESION CONSTANTE",
+                        "valor": "xp"
+                    },
+                    "valor": {
+                        "node": "EXPRESION CONSTANTE",
+                        "valor": "yp"
+                    }
+                },
+                {
+                    "node": "INSTRUCCION ASIGNACION",
+                    "variable": {
+                        "node": "EXPRESION CONSTANTE",
+                        "valor": "yp"
+                    },
+                    "valor": {
+                        "node": "EXPRESION CONSTANTE",
+                        "valor": "temp"
+                    }
+                }
+            ]
+        },
+        {
+            "args": [
+                {
+                    "tipo": {
+                        "node": "TIPO",
+                        "tipo": {
+                            "node": "TIPO",
+                            "kindT": "intix"
+                        },
+                        "longitud": "5",
+                        "kindT": "vectix"
+                    },
+                    "id": "v",
+                    "referencia": "SI",
+                    "nodo": "ARGUMENTO"
+                }
+            ],
+            "node": "SUBPROGRAMA",
+            "id": "bubbleSort",
+            "cuerpo": [
+                {
+                    "node": "INSTRUCCION DECLARACION",
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "valor": {
+                        "node": "EXPRESION CONSTANTE",
+                        "valor": "0"
+                    },
+                    "id": "i"
+                },
+                {
+                    "node": "INSTRUCCION DECLARACION",
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "valor": {
+                        "node": "EXPRESION CONSTANTE",
+                        "valor": "0"
+                    },
+                    "id": "j"
+                },
+                {
+                    "node": "INSTRUCCION WHILE",
+                    "cond": {
+                        "operando 2": {
+                            "operando 2": {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "1"
+                            },
+                            "node": "EXPRESION BINARIA",
+                            "operacion": "menos",
+                            "operando 1": {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "5"
+                            }
+                        },
+                        "node": "EXPRESION BINARIA",
+                        "operacion": "menor",
+                        "operando 1": {
+                            "node": "EXPRESION CONSTANTE",
+                            "valor": "i"
+                        }
+                    },
+                    "cuerpo": [
+                        {
+                            "node": "INSTRUCCION WHILE",
+                            "cond": {
+                                "operando 2": {
+                                    "operando 2": {
+                                        "node": "EXPRESION CONSTANTE",
+                                        "valor": "1"
+                                    },
+                                    "node": "EXPRESION BINARIA",
+                                    "operacion": "menos",
+                                    "operando 1": {
+                                        "operando 2": {
+                                            "node": "EXPRESION CONSTANTE",
+                                            "valor": "i"
+                                        },
+                                        "node": "EXPRESION BINARIA",
+                                        "operacion": "menos",
+                                        "operando 1": {
+                                            "node": "EXPRESION CONSTANTE",
+                                            "valor": "5"
+                                        }
+                                    }
+                                },
+                                "node": "EXPRESION BINARIA",
+                                "operacion": "menor",
+                                "operando 1": {
+                                    "node": "EXPRESION CONSTANTE",
+                                    "valor": "j"
+                                }
+                            },
+                            "cuerpo": [
+                                {
+                                    "node": "INSTRUCCION IF",
+                                    "cuerpoIf": [
+                                        {
+                                            "args": [
+                                                {
+                                                    "operando 2": {
+                                                        "node": "EXPRESION CONSTANTE",
+                                                        "valor": "j"
+                                                    },
+                                                    "node": "EXPRESION BINARIA",
+                                                    "operacion": "accA",
+                                                    "operando 1": {
+                                                        "node": "EXPRESION CONSTANTE",
+                                                        "valor": "v"
+                                                    }
+                                                },
+                                                {
+                                                    "operando 2": {
+                                                        "operando 2": {
+                                                            "node": "EXPRESION CONSTANTE",
+                                                            "valor": "1"
+                                                        },
+                                                        "node": "EXPRESION BINARIA",
+                                                        "operacion": "mas",
+                                                        "operando 1": {
+                                                            "node": "EXPRESION CONSTANTE",
+                                                            "valor": "j"
+                                                        }
+                                                    },
+                                                    "node": "EXPRESION BINARIA",
+                                                    "operacion": "accA",
+                                                    "operando 1": {
+                                                        "node": "EXPRESION CONSTANTE",
+                                                        "valor": "v"
+                                                    }
+                                                }
+                                            ],
+                                            "node": "INSTRUCCION LLAMADA",
+                                            "funcion": "swap"
+                                        }
+                                    ],
+                                    "cond": {
+                                        "operando 2": {
+                                            "operando 2": {
+                                                "operando 2": {
+                                                    "node": "EXPRESION CONSTANTE",
+                                                    "valor": "1"
+                                                },
+                                                "node": "EXPRESION BINARIA",
+                                                "operacion": "mas",
+                                                "operando 1": {
+                                                    "node": "EXPRESION CONSTANTE",
+                                                    "valor": "j"
+                                                }
+                                            },
+                                            "node": "EXPRESION BINARIA",
+                                            "operacion": "accA",
+                                            "operando 1": {
+                                                "node": "EXPRESION CONSTANTE",
+                                                "valor": "v"
+                                            }
+                                        },
+                                        "node": "EXPRESION BINARIA",
+                                        "operacion": "mayor",
+                                        "operando 1": {
+                                            "operando 2": {
+                                                "node": "EXPRESION CONSTANTE",
+                                                "valor": "j"
+                                            },
+                                            "node": "EXPRESION BINARIA",
+                                            "operacion": "accA",
+                                            "operando 1": {
+                                                "node": "EXPRESION CONSTANTE",
+                                                "valor": "v"
+                                            }
+                                        }
+                                    }
+                                },
+                                {
+                                    "node": "INSTRUCCION ASIGNACION",
+                                    "variable": {
+                                        "node": "EXPRESION CONSTANTE",
+                                        "valor": "j"
+                                    },
+                                    "valor": {
+                                        "operando 2": {
+                                            "node": "EXPRESION UNARIA",
+                                            "operacion": "menos",
+                                            "operando": {
+                                                "node": "EXPRESION CONSTANTE",
+                                                "valor": "1"
+                                            }
+                                        },
+                                        "node": "EXPRESION BINARIA",
+                                        "operacion": "menos",
+                                        "operando 1": {
+                                            "node": "EXPRESION CONSTANTE",
+                                            "valor": "j"
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "node": "INSTRUCCION ASIGNACION",
+                            "variable": {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "i"
+                            },
+                            "valor": {
+                                "operando 2": {
+                                    "node": "EXPRESION CONSTANTE",
+                                    "valor": "1"
+                                },
+                                "node": "EXPRESION BINARIA",
+                                "operacion": "mas",
+                                "operando 1": {
+                                    "node": "EXPRESION CONSTANTE",
+                                    "valor": "i"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "args": [
+                {
+                    "tipo": {
+                        "node": "TIPO",
+                        "tipo": {
+                            "node": "TIPO",
+                            "kindT": "intix"
+                        },
+                        "longitud": "5",
+                        "kindT": "vectix"
+                    },
+                    "id": "v",
+                    "referencia": "NO",
+                    "nodo": "ARGUMENTO"
+                }
+            ],
+            "node": "SUBPROGRAMA",
+            "id": "printArray",
+            "cuerpo": [
+                {
+                    "node": "INSTRUCCION FOR",
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "id": "i",
+                    "cuerpo": [
+                        {
+                            "node": "INSTRUCCION ES",
+                            "valor": {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "i"
+                            },
+                            "ES": "stilus"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "node": "SUBPROGRAMA",
+            "id": "panoramix",
+            "cuerpo": [
+                {
+                    "node": "INSTRUCCION DECLARACION",
+                    "tipo": {
+                        "node": "TIPO",
+                        "tipo": {
+                            "node": "TIPO",
+                            "kindT": "intix"
+                        },
+                        "longitud": "5",
+                        "kindT": "vectix"
+                    },
+                    "valor": {
+                        "lista": [
+                            {
+                                "node": "EXPRESION UNARIA",
+                                "operacion": "menos",
+                                "operando": {
+                                    "node": "EXPRESION CONSTANTE",
+                                    "valor": "64"
+                                }
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "34"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "25"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "12"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "22"
+                            }
+                        ],
+                        "node": "EXPRESION LISTA"
+                    },
+                    "id": "v"
+                },
+                {
+                    "args": [
+                        {
+                            "node": "EXPRESION CONSTANTE",
+                            "valor": "v"
+                        }
+                    ],
+                    "node": "INSTRUCCION LLAMADA",
+                    "funcion": "bubbleSort"
+                },
+                {
+                    "args": [
+                        {
+                            "node": "EXPRESION CONSTANTE",
+                            "valor": "v"
+                        }
+                    ],
+                    "node": "INSTRUCCION LLAMADA",
+                    "funcion": "printArray"
+                }
+            ]
+        }
+    ]
+}

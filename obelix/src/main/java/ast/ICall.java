@@ -38,9 +38,7 @@ public class ICall extends I {
     }
 
     public String toString() {
-        if (noParams)
-            return "call("+id +")";
-        return "call("+id+","+params.toString()+")";
+        return getJSON().toJSONString();
     }
 
 }

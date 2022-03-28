@@ -25,6 +25,7 @@ public class IDecVar extends IDec {
         JSONObject obj = new JSONObject();
         obj.put("node", "INSTRUCCION DECLARACION");
         obj.put("id", id);
+        obj.put("tipo", type.getJSON());
         if(!ini)
             return obj;
         obj.put("valor", valor.getJSON());
@@ -32,8 +33,6 @@ public class IDecVar extends IDec {
     }
 
     public String toString() {
-        if (ini)
-            return "Dec(" + type.toString() + "," + id + "," + valor.toString() + ")";
-        return "Dec(" + type.toString() + "," + id + ")";
+        return getJSON().toJSONString();
     }
 }

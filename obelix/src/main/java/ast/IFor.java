@@ -36,7 +36,7 @@ public class IFor extends I {
     }
 
     public String toString() {
-        return "for("+tipo.toString()+","+id+","+cuerpoFor.toString()+")";
+        return getJSON().toJSONString();
     }
 
     

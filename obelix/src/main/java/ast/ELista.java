@@ -28,8 +28,8 @@ public class ELista extends E {
         return obj;
     }
 
-    public String toString() {
-        return "vector("+V.toString() + ")";
-    }
+   public String toString () {
+        return getJSON().toJSONString();
+   }
 
 }

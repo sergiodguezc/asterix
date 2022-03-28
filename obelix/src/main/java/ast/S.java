@@ -38,21 +38,15 @@ public class S implements ASTNode, DefSub {
         isMain = true;
     }
 
-	public NodeKind nodeKind() {
-		return NodeKind.SUBPROGRAMA;
-	}
-
-    public String toString() {
-        if (isMain) {
-            return "main("+cuerpo.toString()+"," + vRet.toString() + ")";
-        }
-        if (isFunction) {
-            return "fun("+id+","+args.toString()+","+cuerpo.toString()+","+tRet.toString()+","+vRet.toString()+")";
-        }
-        return "proc("+id+","+args.toString()+","+cuerpo.toString()+")";
+    public NodeKind nodeKind() {
+        return NodeKind.SUBPROGRAMA;
     }
 
-	@Override
+    public String toString() {
+        return getJSON().toJSONString();
+    }
+
+    @Override
 	public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "SUBPROGRAMA");
@@ -71,9 +65,17 @@ public class S implements ASTNode, DefSub {
                 }
                 obj.put("args", argsjson);
             }
+
+        }
+        if (!cuerpo.isEmpty()) {
+            JSONArray cuerpojson = new JSONArray();
+            for ( I i : cuerpo ) {
+                cuerpojson.add(i.getJSON());
+            }
+            obj.put("cuerpo", cuerpojson);
         }
 
-        return obj;
-	}
-    
+    return obj;
+}
+
 }

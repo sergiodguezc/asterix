@@ -28,13 +28,6 @@ public class IIf extends I {
 		return KindI.IF;
 	}
 
-    public String toString() {
-        if (ifelse) {
-            return "ifelse("+cond.toString()+","+cuerpoIf.toString()+","+cuerpoElse.toString()+")";
-        }
-        return "if("+cond.toString()+","+cuerpoIf.toString()+")";
-    }
-
 	@Override
 	public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
@@ -59,4 +52,7 @@ public class IIf extends I {
 		return obj;
 	}
     
+   public String toString () {
+        return getJSON().toJSONString();
+   }
 }

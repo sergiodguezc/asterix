@@ -15,7 +15,7 @@ public class IDecStruct extends IDec {
     }
 
     public String toString(){
-        return "struct("+id+","+declarations.toString()+")";
+        return getJSON().toJSONString();
     }
 
 

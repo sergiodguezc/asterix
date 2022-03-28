@@ -36,8 +36,6 @@ public class ECall extends E{
     }
 
     public String toString() {
-        if(noParams)
-            return "call("+id+")";
-        return "call("+id+","+args.toString()+")";
+        return getJSON().toJSONString();
     }
 }

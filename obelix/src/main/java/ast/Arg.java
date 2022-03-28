@@ -18,9 +18,7 @@ public class Arg implements ASTNode {
 	}
 
     public String toString () {
-        if (ref)
-            return "arg(" + tipo.toString() + ",ref," + id +")";
-        return "arg(" + tipo.toString() + "," + id +")";
+        return getJSON().toJSONString();
     }
 
     public JSONObject getJSON() {

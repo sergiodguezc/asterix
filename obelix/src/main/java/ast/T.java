@@ -19,18 +19,21 @@ public class T implements ASTNode {
     }
     public NodeKind nodeKind() {return NodeKind.TIPO;}
     public String toString() {
-        if (isVector)
-            return "vectix(" + tipo.toString() + "," + N + ")";
-        return kindT;
+        return getJSON().toJSONString();
     }
 
     @Override
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "TIPO");
-        obj.put("kindT", kindT);
-        if(isVector)
+        if(isVector) {
+            obj.put("kindT", "vectix");
+            obj.put("tipo", tipo.getJSON());
             obj.put("longitud", N);
+        }
+        else {
+            obj.put("kindT", kindT);
+        }
         return obj;
     }
 }

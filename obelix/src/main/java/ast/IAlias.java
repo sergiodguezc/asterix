@@ -24,7 +24,7 @@ public class IAlias extends I implements DefSub {
     }
 
     public String toString() {
-        return "alias(" + id + "," + tipo.toString() + ")";
+        return getJSON().toJSONString();
     }
     
 }

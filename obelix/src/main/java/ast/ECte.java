@@ -17,5 +17,5 @@ public class ECte extends E {
         return obj;
     }
 
-    public String toString() {return v;}
+    public String toString() {return getJSON().toJSONString();}
 }

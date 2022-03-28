@@ -13,7 +13,7 @@ public class EBin extends E {
      this.op = op;
    }
 
-   public String toString() { return op+"("+opnd1().toString()+","+opnd2().toString()+")";}
+   public String toString() { return getJSON().toJSONString();}
    public JSONObject getJSON() {
        JSONObject obj = new JSONObject();
        obj.put("node", "EXPRESION BINARIA");

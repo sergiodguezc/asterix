@@ -18,9 +18,9 @@ public class IWhile extends I {
 		return KindI.WHILE;
 	}
 
-    public String toString() {
-        return "while("+cond.toString()+","+cuerpoWhile.toString()+")";
-    }
+   public String toString () {
+        return getJSON().toJSONString();
+   }
 
 	@Override
 	public JSONObject getJSON() {

@@ -24,6 +24,6 @@ public class IAsig extends I {
     }
 
     public String toString() {
-        return "asig(" + id.toString() + "," + valor.toString() + ")";
+        return getJSON().toJSONString();
     }
 }

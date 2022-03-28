@@ -1,0 +1,334 @@
+{
+    "node": "PROGRAMA",
+    "DefSub": [
+        {
+            "node": "INSTRUCCION STRUCT",
+            "id": "sol",
+            "declarations": [
+                {
+                    "node": "INSTRUCCION DECLARACION",
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "id": "x"
+                },
+                {
+                    "node": "INSTRUCCION DECLARACION",
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "boolix"
+                    },
+                    "valor": {
+                        "node": "EXPRESION CONSTANTE",
+                        "valor": "romano"
+                    },
+                    "id": "encontrado"
+                }
+            ]
+        },
+        {
+            "args": [
+                {
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "id": "N",
+                    "referencia": "NO",
+                    "nodo": "ARGUMENTO"
+                },
+                {
+                    "tipo": {
+                        "node": "TIPO",
+                        "tipo": {
+                            "node": "TIPO",
+                            "kindT": "intix"
+                        },
+                        "longitud": "10",
+                        "kindT": "vectix"
+                    },
+                    "id": "V",
+                    "referencia": "NO",
+                    "nodo": "ARGUMENTO"
+                },
+                {
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "id": "x",
+                    "referencia": "NO",
+                    "nodo": "ARGUMENTO"
+                }
+            ],
+            "node": "SUBPROGRAMA",
+            "tRet": {
+                "node": "TIPO",
+                "kindT": "boolix"
+            },
+            "id": "binarySearch",
+            "vRet": {
+                "node": "EXPRESION CONSTANTE",
+                "valor": "encontrado"
+            },
+            "cuerpo": [
+                {
+                    "node": "INSTRUCCION DECLARACION",
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "id": "mitad"
+                },
+                {
+                    "node": "INSTRUCCION DECLARACION",
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "valor": {
+                        "node": "EXPRESION CONSTANTE",
+                        "valor": "0"
+                    },
+                    "id": "ini"
+                },
+                {
+                    "node": "INSTRUCCION DECLARACION",
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "intix"
+                    },
+                    "valor": {
+                        "operando 2": {
+                            "node": "EXPRESION CONSTANTE",
+                            "valor": "1"
+                        },
+                        "node": "EXPRESION BINARIA",
+                        "operacion": "menos",
+                        "operando 1": {
+                            "node": "EXPRESION CONSTANTE",
+                            "valor": "N"
+                        }
+                    },
+                    "id": "fin"
+                },
+                {
+                    "node": "INSTRUCCION DECLARACION",
+                    "tipo": {
+                        "node": "TIPO",
+                        "kindT": "boolix"
+                    },
+                    "valor": {
+                        "node": "EXPRESION CONSTANTE",
+                        "valor": "romano"
+                    },
+                    "id": "encontrado"
+                },
+                {
+                    "node": "INSTRUCCION WHILE",
+                    "cond": {
+                        "operando 2": {
+                            "operando 2": {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "fin"
+                            },
+                            "node": "EXPRESION BINARIA",
+                            "operacion": "leq",
+                            "operando 1": {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "ini"
+                            }
+                        },
+                        "node": "EXPRESION BINARIA",
+                        "operacion": "and",
+                        "operando 1": {
+                            "node": "EXPRESION UNARIA",
+                            "operacion": "not",
+                            "operando": {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "encontrado"
+                            }
+                        }
+                    },
+                    "cuerpo": [
+                        {
+                            "node": "INSTRUCCION ASIGNACION",
+                            "variable": {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "mitad"
+                            },
+                            "valor": {
+                                "operando 2": {
+                                    "node": "EXPRESION CONSTANTE",
+                                    "valor": "2"
+                                },
+                                "node": "EXPRESION BINARIA",
+                                "operacion": "div",
+                                "operando 1": {
+                                    "operando 2": {
+                                        "node": "EXPRESION CONSTANTE",
+                                        "valor": "fin"
+                                    },
+                                    "node": "EXPRESION BINARIA",
+                                    "operacion": "mas",
+                                    "operando 1": {
+                                        "node": "EXPRESION CONSTANTE",
+                                        "valor": "ini"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "node": "INSTRUCCION IF",
+                            "cuerpoElse": [
+                                {
+                                    "node": "INSTRUCCION ASIGNACION",
+                                    "variable": {
+                                        "node": "EXPRESION CONSTANTE",
+                                        "valor": "encontrado"
+                                    },
+                                    "valor": {
+                                        "node": "EXPRESION CONSTANTE",
+                                        "valor": "galo"
+                                    }
+                                }
+                            ],
+                            "cuerpoIf": [
+                                {
+                                    "node": "INSTRUCCION ASIGNACION",
+                                    "variable": {
+                                        "node": "EXPRESION CONSTANTE",
+                                        "valor": "encontrado"
+                                    },
+                                    "valor": {
+                                        "node": "EXPRESION CONSTANTE",
+                                        "valor": "galo"
+                                    }
+                                }
+                            ],
+                            "cond": {
+                                "operando 2": {
+                                    "operando 2": {
+                                        "node": "EXPRESION CONSTANTE",
+                                        "valor": "mitad"
+                                    },
+                                    "node": "EXPRESION BINARIA",
+                                    "operacion": "accA",
+                                    "operando 1": {
+                                        "node": "EXPRESION CONSTANTE",
+                                        "valor": "V"
+                                    }
+                                },
+                                "node": "EXPRESION BINARIA",
+                                "operacion": "igual",
+                                "operando 1": {
+                                    "node": "EXPRESION CONSTANTE",
+                                    "valor": "x"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "node": "SUBPROGRAMA",
+            "id": "panoramix",
+            "cuerpo": [
+                {
+                    "node": "INSTRUCCION DECLARACION",
+                    "tipo": {
+                        "node": "TIPO",
+                        "tipo": {
+                            "node": "TIPO",
+                            "kindT": "intix"
+                        },
+                        "longitud": "10",
+                        "kindT": "vectix"
+                    },
+                    "valor": {
+                        "lista": [
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "1"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "2"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "3"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "4"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "5"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "6"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "7"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "8"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "9"
+                            }
+                        ],
+                        "node": "EXPRESION LISTA"
+                    },
+                    "id": "V"
+                },
+                {
+                    "node": "INSTRUCCION ES",
+                    "valor": {
+                        "operando 2": {
+                            "node": "EXPRESION CONSTANTE",
+                            "valor": "x"
+                        },
+                        "node": "EXPRESION BINARIA",
+                        "operacion": "accS",
+                        "operando 1": {
+                            "node": "EXPRESION CONSTANTE",
+                            "valor": "sol"
+                        }
+                    },
+                    "ES": "tabellae"
+                },
+                {
+                    "node": "INSTRUCCION ES",
+                    "valor": {
+                        "args": [
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "10"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "V"
+                            },
+                            {
+                                "node": "EXPRESION CONSTANTE",
+                                "valor": "x"
+                            }
+                        ],
+                        "node": "EXPRESION LLAMADA",
+                        "id": "binarySearch"
+                    },
+                    "ES": "stilus"
+                }
+            ]
+        }
+    ]
+}
