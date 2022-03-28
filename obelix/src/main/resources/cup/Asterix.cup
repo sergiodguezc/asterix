@@ -52,21 +52,21 @@ cuerpo ::= subprograma:nuevo
     {: List<DefSub> lista = new ArrayList<DefSub>();
        lista.add(nuevo);
        RESULT = lista; :};
-cuerpo ::= dec:nuevo
+cuerpo ::= dec:nuevo PUNTOCOMA
     {: List<DefSub> lista = new ArrayList<DefSub>();
        lista.add(nuevo);
        RESULT = lista; :};
-cuerpo ::= alias:nuevo
+cuerpo ::= alias:nuevo PUNTOCOMA
     {: List<DefSub> lista = new ArrayList<DefSub>();
        lista.add(nuevo);
        RESULT = lista; :};
 cuerpo ::= cuerpo:listadefSub subprograma:nuevo
     {: listadefSub.add(nuevo);
     RESULT = listadefSub; :};
-cuerpo ::= cuerpo:listadefSub dec:nuevo
+cuerpo ::= cuerpo:listadefSub dec:nuevo PUNTOCOMA
     {: listadefSub.add(nuevo);
     RESULT = listadefSub; :};
-cuerpo ::= cuerpo:listadefSub alias:nuevo
+cuerpo ::= cuerpo:listadefSub alias:nuevo PUNTOCOMA
     {: listadefSub.add(nuevo);
     RESULT = listadefSub; :};
 
