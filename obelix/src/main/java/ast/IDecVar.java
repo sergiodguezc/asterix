@@ -1,5 +1,7 @@
 package ast;
 
+import org.json.simple.JSONObject;
+
 public class IDecVar extends IDec {
     private T type;
     private String id;
@@ -18,6 +20,17 @@ public class IDecVar extends IDec {
         ini = true;
     }
     public KindI kind() {return KindI.DEC;}
+
+    public JSONObject getJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("node", "INSTRUCCION DECLARACION");
+        obj.put("id", id);
+        if(!ini)
+            return obj;
+        obj.put("valor", valor.getJSON());
+        return obj;
+    }
+
     public String toString() {
         if (ini)
             return "Dec(" + type.toString() + "," + id + "," + valor.toString() + ")";
