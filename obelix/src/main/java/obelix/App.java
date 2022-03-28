@@ -15,7 +15,7 @@ public class App {
      Reader input = new InputStreamReader(new FileInputStream(args[0]));
 	 AnalizadorLexicoAsterix alex = new AnalizadorLexicoAsterix(input);
 	 AnalizadorSintacticoAsterix asint = new AnalizadorSintacticoAsterix(alex);
-	 asint.parse();
+	 System.out.println(asint.parse().value);
  }
 }   
    
