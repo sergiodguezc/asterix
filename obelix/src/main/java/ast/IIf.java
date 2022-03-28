@@ -2,6 +2,9 @@ package ast;
 
 import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class IIf extends I {
     private E cond; 
     private List<I> cuerpoIf;
@@ -32,5 +35,28 @@ public class IIf extends I {
         return "if("+cond.toString()+","+cuerpoIf.toString()+")";
     }
 
+	@Override
+	public JSONObject getJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("node", "INSTRUCCION IF");
+        obj.put("cond", cond.getJSON());
+        if (!cuerpoIf.isEmpty()) {
+            JSONArray cuerpojson = new JSONArray();
+            for (I i : cuerpoIf) {
+                cuerpojson.add(i.getJSON());
+            }
+            obj.put("cuerpoIf", cuerpojson);
+        }
+        if (ifelse) {
+            if (!cuerpoElse.isEmpty()) {
+                JSONArray cuerpojson = new JSONArray();
+                for (I i : cuerpoIf) {
+                    cuerpojson.add(i.getJSON());
+                }
+                obj.put("cuerpoElse", cuerpojson);
+            }
+        }
+		return obj;
+	}
     
 }

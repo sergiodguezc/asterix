@@ -1,5 +1,6 @@
 package ast;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.util.List;
@@ -21,6 +22,15 @@ public class P implements ASTNode {
 
 	@Override
 	public JSONObject getJSON() {
-		return null;
+        JSONObject obj = new JSONObject();
+        obj.put("node", "PROGRAMA");
+        if (!defsubs.isEmpty()) {
+            JSONArray defsubsjson = new JSONArray();
+            for (DefSub df : defsubs) {
+                defsubsjson.add(df.getJSON());
+            }
+            obj.put("DefSub", defsubs);
+        }
+		return obj;
 	}
 }

@@ -2,6 +2,9 @@ package ast;
 
 import java.util.List;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 public class S implements ASTNode, DefSub {
     private List<I> cuerpo;
     private List<Arg> args;
@@ -48,5 +51,29 @@ public class S implements ASTNode, DefSub {
         }
         return "proc("+id+","+args.toString()+","+cuerpo.toString()+")";
     }
+
+	@Override
+	public JSONObject getJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("node", "SUBPROGRAMA");
+        if (isMain) {
+            obj.put("id", "panoramix");
+        } else {
+            obj.put("id", id);
+            if (isFunction) {
+                obj.put("tRet", tRet.getJSON());
+                obj.put("vRet", vRet.getJSON());
+            } 
+            if (!args.isEmpty()) {
+                JSONArray argsjson = new JSONArray();
+                for ( Arg a : args ) {
+                    argsjson.add(a.getJSON());
+                }
+                obj.put("args", argsjson);
+            }
+        }
+
+        return obj;
+	}
     
 }
