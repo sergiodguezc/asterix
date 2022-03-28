@@ -1,5 +1,8 @@
 package ast;
 
+
+import org.json.simple.JSONObject;
+
 public class Arg implements ASTNode {
     private T tipo;
     private String id;
@@ -17,9 +20,20 @@ public class Arg implements ASTNode {
 
     public String toString () {
         if (ref)
-            return tipo.toString()+" : &"+id.toString();
+            return "arg(" + tipo.toString() + ",ref," + id +")";
+        return "arg(" + tipo.toString() + "," + id +")";
+    }
 
-        return tipo.toString()+" : "+id.toString();
+    public JSONObject getJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("nodo", "ARGUMENTO");
+        obj.put("tipo",tipo.getJSON());
+        if(ref)
+            obj.put("referencia", "SI");
+        else
+            obj.put("referencia", "NO");
+        obj.put("id", id);
+        return obj;
     }
 }
 

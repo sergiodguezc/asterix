@@ -1,5 +1,8 @@
 package ast;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.util.List;
 
 public class ECall extends E{
@@ -18,6 +21,20 @@ public class ECall extends E{
     }
 
     public KindE kind() {return KindE.CALL;}
+
+    public JSONObject getJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("node", "EXPRESION LLAMADA");
+        obj.put("id", id);
+        if(noParams)
+            return obj;
+        JSONArray arr = new JSONArray();
+        for (E arg : args)
+            arr.add(arg.getJSON());
+        obj.put("args", arr);
+        return obj;
+    }
+
     public String toString() {
         if(noParams)
             return "call("+id+")";

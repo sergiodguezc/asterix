@@ -1,5 +1,7 @@
 package ast;
 
+import org.json.simple.JSONObject;
+
 public class EUn extends E {
 
    private E opnd;
@@ -14,5 +16,15 @@ public class EUn extends E {
      return op+"("+opnd().toString()+")";
    }
    public KindE kind() {return KindE.EUn;}
-   public E opnd() {return opnd;}
+
+    @Override
+    public JSONObject getJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("node", "EXPRESION UNARIA");
+        obj.put("operacion", op);
+        obj.put("operando", opnd.getJSON());
+        return obj;
+    }
+
+    public E opnd() {return opnd;}
 }
