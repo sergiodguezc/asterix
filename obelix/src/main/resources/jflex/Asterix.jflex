@@ -143,7 +143,7 @@ stilus = stilus
 {return}              {return ops.unidadReturn();}
 {tabellae}              {return ops.unidadTabellae();}
 {stilus}              {return ops.unidadStilus();}
-
+{datix}               {return ops.unidadDatix();}
 {identificador}                   {return ops.unidadId();}
 
 [^]                       {ops.error();}  

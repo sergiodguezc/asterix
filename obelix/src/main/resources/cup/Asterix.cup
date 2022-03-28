@@ -26,7 +26,7 @@ terminal TokenValue PUNTOCOMA, COMA, INTEGER, FLOATING, GALO, ROMANO,
     MENOR, MAYOR, CORA, CORC, PAA, PAC, LLA, LLC, MAS, MENOS, MUL, DIV, IGUAL, OR,
     AND, DIS, ASIG, MEIGUAL, MAIGUAL, MOD, POW, NOT, REF, IF, ELSE, WHILIX, PUNTO,
     FORIX, PANOR, POTION, DOSPUNTOS, FLECHA, RET, TABEL, STIL, ID,
-    INTIX, BOOLIX, FLOATIX, POT, VECTIX;
+    INTIX, BOOLIX, FLOATIX, POT, VECTIX, DATIX;
 
 non terminal P programa;
 non terminal S subprograma, main;
@@ -86,6 +86,8 @@ i ::= asignation:iasig PUNTOCOMA
     {: RESULT = iasig; :};
 i ::= callf:icall PUNTOCOMA
     {: RESULT = icall; :};
+i ::= alias:ialias PUNTOCOMA
+    {: RESULT = ialias :};
 
 main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s:cuerpo RET exp0:vRet PUNTOCOMA LLC
     {: RESULT = new  S(cuerpo,vRet); :};
@@ -99,6 +101,9 @@ dec ::= struct:decStruct
 
 asignation ::= exp0:id ASIG exp0:valor
     {: RESULT = new IAsig(id, valor); :};
+
+alias ::= DATIX ID:id tipo:type
+    {: RESULT = new IAlias(id.lexema, type); :};
 
 lista ::= LLA LLC
     {: RESULT = new ArrayList(); :};
@@ -115,6 +120,8 @@ listaint ::= listaint:listaexp COMA exp0:nuevo
 
 tipo ::= INTIX:ent
     {: RESULT = new T(ent.lexema); :};
+tipo ::= ID:id
+    {: RESULT = new T(id.lexema); :};
 tipo ::= BOOLIX:bool
     {: RESULT = new T(bool.lexema); :};
 tipo ::= FLOATIX:real
@@ -157,6 +164,7 @@ args ::= ID:id DOSPUNTOS REF tipo:t
     {: List<Arg> args = new ArrayList<Arg>();
        args.add(new Arg(t,id.lexema,true));
     RESULT = args;:};
+args ::= ID:id
 
 callf ::= ID:id PAA PAC
     {:RESULT = new ICall(id.lexema);:};

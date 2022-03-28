@@ -149,8 +149,11 @@ public class ALexOperations {
   } 
   public UnidadLexica unidadTabellae() {
      return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.TABEL,alex.lexema()); 
-  } 
-  public UnidadLexica unidadEof() {
+  }
+    public UnidadLexica unidadDatix() {
+        return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.DATIX,alex.lexema());
+    }
+    public UnidadLexica unidadEof() {
      return new UnidadLexica(alex.fila(),alex.columna(),ClaseLexica.EOF,alex.lexema()); 
   }
   public void error() {
