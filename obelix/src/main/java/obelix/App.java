@@ -11,22 +11,27 @@ import java.io.Reader;
 
 import alex.AnalizadorLexicoAsterix;
 import asint.AnalizadorSintacticoAsterix;
+import errors.GestionErroresAsterix;
 
 public class App {
     public static void main(String[] args) throws Exception {
         Reader input = new InputStreamReader(new FileInputStream(args[0]));
         AnalizadorLexicoAsterix alex = new AnalizadorLexicoAsterix(input);
         AnalizadorSintacticoAsterix asint = new AnalizadorSintacticoAsterix(alex);
-        // System.out.println(asint.parse().value);
-        try (FileWriter file = new FileWriter(args[1])) {
-            try {
-                file.write(asint.parse().value.toString());
-                file.flush();
+        Object archivo = asint.parse().value;
+        if (GestionErroresAsterix.numErroresSemanticos + GestionErroresAsterix.numErroresSintacticos == 0) {
+            try (FileWriter file = new FileWriter(args[1])) {
+                try {
+                    file.write(archivo.toString());
+                    file.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            System.err.println("*** Errores en el código, no se genera salida.");
         }
     }
 }

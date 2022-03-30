@@ -101,13 +101,13 @@ main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s:cuerpo RET exp0:vRet PUNTOCOMA 
     {: RESULT = new  S(cuerpo,vRet); :};
 main ::= POTION PANOR error LLA s:cuerpo RET exp0:vRet PUNTOCOMA LLC
     {: System.err.println("Error en la declaración de la función panoramix.");
-       RESULT = null; :};
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 main ::= POTION PANOR PAA PAC FLECHA INTIX LLA error RET exp0:vRet PUNTOCOMA LLC
     {: System.err.println("Error en el cuerpo de la función panoramix.");
-       RESULT = null; :};
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s:cuerpo error LLC
     {: System.err.println("Error en el return de la función panoramix.");
-       RESULT = null; :};
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 dec ::= tipo:type ID:id ASIG exp0:valor
     {: RESULT = new IDecVar(type, id.lexema, valor); :};
@@ -117,19 +117,19 @@ dec ::= struct:decStruct
     {: RESULT = decStruct; :};
 dec ::= tipo:type error
     {: System.err.println("Error en la declaración. Identificador no reconocido.");
-       RESULT = null; :};
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 dec ::= tipo:type ID:id ASIG error
     {: System.err.println("Error en la declaración. Valor asignado no reconocido.");
-       RESULT = null; :};
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 asignation ::= exp0:id ASIG exp0:valor
     {: RESULT = new IAsig(id, valor); :};
 asignation ::= error ASIG exp0:valor
     {: System.err.println("Error en la asignación. Identificador no reconocido.");
-       RESULT = null; :};
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 asignation ::= exp0:id ASIG error
     {: System.err.println("Error en la asignación. Valor asignado no reconocido.");
-       RESULT = null; :};
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 alias ::= DATIX ID:id tipo:type
     {: RESULT = new IAlias(id.lexema, type); :};
