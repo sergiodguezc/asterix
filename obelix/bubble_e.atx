@@ -20,7 +20,7 @@ potion bubbleSort(v : &vectix<intix>[5]) {
 }
  
 // Función para imprimir el array 
-potion printArray(v : vectix<intix>[5]) {
+potion p@rintArray(v : vectix<intix>[5]) {
     forix (intix i : v) {
         stilus(i);
     }

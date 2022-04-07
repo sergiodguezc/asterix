@@ -133,6 +133,12 @@ asignation ::= exp0:id ASIG error
 
 alias ::= DATIX ID:id tipo:type
     {: RESULT = new IAlias(id.lexema, type); :};
+alias ::= DATIX error
+    {: System.err.println("Error en la instrucción datix. Identificador no reconocido.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
+alias ::= DATIX ID:id error
+    {: System.err.println("Error en la instrucción datix. Tipo no reconocido.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 lista ::= LLA LLC
     {: RESULT = new ArrayList(); :};
@@ -160,6 +166,12 @@ tipo ::= VECTIX MENOR tipo:type MAYOR CORA INTEGER:tam CORC
 
 struct ::= POT ID:id LLA structint:listdec LLC
     {: RESULT = new IDecStruct(id.lexema, listdec);:};
+struct ::= POT error LLA structint:listdec LLC
+    {: System.err.println("Error en la declaración del pot. Identificador no reconocido.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
+struct ::= POT ID:id LLA error LLC
+    {: System.err.println("Error en el cuerpo del pot.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 structint ::= structint:listadec dec:nuevo PUNTOCOMA
     {: listadec.add(nuevo);
@@ -173,6 +185,12 @@ subprograma ::= POTION ID:id largp:args LLA s:cuerpo LLC
     {:RESULT = new S(cuerpo, args, id.lexema);:};
 subprograma ::= POTION ID:id largp:args FLECHA tipo:tRet LLA s:cuerpo RET exp0:vRet PUNTOCOMA LLC
     {:RESULT = new S(cuerpo, args, id.lexema, tRet, vRet);:};
+subprograma ::= POTION error LLA s:cuerpo LLC
+    {: System.err.println("Error en la declaración de la función.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
+subprograma ::= POTION ID:id largp:args FLECHA tipo:tRet LLA error LLC
+    {: System.err.println("Error en el cuerpo de la función.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 largp ::= PAA PAC
     {:RESULT = new ArrayList<Arg>();:};
@@ -202,6 +220,9 @@ callf ::= ID:id PAA largc:params PAC
 largc ::= largc:lista COMA exp0:valor
     {: lista.add(valor);
     RESULT = lista;:};
+largc ::= largc:lista COMA error
+    {: System.err.println("Error en los parámetros de la llamada a la función.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 largc ::= exp0:valor
     {: List<E> lista = new ArrayList<E>();
        lista.add(valor);
@@ -211,6 +232,15 @@ ifelse ::= IF PAA exp0:cond PAC LLA s:cuerpo LLC
     {:RESULT = new IIf(cond,cuerpo);:};
 ifelse ::= IF PAA exp0:cond PAC LLA s:cuerpoIf LLC ELSE LLA s:cuerpoElse LLC
     {:RESULT = new IIf(cond,cuerpoIf,cuerpoElse);:};
+ifelse ::= IF error LLC
+    {: System.err.println("Error en la condición del if.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
+ifelse ::= IF PAA exp0:cond PAC LLA error LLC ELSE LLA s:cuerpoElse LLC
+    {: System.err.println("Error en el cuerpo del if.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
+ifelse ::= IF PAA exp0:cond PAC LLA s:cuerpoIf LLC ELSE LLA error LLC
+    {: System.err.println("Error en el cuerpo del else.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 while ::= WHILIX PAA exp0:cond PAC LLA s:cuerpo LLC
     {:RESULT = new IWhile(cond,cuerpo);:};
