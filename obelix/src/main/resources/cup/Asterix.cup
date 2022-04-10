@@ -163,6 +163,9 @@ tipo ::= FLOATIX:real
     {: RESULT = new T(real.lexema); :};
 tipo ::= VECTIX MENOR tipo:type MAYOR CORA INTEGER:tam CORC
     {: RESULT = new T(type, tam.lexema); :};
+tipo ::= VECTIX error MAYOR
+    {: System.err.println("Error en el tipo del vector. Tipo no reconocido.");
+           GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 struct ::= POT ID:id LLA structint:listdec LLC
     {: RESULT = new IDecStruct(id.lexema, listdec);:};
@@ -244,15 +247,33 @@ ifelse ::= IF PAA exp0:cond PAC LLA s:cuerpoIf LLC ELSE LLA error LLC
 
 while ::= WHILIX PAA exp0:cond PAC LLA s:cuerpo LLC
     {:RESULT = new IWhile(cond,cuerpo);:};
+while ::= WHILIX error LLC
+    {: System.err.println("Error en la condicion del whilix.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
+while ::= WHILIX PAA exp0:cond PAC error
+    {: System.err.println("Error en el cuerpo del whilix.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 for ::= FORIX PAA tipo:t ID:id DOSPUNTOS ID PAC LLA s:cuerpo LLC
     {:RESULT = new IFor(t,id.lexema,cuerpo);:};
+for ::= FORIX error LLC
+    {: System.err.println("Error en la declaracion del forix.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
+for ::= FORIX PAA tipo:t ID:id DOSPUNTOS ID PAC LLA error LLC
+    {: System.err.println("Error en el cuerpo del forix.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 tab ::= TABEL:op PAA exp0:valor PAC
     {:RESULT = new IES(valor,op.lexema);:};
+tab ::= TABEL:op error PAC
+     {: System.err.println("Error en valor del tabellae.");
+        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 stilus ::= STIL:op PAA exp0:valor PAC
     {:RESULT = new IES(valor,op.lexema);:};
+stilus ::= STIL:op error PAC
+    {: System.err.println("Error en valor del stilus.");
+       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 exp0 ::= exp1:valor1 OR exp0:valor2
     {:RESULT = new EBin(valor1,valor2, "or");:};

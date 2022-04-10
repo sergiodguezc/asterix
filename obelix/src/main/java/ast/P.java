@@ -1,5 +1,6 @@
 package ast;
 
+import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -12,7 +13,19 @@ public class P implements ASTNode {
         this.defsubs = defsubs;
         defsubs.add(nuevo);
     }
-	public NodeKind nodeKind() {
+
+    public void bind(SymbolMap ts) {
+        // Creamos el bloque principal con los identificadores
+        // de las definiciones
+        ts.openBlock();
+
+        // Recursion a las definiciones
+        for (DefSub ds : defsubs) {
+            defsubs.bind(ts);
+        }
+    }
+
+    public NodeKind nodeKind() {
 		return NodeKind.PROGRAMA;
 	}
 

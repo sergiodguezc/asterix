@@ -1,5 +1,6 @@
 package ast;
 
+import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public class Arg implements ASTNode {
@@ -12,8 +13,11 @@ public class Arg implements ASTNode {
         this.id = id;
         this.ref = ref;
     }
+    public void bind(SymbolMap ts) {
+        ts.insertId(id,this);
+    }
 
-	public NodeKind nodeKind() {
+    public NodeKind nodeKind() {
 		return NodeKind.ARG;
 	}
 

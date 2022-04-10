@@ -2,6 +2,7 @@ package ast;
 
 import java.util.List;
 
+import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -36,6 +37,22 @@ public class S implements ASTNode, DefSub {
         this.cuerpo = cuerpo;
         this.vRet = vRet;
         isMain = true;
+    }
+
+    @Override
+    public void bind(SymbolMap ts) {
+        // Insertamos identificador al ambito general del programa
+        ts.insertId(id, this);
+        // Creamos el ambito del subprograma
+        ts.openBlock();
+        for(Arg arg : args) {
+            arg.bind(ts);
+        }
+        for(I ins : cuerpo) {
+            ins.bind(ts);
+        }
+
+        ts.closeBlock();
     }
 
     public NodeKind nodeKind() {

@@ -1,5 +1,6 @@
 package ast;
 
+import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public interface DefSub {
@@ -7,5 +8,6 @@ public interface DefSub {
     public String toString(); 
     public NodeKind nodeKind();
     public JSONObject getJSON();
+    public void bind(SymbolMap ts);
 }
 
