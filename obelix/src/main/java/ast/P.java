@@ -21,7 +21,7 @@ public class P implements ASTNode {
 
         // Recursion a las definiciones
         for (DefSub ds : defsubs) {
-            defsubs.bind(ts);
+            ds.bind(ts);
         }
     }
 

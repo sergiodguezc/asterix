@@ -1,5 +1,6 @@
 package ast;
 
+import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public class IAlias extends I implements DefSub {
@@ -21,6 +22,11 @@ public class IAlias extends I implements DefSub {
         obj.put("alias", id);
         obj.put("tipo", tipo.getJSON());
         return obj;
+    }
+
+    @Override
+    public void bind(SymbolMap ts) {
+        ts.insertId(id, this);
     }
 
     public String toString() {

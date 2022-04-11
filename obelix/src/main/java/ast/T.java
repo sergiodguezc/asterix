@@ -1,5 +1,6 @@
 package ast;
 
+import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public class T implements ASTNode {
@@ -17,6 +18,9 @@ public class T implements ASTNode {
         this.tipo = tipo;
         this.N = N;
     }
+
+    public void bind(SymbolMap ts) {};
+
     public NodeKind nodeKind() {return NodeKind.TIPO;}
     public String toString() {
         return getJSON().toJSONString();

@@ -1,5 +1,6 @@
 package ast;
 
+import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public class EBin extends E {
@@ -22,7 +23,8 @@ public class EBin extends E {
        obj.put("operando 2", opnd2.getJSON());
        return obj;
    }
+
    public KindE kind() {return KindE.EBin;}
    public E opnd1() {return opnd1;}
-   public E opnd2() {return opnd2;}    
+   public E opnd2() {return opnd2;}
 }

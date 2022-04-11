@@ -1,5 +1,6 @@
 package ast;
 
+import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -18,6 +19,9 @@ public class IDecStruct extends IDec {
         return getJSON().toJSONString();
     }
 
+    public void bind(SymbolMap ts) {
+        ts.insertId(id, this);
+    }
 
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();

@@ -1,5 +1,6 @@
 package ast;
 
+import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public class IAsig extends I {
@@ -27,3 +28,5 @@ public class IAsig extends I {
         return getJSON().toJSONString();
     }
 }
+
+

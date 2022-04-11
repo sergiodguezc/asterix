@@ -1,5 +1,6 @@
 package ast;
 
+import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public class IDecVar extends IDec {
@@ -30,6 +31,10 @@ public class IDecVar extends IDec {
             return obj;
         obj.put("valor", valor.getJSON());
         return obj;
+    }
+
+    public void bind (SymbolMap ts) {
+        ts.insertId(id, this);
     }
 
     public String toString() {
