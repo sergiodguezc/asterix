@@ -1,5 +1,6 @@
 package ast;
 
+import errors.GestionErroresAsterix;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -36,12 +37,22 @@ public class ELista extends E {
     }
 
     public T type() {
-        return null;
+        if (V.isEmpty())
+            return new T(KindT.VECTIX);
+        T tipoVector = V.get(0).type();
+        for (E elem : V) {
+            if(tipoVector != elem.type()) {
+                GestionErroresAsterix.errorSemantico("Vector tiene elementos de distinto tipo");
+                return new T(KindT.ERROR);
+            }
+        }
+        return new T(tipoVector, V.size());
     }
 
-    @Override
 	public void bind(SymbolMap ts) {
-        
+        for(E elem : V) {
+            elem.bind(ts);
+        }
 	}
 
 }

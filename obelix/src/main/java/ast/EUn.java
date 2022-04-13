@@ -1,5 +1,6 @@
 package ast;
 
+import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public class EUn extends E {
@@ -35,5 +36,9 @@ public class EUn extends E {
 
     public T type() {
         return null;
+    }
+
+    public void bind(SymbolMap ts) {
+
     }
 }

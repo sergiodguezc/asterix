@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 public class T implements ASTNode {
     private KindT kindT;
     private String aliasId;
-    private String N; // Longitud del vector
+    private int N; // Longitud del vector
     private T tipo; // Tipo del vector o del alias (significado doble)
 
     public T(KindT kindT) {
@@ -18,7 +18,7 @@ public class T implements ASTNode {
         kindT = KindT.ALIAS;
     }
 
-    public T(T tipo, String N) {
+    public T(T tipo, int N) {
         this.kindT = KindT.VECTIX;
         this.tipo = tipo;
         this.N = N;

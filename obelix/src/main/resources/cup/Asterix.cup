@@ -162,7 +162,7 @@ tipo ::= BOOLIX:bool
 tipo ::= FLOATIX:real
     {: RESULT = new T(KindT.FLOATIX); :};
 tipo ::= VECTIX MENOR tipo:type MAYOR CORA INTEGER:tam CORC
-    {: RESULT = new T(type, tam.lexema); :};
+    {: RESULT = new T(type, Integer.parseInt(tam.lexema)); :};
 tipo ::= VECTIX error MAYOR
     {: System.err.println("Error en el tipo del vector. Tipo no reconocido.");
            GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
