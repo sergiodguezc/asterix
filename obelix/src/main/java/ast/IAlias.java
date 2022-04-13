@@ -12,10 +12,11 @@ public class IAlias extends I implements DefSub {
         this.tipo = tipo;
     }
 
-	public KindI kind() {
-		return KindI.ALIAS;
-	}
+    public KindI kind() {
+        return KindI.ALIAS;
+    }
 
+    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "INSTRUCCION ALIAS");
@@ -24,9 +25,8 @@ public class IAlias extends I implements DefSub {
         return obj;
     }
 
-    @Override
-    public KindT type() {
-        return tipo.type();
+    public T type() {
+        return tipo;
     }
 
     public T getTipo() {
@@ -41,5 +41,5 @@ public class IAlias extends I implements DefSub {
     public String toString() {
         return getJSON().toJSONString();
     }
-    
+
 }

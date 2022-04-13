@@ -26,15 +26,15 @@ public class P implements ASTNode {
     }
 
     public NodeKind nodeKind() {
-		return NodeKind.PROGRAMA;
-	}
+        return NodeKind.PROGRAMA;
+    }
 
-	public String toString() {
+    public String toString() {
         return getJSON().toJSONString();
-	}
+    }
 
-	@Override
-	public JSONObject getJSON() {
+    @SuppressWarnings("unchecked")
+    public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "PROGRAMA");
         if (!defsubs.isEmpty()) {
@@ -44,6 +44,10 @@ public class P implements ASTNode {
             }
             obj.put("DefSub", defsubs);
         }
-		return obj;
-	}
+        return obj;
+    }
+
+    public T type() {
+        return null;
+    }
 }

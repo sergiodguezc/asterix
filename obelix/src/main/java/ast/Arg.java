@@ -15,8 +15,8 @@ public class Arg implements ASTNode {
     }
 
     @Override
-    public KindT type() {
-        return tipo.getKindT();
+    public T type() {
+        return tipo;
     }
 
     public void bind(SymbolMap ts) {
@@ -31,6 +31,8 @@ public class Arg implements ASTNode {
         return getJSON().toJSONString();
     }
 
+
+    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("nodo", "ARGUMENTO");

@@ -45,10 +45,10 @@ public class S implements ASTNode, DefSub {
         ts.insertId(id, this);
         // Creamos el ambito del subprograma
         ts.openBlock();
-        for(Arg arg : args) {
+        for (Arg arg : args) {
             arg.bind(ts);
         }
-        for(I ins : cuerpo) {
+        for (I ins : cuerpo) {
             ins.bind(ts);
         }
 
@@ -63,8 +63,8 @@ public class S implements ASTNode, DefSub {
         return getJSON().toJSONString();
     }
 
-    @Override
-	public JSONObject getJSON() {
+    @SuppressWarnings("unchecked")
+    public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "SUBPROGRAMA");
         if (isMain) {
@@ -74,10 +74,10 @@ public class S implements ASTNode, DefSub {
             if (isFunction) {
                 obj.put("tRet", tRet.getJSON());
                 obj.put("vRet", vRet.getJSON());
-            } 
+            }
             if (!args.isEmpty()) {
                 JSONArray argsjson = new JSONArray();
-                for ( Arg a : args ) {
+                for (Arg a : args) {
                     argsjson.add(a.getJSON());
                 }
                 obj.put("args", argsjson);
@@ -86,13 +86,18 @@ public class S implements ASTNode, DefSub {
         }
         if (!cuerpo.isEmpty()) {
             JSONArray cuerpojson = new JSONArray();
-            for ( I i : cuerpo ) {
+            for (I i : cuerpo) {
                 cuerpojson.add(i.getJSON());
             }
             obj.put("cuerpo", cuerpojson);
         }
 
-    return obj;
-}
+        return obj;
+    }
+
+    @Override
+    public T type() {
+        return null;
+    }
 
 }

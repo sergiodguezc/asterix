@@ -15,6 +15,7 @@ public class ICall extends I {
         this.id = id;
         noParams = false;
     }
+
     public ICall(String id) {
         this.id = id;
         noParams = true;
@@ -24,14 +25,15 @@ public class ICall extends I {
         return KindI.CALL;
     }
 
+    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "INSTRUCCION LLAMADA");
         obj.put("funcion", id);
-        if(noParams)
+        if (noParams)
             return obj;
         JSONArray arr = new JSONArray();
-        for(E arg: params)
+        for (E arg : params)
             arr.add(arg.getJSON());
         obj.put("args", arr);
         return obj;
@@ -40,5 +42,9 @@ public class ICall extends I {
     public String toString() {
         return getJSON().toJSONString();
     }
+
+	public T type() {
+		return null;
+	}
 
 }

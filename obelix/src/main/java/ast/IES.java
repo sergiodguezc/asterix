@@ -15,6 +15,7 @@ public class IES extends I {
 		return KindI.ES;
 	}
 
+    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "INSTRUCCION ES");
@@ -25,5 +26,9 @@ public class IES extends I {
 
     public String toString() {
         return getJSON().toJSONString();
-    } 
+    }
+
+	public T type() {
+		return null;
+	} 
 }

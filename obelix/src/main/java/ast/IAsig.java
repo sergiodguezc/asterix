@@ -13,9 +13,11 @@ public class IAsig extends I {
         this.valor = valor;
     }
 
-    public KindI kind() {return KindI.ASIG;}
+    public KindI kind() {
+        return KindI.ASIG;
+    }
 
-    @Override
+    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "INSTRUCCION ASIGNACION");
@@ -27,6 +29,9 @@ public class IAsig extends I {
     public String toString() {
         return getJSON().toJSONString();
     }
+
+	@Override
+	public T type() {
+		return null;
+	}
 }
-
-

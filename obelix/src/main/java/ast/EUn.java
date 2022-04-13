@@ -4,20 +4,23 @@ import org.json.simple.JSONObject;
 
 public class EUn extends E {
 
-   private E opnd;
-   private String op;
+    private E opnd;
+    private String op;
 
-   public EUn(E opnd, String op) {
-     this.opnd = opnd;
-     this.op = op;
-   }
+    public EUn(E opnd, String op) {
+        this.opnd = opnd;
+        this.op = op;
+    }
 
-   public String toString() {
-     return getJSON().toJSONString();
-   }
-   public KindE kind() {return KindE.EUn;}
+    public String toString() {
+        return getJSON().toJSONString();
+    }
 
-    @Override
+    public KindE kind() {
+        return KindE.EUn;
+    }
+
+    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "EXPRESION UNARIA");
@@ -26,5 +29,11 @@ public class EUn extends E {
         return obj;
     }
 
-    public E opnd() {return opnd;}
+    public E opnd() {
+        return opnd;
+    }
+
+    public T type() {
+        return null;
+    }
 }

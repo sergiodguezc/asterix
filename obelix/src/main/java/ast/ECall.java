@@ -22,6 +22,8 @@ public class ECall extends E{
 
     public KindE kind() {return KindE.CALL;}
 
+
+    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "EXPRESION LLAMADA");
@@ -38,4 +40,8 @@ public class ECall extends E{
     public String toString() {
         return getJSON().toJSONString();
     }
+	@Override
+	public T type() {
+		return null;
+	}
 }

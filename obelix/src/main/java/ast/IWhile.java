@@ -6,7 +6,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class IWhile extends I {
-    private E cond; 
+    private E cond;
     private List<I> cuerpoWhile;
 
     public IWhile(E cond, List<I> cuerpoWhile) {
@@ -14,16 +14,16 @@ public class IWhile extends I {
         this.cuerpoWhile = cuerpoWhile;
     }
 
-	public KindI kind() {
-		return KindI.WHILE;
-	}
+    public KindI kind() {
+        return KindI.WHILE;
+    }
 
-   public String toString () {
+    public String toString() {
         return getJSON().toJSONString();
-   }
+    }
 
-	@Override
-	public JSONObject getJSON() {
+    @SuppressWarnings("unchecked")
+    public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "INSTRUCCION WHILE");
         obj.put("cond", cond.getJSON());
@@ -34,8 +34,11 @@ public class IWhile extends I {
             }
             obj.put("cuerpo", cuerpojson);
         }
-		return obj;
-	}
+        return obj;
+    }
 
-    
+    public T type() {
+        return null;
+    }
+
 }

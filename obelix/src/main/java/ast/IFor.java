@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 import java.util.List;
 
 public class IFor extends I {
-    private T tipo; 
+    private T tipo;
     private String id;
     private List<I> cuerpoFor;
 
@@ -16,20 +16,20 @@ public class IFor extends I {
         this.cuerpoFor = cuerpoFor;
     }
 
-	public KindI kind() {
-		return KindI.FOR;
-	}
+    public KindI kind() {
+        return KindI.FOR;
+    }
 
-    @Override
+    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "INSTRUCCION FOR");
         obj.put("tipo", tipo.getJSON());
         obj.put("id", id);
-        if(cuerpoFor.isEmpty())
+        if (cuerpoFor.isEmpty())
             return obj;
         JSONArray arr = new JSONArray();
-        for(I i: cuerpoFor)
+        for (I i : cuerpoFor)
             arr.add(i.getJSON());
         obj.put("cuerpo", arr);
         return obj;
@@ -39,5 +39,8 @@ public class IFor extends I {
         return getJSON().toJSONString();
     }
 
-    
+    public T type() {
+        return null;
+    }
+
 }

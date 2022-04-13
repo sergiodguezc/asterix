@@ -23,6 +23,7 @@ public class IDecStruct extends IDec {
         ts.insertId(id, this);
     }
 
+    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "INSTRUCCION STRUCT");
@@ -35,4 +36,9 @@ public class IDecStruct extends IDec {
         obj.put("declarations", arr);
         return obj;
     }
+
+	@Override
+	public T type() {
+		return null;
+	}
 }

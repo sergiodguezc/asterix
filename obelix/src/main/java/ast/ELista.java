@@ -16,20 +16,25 @@ public class ELista extends E {
         return KindE.LISTA;
     }
 
+    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "EXPRESION LISTA");
         if (V.isEmpty())
             return obj;
         JSONArray arr = new JSONArray();
-        for(E v: V)
+        for (E v : V)
             arr.add(v.getJSON());
         obj.put("lista", arr);
         return obj;
     }
 
-   public String toString () {
+    public String toString() {
         return getJSON().toJSONString();
-   }
+    }
+
+    public T type() {
+        return null;
+    }
 
 }

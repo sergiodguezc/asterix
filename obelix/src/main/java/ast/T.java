@@ -9,11 +9,12 @@ public class T implements ASTNode {
     private T tipo; // Tipo del vector o del alias (significado doble)
     private Boolean isVector;
 
-    public T(String kindT){
+    public T(String kindT) {
         this.kindT = kindT;
         isVector = false;
     }
-    public T(T tipo, String N){
+
+    public T(T tipo, String N) {
         isVector = true;
         this.tipo = tipo;
         this.N = N;
@@ -24,21 +25,23 @@ public class T implements ASTNode {
         tipo = def.type();
     };
 
-    public NodeKind nodeKind() {return NodeKind.TIPO;}
+    public NodeKind nodeKind() {
+        return NodeKind.TIPO;
+    }
+
     public String toString() {
         return getJSON().toJSONString();
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "TIPO");
-        if(isVector) {
+        if (isVector) {
             obj.put("kindT", "vectix");
             obj.put("tipo", tipo.getJSON());
             obj.put("longitud", N);
-        }
-        else {
+        } else {
             obj.put("kindT", kindT);
         }
         return obj;
@@ -46,5 +49,9 @@ public class T implements ASTNode {
 
     public KindT getKindT() {
         return null;
+    }
+
+    public T type() {
+        return this;
     }
 }
