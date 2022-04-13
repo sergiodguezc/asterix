@@ -1,6 +1,7 @@
 package ast;
 
 import asem.SymbolMap;
+import errors.GestionErroresAsterix;
 import org.json.simple.JSONObject;
 
 public class EBin extends E {
@@ -15,12 +16,25 @@ public class EBin extends E {
    }
 
     @Override
-    public T type() {
+    public KindT type() {
        T tipoOp1 = opnd1.type();
        T tipoOp2 = opnd2.type();
-       switch(op) {
-           case "" :
-
+       if (op.equals("or") || op.equals("and") || op.equals("igual")) {
+           if (tipoOp1.check("boolix") && tipoOp2.check("boolix")) {
+               return tipoOp1;
+           }
+           else if (op.equals("igual") && tipoOp1.check("intix") && tipoOp2.check("intix")) {
+               return tipoOp1;
+           }
+           else {
+               GestionErroresAsterix.numErroresSemanticos++;
+           }
+       }
+       else {
+           if(tipoOp1.check("intix") && tipoOp2.check("intix")) {
+               return tipoOp1;
+           }
+           else
        }
     }
 

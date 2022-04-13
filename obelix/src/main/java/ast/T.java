@@ -6,7 +6,7 @@ import org.json.simple.JSONObject;
 public class T implements ASTNode {
     private String kindT;
     private String N; // Longitud del vector
-    private T tipo;
+    private T tipo; // Tipo del vector o del alias (significado doble)
     private Boolean isVector;
 
     public T(String kindT){
@@ -19,7 +19,10 @@ public class T implements ASTNode {
         this.N = N;
     }
 
-    public void bind(SymbolMap ts) {};
+    public void bind(SymbolMap ts) {
+        IAlias def = (IAlias) ts.searchId(kindT);
+        tipo = def.type();
+    };
 
     public NodeKind nodeKind() {return NodeKind.TIPO;}
     public String toString() {
@@ -39,5 +42,9 @@ public class T implements ASTNode {
             obj.put("kindT", kindT);
         }
         return obj;
+    }
+
+    public KindT getKindT() {
+        return null;
     }
 }

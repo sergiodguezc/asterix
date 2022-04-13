@@ -15,8 +15,8 @@ public class Arg implements ASTNode {
     }
 
     @Override
-    public T type() {
-        return tipo;
+    public KindT type() {
+        return tipo.getKindT();
     }
 
     public void bind(SymbolMap ts) {
