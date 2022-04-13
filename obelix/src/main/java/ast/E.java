@@ -12,4 +12,5 @@ public abstract class E implements ASTNode {
     public String num() {throw new UnsupportedOperationException("num");}
     public NodeKind nodeKind() {return NodeKind.EXPRESION;}
     public String toString() {return "";}
+    public abstract T type();
 }

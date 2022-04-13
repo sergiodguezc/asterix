@@ -9,5 +9,6 @@ public interface DefSub {
     public NodeKind nodeKind();
     public JSONObject getJSON();
     public void bind(SymbolMap ts);
+    public T type();
 }
 

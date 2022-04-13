@@ -339,7 +339,7 @@ exp8 ::= exp9:valor
     {:RESULT = valor; :};
 
 exp9 ::= INTEGER:valor
-    {: RESULT = new ECte(valor.lexema);:};
+    {: RESULT = new ECte(valor.lexema, KindT.INTIX);:};
 exp9 ::= FLOATING:valor
     {: RESULT = new ECte(valor.lexema);:};
 exp9 ::= GALO:valor

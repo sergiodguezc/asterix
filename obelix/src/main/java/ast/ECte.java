@@ -18,5 +18,14 @@ public class ECte extends E {
         return obj;
     }
 
+    public KindT type() {
+        if (v = "galo" || v = "romano")
+            return BOOLIX;
+        else if (ts.searchid(v)) {
+            return tipo declaracion;
+        }
+        else if to
+    }
+
     public String toString() {return getJSON().toJSONString();}
 }

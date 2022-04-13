@@ -13,6 +13,12 @@ public class Arg implements ASTNode {
         this.id = id;
         this.ref = ref;
     }
+
+    @Override
+    public T type() {
+        return tipo;
+    }
+
     public void bind(SymbolMap ts) {
         ts.insertId(id,this);
     }
