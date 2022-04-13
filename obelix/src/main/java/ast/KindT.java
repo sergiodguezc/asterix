@@ -5,5 +5,6 @@ public enum KindT {
     INTIX,
     VECTIX,
     POT,
-    FLOATIX;
+    FLOATIX, 
+    ALIAS, ERROR;
 }

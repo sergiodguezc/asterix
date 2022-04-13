@@ -154,13 +154,13 @@ listaint ::= listaint:listaexp COMA exp0:nuevo
        RESULT = listaexp; :};
 
 tipo ::= INTIX:ent
-    {: RESULT = new T(ent.lexema); :};
+    {: RESULT = new T(KindT.INTIX); :};
 tipo ::= ID:id
     {: RESULT = new T(id.lexema); :};
 tipo ::= BOOLIX:bool
-    {: RESULT = new T(bool.lexema); :};
+    {: RESULT = new T(KindT.BOOLIX); :};
 tipo ::= FLOATIX:real
-    {: RESULT = new T(real.lexema); :};
+    {: RESULT = new T(KindT.FLOATIX); :};
 tipo ::= VECTIX MENOR tipo:type MAYOR CORA INTEGER:tam CORC
     {: RESULT = new T(type, tam.lexema); :};
 tipo ::= VECTIX error MAYOR
@@ -339,7 +339,7 @@ exp8 ::= exp9:valor
     {:RESULT = valor; :};
 
 exp9 ::= INTEGER:valor
-    {: RESULT = new ECte(valor.lexema, KindT.INTIX);:};
+    {: RESULT = new ECte(valor.lexema);:};
 exp9 ::= FLOATING:valor
     {: RESULT = new ECte(valor.lexema);:};
 exp9 ::= GALO:valor

@@ -26,4 +26,9 @@ public class GestionErroresAsterix {
                     + unidadLexica.columna() + " Elemento inesperado " + unidadLexica.lexema());
         }
     }
+
+    public static void errorSemantico(String msg) {
+        numErroresSemanticos++;
+        System.err.println("***ERROR semantico. " + msg);
+    }
 }

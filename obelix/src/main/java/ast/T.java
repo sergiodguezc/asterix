@@ -4,25 +4,39 @@ import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public class T implements ASTNode {
-    private String kindT;
+    private KindT kindT;
+    private String aliasId;
     private String N; // Longitud del vector
     private T tipo; // Tipo del vector o del alias (significado doble)
-    private Boolean isVector;
 
-    public T(String kindT) {
+    public T(KindT kindT) {
         this.kindT = kindT;
-        isVector = false;
+    }
+
+    public T(String aliasId) {
+        this.aliasId = aliasId;
+        kindT = KindT.ALIAS;
     }
 
     public T(T tipo, String N) {
-        isVector = true;
+        this.kindT = KindT.VECTIX;
         this.tipo = tipo;
         this.N = N;
     }
 
+    public KindT getKindT() {
+        return kindT;
+    }
+
     public void bind(SymbolMap ts) {
-        IAlias def = (IAlias) ts.searchId(kindT);
-        tipo = def.type();
+        if (kindT == KindT.ALIAS) {
+            // Conseguir el tipo de un alias
+            IAlias def = (IAlias) ts.searchId(aliasId);
+            tipo = def.type();
+        } else if (kindT == KindT.VECTIX) {
+            tipo.bind(ts);
+        }
+
     };
 
     public NodeKind nodeKind() {
@@ -37,7 +51,7 @@ public class T implements ASTNode {
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "TIPO");
-        if (isVector) {
+        if (kindT == KindT.VECTIX) {
             obj.put("kindT", "vectix");
             obj.put("tipo", tipo.getJSON());
             obj.put("longitud", N);
@@ -45,10 +59,6 @@ public class T implements ASTNode {
             obj.put("kindT", kindT);
         }
         return obj;
-    }
-
-    public KindT getKindT() {
-        return null;
     }
 
     public T type() {

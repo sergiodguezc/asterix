@@ -29,11 +29,6 @@ public class IAlias extends I implements DefSub {
         return tipo;
     }
 
-    public T getTipo() {
-        return tipo;
-    }
-
-    @Override
     public void bind(SymbolMap ts) {
         ts.insertId(id, this);
     }

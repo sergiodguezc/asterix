@@ -3,6 +3,8 @@ package ast;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import asem.SymbolMap;
+
 import java.util.List;
 
 public class ELista extends E {
@@ -36,5 +38,10 @@ public class ELista extends E {
     public T type() {
         return null;
     }
+
+    @Override
+	public void bind(SymbolMap ts) {
+        
+	}
 
 }
