@@ -35,10 +35,10 @@ public class EUn extends E {
     }
 
     public T type() {
-        return null;
+        return opnd.type();
     }
 
     public void bind(SymbolMap ts) {
-
+        opnd.bind(ts);
     }
 }
