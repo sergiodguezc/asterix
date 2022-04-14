@@ -34,6 +34,7 @@ public class EUn extends E {
         return opnd;
     }
 
+    // TODO: Comprobar que sean tipos admitidos
     public T type() {
         return opnd.type();
     }
