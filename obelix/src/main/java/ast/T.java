@@ -62,6 +62,6 @@ public class T implements ASTNode {
     }
 
     public T type() {
-        return this;
+        return tipo;
     }
 }

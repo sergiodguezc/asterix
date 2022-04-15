@@ -1,6 +1,8 @@
 package ast;
 
 import asem.SymbolMap;
+import errors.GestionErroresAsterix;
+
 import org.json.simple.JSONObject;
 
 public class EUn extends E {
@@ -34,9 +36,14 @@ public class EUn extends E {
         return opnd;
     }
 
-    // TODO: Comprobar que sean tipos admitidos
     public T type() {
-        return opnd.type();
+        if ((op.equals("not") && opnd().type().getKindT() != KindT.BOOLIX) ||
+                (op.equals("menos") && opnd().type().getKindT() != KindT.INTIX) ||
+                (op.equals("menos") && opnd().type().getKindT() != KindT.FLOATIX)) {
+            GestionErroresAsterix.errorSemantico("Expresion unaria mal tipada.");
+            return new T(KindT.ERROR);
+        } else
+            return opnd().type();
     }
 
     public void bind(SymbolMap ts) {

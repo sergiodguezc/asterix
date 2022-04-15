@@ -1,5 +1,7 @@
 package ast;
 
+import java.util.ArrayList;
+
 import org.json.simple.JSONObject;
 
 import asem.SymbolMap;
@@ -9,6 +11,7 @@ public class EBin extends E {
     private E opnd1;
     private E opnd2;
     private String op;
+    private ArrayList<IDec> decStruct;
 
     public EBin(E opnd1, E opnd2, String op) {
         this.opnd1 = opnd1;
@@ -29,11 +32,23 @@ public class EBin extends E {
             return new T(KindT.INTIX);
         else if (checkTEFloat(tipoOp1, tipoOp2))
             return new T(KindT.FLOATIX);
+        else if (op.equals("accA") && checkTAccA(tipoOp1, tipoOp2))
+            return tipoOp1.type();
+        else if (op.equals("accS") && checkTAccS(tipoOp1, tipoOp2))
 
-        GestionErroresAsterix.errorSemantico("Expresion no ajusta tipado.");
+            GestionErroresAsterix.errorSemantico("");
         return new T(KindT.ERROR);
     }
 
+    private boolean checkTAccS(T tipoOp1, T tipoOp2) {
+        return tipoOp1.getKindT() == KindT.POT;
+    }
+
+    private boolean checkTAccA(T tipoOp1, T tipoOp2) {
+        return tipoOp1.getKindT() == KindT.VECTIX && tipoOp2.getKindT() == KindT.INTIX;
+    }
+
+    // TODO: Comparaciones y casteos varios
     private boolean checkTEFloat(T tipoOp1, T tipoOp2) {
         return (tipoOp1.getKindT() == KindT.INTIX || tipoOp1.getKindT() == KindT.FLOATIX)
                 && (tipoOp2.getKindT() == KindT.INTIX || tipoOp2.getKindT() == KindT.FLOATIX);
@@ -43,6 +58,7 @@ public class EBin extends E {
         return tipoOp1.getKindT() == KindT.INTIX && tipoOp2.getKindT() == KindT.INTIX;
     }
 
+    // TODO: Comparaciones y casteos varios
     private boolean checkTEComp(T opnd1, T opnd2) {
         return (opnd1.getKindT() == KindT.INTIX || opnd1.getKindT() == KindT.FLOATIX)
                 && (opnd2.getKindT() == KindT.INTIX || opnd2.getKindT() == KindT.FLOATIX)
@@ -82,5 +98,8 @@ public class EBin extends E {
     public void bind(SymbolMap ts) {
         opnd1.bind(ts);
         opnd2.bind(ts);
+
+        // Si es un struct guardamos las declaraciones
+        // IDecStruct struct = (IDecStruct) ts.searchId(opnd1.getVal());
     }
 }

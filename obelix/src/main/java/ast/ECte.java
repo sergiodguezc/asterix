@@ -13,7 +13,7 @@ public class ECte extends E {
         this.v = v;
     }
 
-    public String num() {
+    public String getVal() {
         return v;
     }
 
@@ -29,9 +29,12 @@ public class ECte extends E {
         return obj;
     }
 
+    // TODO: Cambiar el cups para mandar un KindT en el constructor
     public T type() {
         if (dec != null)
             return dec.type();
+        else if (v.equals("galo") || v.equals("romano"))
+            return new T(KindT.BOOLIX);
         else {
             GestionErroresAsterix.errorSemantico("Variable '" + v + "' sin declarar");
             return new T(KindT.ERROR);
