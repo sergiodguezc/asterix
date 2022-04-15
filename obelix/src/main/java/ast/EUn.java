@@ -37,13 +37,15 @@ public class EUn extends E {
     }
 
     public T type() {
-        if ((op.equals("not") && opnd().type().getKindT() != KindT.BOOLIX) ||
-                (op.equals("menos") && opnd().type().getKindT() != KindT.INTIX) ||
-                (op.equals("menos") && opnd().type().getKindT() != KindT.FLOATIX)) {
+        T tipoOpnd = opnd.type();
+
+        if ((op.equals("not") && tipoOpnd.getKindT() != KindT.BOOLIX) ||
+                (op.equals("menos") && tipoOpnd.getKindT() != KindT.INTIX) ||
+                (op.equals("menos") && tipoOpnd.getKindT() != KindT.FLOATIX)) {
             GestionErroresAsterix.errorSemantico("Expresion unaria mal tipada.");
             return new T(KindT.ERROR);
         } else
-            return opnd().type();
+            return tipoOpnd;
     }
 
     public void bind(SymbolMap ts) {

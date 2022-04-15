@@ -254,8 +254,8 @@ while ::= WHILIX PAA exp0:cond PAC error
     {: System.err.println("Error en el cuerpo del whilix.");
        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
-for ::= FORIX PAA tipo:t ID:id DOSPUNTOS ID PAC LLA s:cuerpo LLC
-    {:RESULT = new IFor(t,id.lexema,cuerpo);:};
+for ::= FORIX PAA tipo:t ID:id DOSPUNTOS exp0:lista PAC LLA s:cuerpo LLC
+    {:RESULT = new IFor(t,id.lexema,lista,cuerpo);:};
 for ::= FORIX error LLC
     {: System.err.println("Error en la declaracion del forix.");
        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
@@ -339,13 +339,13 @@ exp8 ::= exp9:valor
     {:RESULT = valor; :};
 
 exp9 ::= INTEGER:valor
-    {: RESULT = new ECte(valor.lexema);:};
+    {: RESULT = new ECte(valor.lexema, KindT.INTIX );:};
 exp9 ::= FLOATING:valor
-    {: RESULT = new ECte(valor.lexema);:};
+    {: RESULT = new ECte(valor.lexema, KindT.FLOATIX);:};
 exp9 ::= GALO:valor
-    {: RESULT = new ECte(valor.lexema);:};
+    {: RESULT = new ECte(valor.lexema, KindT.BOOLIX);:};
 exp9 ::= ROMANO:valor
-    {: RESULT = new ECte(valor.lexema);:};
+    {: RESULT = new ECte(valor.lexema, KindT.BOOLIX);:};
 exp9 ::= lista:valor
     {: RESULT = new ELista(valor);:};
 exp9 ::= ID:id PAA PAC

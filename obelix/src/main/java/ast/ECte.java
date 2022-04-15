@@ -6,11 +6,17 @@ import errors.GestionErroresAsterix;
 import org.json.simple.JSONObject;
 
 public class ECte extends E {
+    private KindT kindT;
     private String v;
     private IDec dec;
 
     public ECte(String v) {
         this.v = v;
+    }
+
+    public ECte(String v, KindT kindT) {
+        this.v = v;
+        this.kindT = kindT;
     }
 
     public String getVal() {
@@ -29,12 +35,11 @@ public class ECte extends E {
         return obj;
     }
 
-    // TODO: Cambiar el cups para mandar un KindT en el constructor
     public T type() {
         if (dec != null)
             return dec.type();
-        else if (v.equals("galo") || v.equals("romano"))
-            return new T(KindT.BOOLIX);
+        else if (kindT == KindT.INTIX || kindT == KindT.FLOATIX || kindT == KindT.BOOLIX)
+            return new T(kindT);
         else {
             GestionErroresAsterix.errorSemantico("Variable '" + v + "' sin declarar");
             return new T(KindT.ERROR);
@@ -45,6 +50,8 @@ public class ECte extends E {
         return getJSON().toJSONString();
     }
 
+    // Si es una variable dec hace referencia a la declaracion de esa variable
+    // En caso contrario, dec es null.
     public void bind(SymbolMap ts) {
         dec = (IDec) ts.searchId(v);
     }

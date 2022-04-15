@@ -7,5 +7,8 @@ public enum KindT {
     POT,
     FLOATIX,
     ALIAS,
+
+    // Tipo instruccion correcta
+    INS,
     ERROR;
 }

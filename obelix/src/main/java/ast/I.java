@@ -8,6 +8,4 @@ public abstract class I implements ASTNode{
     public abstract JSONObject getJSON();
     public NodeKind nodeKind() {return NodeKind.INSTRUCCION;}
     public String toString() {return "";}
-    public void bind(SymbolMap ts) {};
-    public abstract T type();
 }

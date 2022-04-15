@@ -1,5 +1,7 @@
 package ast;
 
+import asem.SymbolMap;
+import errors.GestionErroresAsterix;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -8,11 +10,13 @@ import java.util.List;
 public class IFor extends I {
     private T tipo;
     private String id;
+    private E lista;
     private List<I> cuerpoFor;
 
-    public IFor(T tipo, String id, List<I> cuerpoFor) {
+    public IFor(T tipo, String id, E lista, List<I> cuerpoFor) {
         this.tipo = tipo;
         this.id = id;
+        this.lista = lista;
         this.cuerpoFor = cuerpoFor;
     }
 
@@ -40,7 +44,39 @@ public class IFor extends I {
     }
 
     public T type() {
-        return null;
+        T tipo = this.tipo.type();
+        T tipoLista = lista.type();
+
+        // Comprobamos que la declaracion del for esta correctamente tipada
+        if (tipo.getKindT() != tipoLista.getKindT() || tipo.getKindT() == KindT.ERROR) {
+            GestionErroresAsterix.errorSemantico("Error de tipado en la declaracion del for");
+            return new T(KindT.ERROR);
+        }
+
+        // Llamamos recursivamente a type() en las instrucciones del cuerpo del for
+        for(I ins : cuerpoFor)
+            ins.type();
+        return new T(KindT.INS);
+    }
+
+    public void bind(SymbolMap ts) {
+        // Abro el ambito del for
+        ts.openBlock();
+
+        // Llamadas recursivas a bind()
+        tipo.bind(ts);
+
+        // Añadimos una referencia a la declaracion del for en la tabla de simbolos
+        IDec dec = new IDecVar(tipo, id);
+        ts.insertId(id, dec);
+
+        // Llamadas recursivas a bind()
+        lista.bind(ts);
+        for (I ins : cuerpoFor)
+            ins.bind(ts);
+
+        // Cierro el ambito del for
+        ts.closeBlock();
     }
 
 }

@@ -1,5 +1,6 @@
 package ast;
 
+import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public class IES extends I {
@@ -29,6 +30,19 @@ public class IES extends I {
     }
 
 	public T type() {
-		return null;
-	} 
+        T tipoValor = valor.type();
+
+        // Solamente permitimos escribir o leer enteros, reales o booleanos
+        if (tipoValor.getKindT() != KindT.BOOLIX
+                && tipoValor.getKindT() != KindT.INTIX
+                && tipoValor.getKindT() != KindT.FLOATIX)
+            return new T(KindT.ERROR);
+
+        // En caso contrario, esta bien tipado
+		return new T(KindT.INS);
+	}
+
+    public void bind(SymbolMap ts) {
+        valor.bind(ts);
+    }
 }

@@ -26,6 +26,10 @@ public class IDecVar extends IDec {
         return KindI.DEC;
     }
 
+    public String getId() {
+        return id;
+    }
+
     @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
@@ -39,6 +43,9 @@ public class IDecVar extends IDec {
     }
 
     public void bind(SymbolMap ts) {
+        type.bind(ts);
+        if(ini)
+            valor.bind(ts);
         ts.insertId(id, this);
     }
 
@@ -46,8 +53,16 @@ public class IDecVar extends IDec {
         return getJSON().toJSONString();
     }
 
-    @Override
     public T type() {
-        return null;
+        type.type();
+        if(ini) {
+            T tipoValor = valor.type();
+            if (type.getKindT() != tipoValor.getKindT())
+                return new T(KindT.ERROR);
+        }
+        // Si esta inicializado y el valor asociado no coincide con el tipo, devuelve ERROR
+        if (ini && type.getKindT() != valor.type().getKindT())
+            return new T(KindT.ERROR);
+        return type;
     }
 }

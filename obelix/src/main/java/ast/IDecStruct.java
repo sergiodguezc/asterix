@@ -4,6 +4,7 @@ import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IDecStruct extends IDec {
@@ -21,6 +22,14 @@ public class IDecStruct extends IDec {
 
     public void bind(SymbolMap ts) {
         ts.insertId(id, this);
+        ts.openBlock();
+        for (IDec dec : declarations)
+            dec.bind(ts);
+        ts.closeBlock();
+    }
+
+    public String getId() {
+        return id;
     }
 
     @SuppressWarnings("unchecked")
@@ -37,8 +46,12 @@ public class IDecStruct extends IDec {
         return obj;
     }
 
-	@Override
+	public List<IDec> getDeclarations() {
+        return declarations;
+    }
+
+    // Devolvemos null ya que las instrucciones no tienen tipo
 	public T type() {
-		return null;
+		return new T(KindT.INS);
 	}
 }

@@ -25,7 +25,10 @@ public class IAlias extends I implements DefSub {
         return obj;
     }
 
+    // En este caso, devolvemos el tipo al que ha hecho alias.
     public T type() {
+        // Recursion al tipo al que hace referencia
+        tipo.type();
         return tipo;
     }
 

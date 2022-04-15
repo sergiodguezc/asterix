@@ -3,19 +3,21 @@ package ast;
 import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
+
 public class T implements ASTNode {
     private KindT kindT;
-    private String aliasId;
+    private String id; // Identificador que hace referencia a un alias o a un struct
     private int N; // Longitud del vector
     private T tipo; // Tipo del vector o del alias (significado doble)
+    private IDecStruct dec; // Declaracion del struct que obtenemos del bind()
 
     public T(KindT kindT) {
         this.kindT = kindT;
     }
 
-    public T(String aliasId) {
-        this.aliasId = aliasId;
-        kindT = KindT.ALIAS;
+    public T(String id) {
+        this.id = id;
     }
 
     public T(T tipo, int N) {
@@ -29,14 +31,20 @@ public class T implements ASTNode {
     }
 
     public void bind(SymbolMap ts) {
-        if (kindT == KindT.ALIAS) {
-            // Conseguir el tipo de un alias
-            IAlias def = (IAlias) ts.searchId(aliasId);
-            tipo = def.type();
-        } else if (kindT == KindT.VECTIX) {
+        if (id != null) { // Caso que sea un alias o un struct
+            I def = (I) ts.searchId(id);
+            if (def.kind() == KindI.ALIAS) {
+                tipo = def.type();
+                kindT = KindT.ALIAS;
+            }
+            else {
+                kindT = KindT.POT;
+                dec = (IDecStruct) def;
+            }
+        }
+        else if (kindT == KindT.VECTIX) {
             tipo.bind(ts);
         }
-
     };
 
     public NodeKind nodeKind() {
@@ -61,6 +69,13 @@ public class T implements ASTNode {
         return obj;
     }
 
+    public IDecStruct getDec() {
+        return dec;
+    }
+
+    // Si es un ALIAS : Devuelve el tipo al que hace referencia
+    // Si es un VECTIX : Devuelve el tipo de los elementos del vector
+    // En cc : Devuelve null.
     public T type() {
         return tipo;
     }

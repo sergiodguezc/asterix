@@ -7,5 +7,6 @@ public abstract class IDec extends I implements DefSub {
         return KindI.DEC;
     }
 
+    public abstract String getId();
     public abstract JSONObject getJSON();
 }

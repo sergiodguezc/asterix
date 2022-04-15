@@ -1,6 +1,7 @@
 package ast;
 
 import asem.SymbolMap;
+import errors.GestionErroresAsterix;
 import org.json.simple.JSONObject;
 
 public class IAsig extends I {
@@ -30,8 +31,29 @@ public class IAsig extends I {
         return getJSON().toJSONString();
     }
 
-	@Override
+    public void bind(SymbolMap ts) {
+        id.bind(ts);
+        valor.bind(ts);
+    }
+
 	public T type() {
-		return null;
+        // Tenemos que comprobar que esta bien tipado
+        T tipoId = id.type();
+        T tipoValor = valor.type();
+
+        // Si son vectores, tienen que coincidir los tipos internos
+        if (checkTIAsig(tipoId, tipoValor))
+            return new T(KindT.INS);
+
+        GestionErroresAsterix.errorSemantico("Error de tipado en la asignacion");
+		return new T(KindT.ERROR);
 	}
+
+    public boolean checkTIAsig(T tipoId, T tipoValor) {
+        return  // Si ambos son vectores, los tipos internos han de coincidir
+                tipoId.getKindT() == KindT.VECTIX && tipoValor.getKindT() == KindT.VECTIX
+                && tipoId.type().getKindT() == tipoValor.getKindT()
+                // En caso contrario, unicamente se necesita que coincidan los tipos
+                || tipoId.getKindT() == tipoValor.getKindT();
+    }
 }

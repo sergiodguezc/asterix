@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONObject;
 
@@ -34,13 +35,23 @@ public class EBin extends E {
             return new T(KindT.FLOATIX);
         else if (op.equals("accA") && checkTAccA(tipoOp1, tipoOp2))
             return tipoOp1.type();
-        else if (op.equals("accS") && checkTAccS(tipoOp1, tipoOp2))
+        else if (op.equals("accS") && checkTAccS(tipoOp1)) {
+            // Obtenemos la lista de declaraciones del struct
+            List<IDec> declarations = tipoOp1.getDec().getDeclarations();
 
-            GestionErroresAsterix.errorSemantico("");
+            // Reccorremos la lista de declaraciones hasta que veamos la que coincide con el opnd2
+            for (IDec dec : declarations)
+                if(opnd2.getVal().equals(dec.getId()))
+                    return dec.type();
+
+            // En caso contrario no devuelve nada y sale de esta condicion
+            // Devolviendo KindT.ERROR.
+        }
+        GestionErroresAsterix.errorSemantico("Error de tipado en la expresion binaria");
         return new T(KindT.ERROR);
     }
 
-    private boolean checkTAccS(T tipoOp1, T tipoOp2) {
+    private boolean checkTAccS(T tipoOp1) {
         return tipoOp1.getKindT() == KindT.POT;
     }
 
