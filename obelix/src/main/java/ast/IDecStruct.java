@@ -4,7 +4,6 @@ import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class IDecStruct extends IDec {
@@ -50,8 +49,10 @@ public class IDecStruct extends IDec {
         return declarations;
     }
 
-    // Devolvemos null ya que las instrucciones no tienen tipo
+    // Devolvemos INS como tipo para afirmar que los tipos son correctos
 	public T type() {
+        for(IDec dec : declarations)
+            dec.type();
 		return new T(KindT.INS);
 	}
 }

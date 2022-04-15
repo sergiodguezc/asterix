@@ -4,6 +4,7 @@ import errors.GestionErroresAsterix;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import asem.ASemUtils;
 import asem.SymbolMap;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class ELista extends E {
             return new T(KindT.VECTIX);
         T tipoVector = V.get(0).type();
         for (E elem : V) {
-            if(tipoVector != elem.type()) {
+            if(!ASemUtils.checkEqualTypes(tipoVector, elem.type())) {
                 GestionErroresAsterix.errorSemantico("Vector tiene elementos de distinto tipo");
                 return new T(KindT.ERROR);
             }

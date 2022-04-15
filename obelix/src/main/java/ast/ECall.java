@@ -3,6 +3,7 @@ package ast;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import asem.ASemUtils;
 import asem.SymbolMap;
 import errors.GestionErroresAsterix;
 
@@ -48,11 +49,33 @@ public class ECall extends E {
     }
 
     public T type() {
+        T tRet;
+        // Comprobamos la existencia del subprograma.
         if (potion == null) {
             GestionErroresAsterix.errorSemantico("ERROR: Llamada a función no existente.");
             return new T(KindT.ERROR);
-        } else
-            return potion.type();
+            // Comprobamos que no sea un procedimiento.
+        } else if ((tRet = potion.type()) == null) {
+            GestionErroresAsterix.errorSemantico("ERROR: Llamada a un procedimiento. No devuelve ningun valor.");
+            return new T(KindT.ERROR);
+        }
+
+        // Obtenemos la lista de argumentos del subprograma al que se hace referencia.
+        List<Arg> argsS = potion.getArguments();
+        if (argsS.size() != args.size()) {
+            GestionErroresAsterix.errorSemantico("ERROR: Llamada a una funcion. Numero de parametros incorrecto.");
+            return new T(KindT.ERROR);
+        }
+
+        for (int i = 0; i < args.size(); i++) {
+            if (!ASemUtils.checkEqualTypes(args.get(i).type(), argsS.get(i).type())) {
+                GestionErroresAsterix.errorSemantico("ERROR: Tipos de los argumentos incorrectos.");
+                return new T(KindT.ERROR);
+            }
+        }
+
+        // Devolvemos el tipo del valor que devuelve la función.
+        return tRet;
     }
 
     public void bind(SymbolMap ts) {

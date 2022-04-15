@@ -15,6 +15,7 @@ public class Arg implements ASTNode {
     }
 
     public T type() {
+        tipo.type();
         return tipo;
     }
 

@@ -47,6 +47,7 @@ public class IFor extends I {
         T tipo = this.tipo.type();
         T tipoLista = lista.type();
 
+        // TODO: Comprobar bien los tipos
         // Comprobamos que la declaracion del for esta correctamente tipada
         if (tipo.getKindT() != tipoLista.getKindT() || tipo.getKindT() == KindT.ERROR) {
             GestionErroresAsterix.errorSemantico("Error de tipado en la declaracion del for");

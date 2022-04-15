@@ -39,7 +39,6 @@ public class S implements ASTNode, DefSub {
         isMain = true;
     }
 
-    @Override
     public void bind(SymbolMap ts) {
         // Insertamos identificador al ambito general del programa
         ts.insertId(id, this);
@@ -95,9 +94,12 @@ public class S implements ASTNode, DefSub {
         return obj;
     }
 
-    @Override
     public T type() {
-        return null;
+        return tRet;
     }
+
+	public List<Arg> getArguments() {
+		return args;
+	}
 
 }

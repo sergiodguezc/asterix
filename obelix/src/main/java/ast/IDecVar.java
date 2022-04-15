@@ -1,6 +1,9 @@
 package ast;
 
+import asem.ASemUtils;
 import asem.SymbolMap;
+import errors.GestionErroresAsterix;
+
 import org.json.simple.JSONObject;
 
 public class IDecVar extends IDec {
@@ -54,15 +57,14 @@ public class IDecVar extends IDec {
     }
 
     public T type() {
-        type.type();
         if(ini) {
             T tipoValor = valor.type();
-            if (type.getKindT() != tipoValor.getKindT())
-                return new T(KindT.ERROR);
-        }
-        // Si esta inicializado y el valor asociado no coincide con el tipo, devuelve ERROR
-        if (ini && type.getKindT() != valor.type().getKindT())
+            if (ASemUtils.checkEqualTypes(type, tipoValor))
+                return new T(KindT.INS);
+
+            GestionErroresAsterix.errorSemantico("Error de tipado en la declaracion.");
             return new T(KindT.ERROR);
+        }
         return type;
     }
 }
