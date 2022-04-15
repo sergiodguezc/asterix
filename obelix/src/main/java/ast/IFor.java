@@ -1,5 +1,6 @@
 package ast;
 
+import asem.ASemUtils;
 import asem.SymbolMap;
 import errors.GestionErroresAsterix;
 import org.json.simple.JSONArray;
@@ -45,11 +46,10 @@ public class IFor extends I {
 
     public T type() {
         T tipo = this.tipo.type();
-        T tipoLista = lista.type();
+        T tipoLista = lista.type(); // Tipo interno de la lista
 
-        // TODO: Comprobar bien los tipos
         // Comprobamos que la declaracion del for esta correctamente tipada
-        if (tipo.getKindT() != tipoLista.getKindT() || tipo.getKindT() == KindT.ERROR) {
+        if (!ASemUtils.checkEqualTypes(tipo, tipoLista)) {
             GestionErroresAsterix.errorSemantico("Error de tipado en la declaracion del for");
             return new T(KindT.ERROR);
         }

@@ -2,6 +2,7 @@ package ast;
 
 import java.util.List;
 
+import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -57,6 +58,36 @@ public class IIf extends I {
     }
 
     public T type() {
-        return null;
+        T resultado = new T(KindT.INS);
+
+        // Solo hay que comprobar que la condicion del if es un booleano
+        if(cond.type().getKindT() != KindT.BOOLIX)
+            resultado = new T(KindT.ERROR);
+
+        // Llamadas recursivas a type() para seguir comprobando si hay errores semanticos
+        for(I ins : cuerpoIf)
+            ins.type();
+
+        if(ifelse)
+            for (I ins : cuerpoElse)
+                ins.type();
+
+        return resultado;
+    }
+
+    public void bind(SymbolMap ts) {
+        cond.bind(ts);
+        // Ambito del cuerpo del if
+        ts.openBlock();
+        for(I ins : cuerpoIf)
+            ins.bind(ts);
+        ts.closeBlock();
+        // Ambito del cuerpo del else
+        if(ifelse) {
+            ts.openBlock();
+            for(I ins : cuerpoElse)
+                ins.bind(ts);
+            ts.closeBlock();
+        }
     }
 }
