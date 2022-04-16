@@ -49,14 +49,18 @@ public class IFor extends I {
         T tipoLista = lista.type(); // Tipo interno de la lista
 
         // Comprobamos que la declaracion del for esta correctamente tipada
+        boolean error = false;
         if (!ASemUtils.checkEqualTypes(tipo, tipoLista)) {
             GestionErroresAsterix.errorSemantico("Error de tipado en la declaracion del for");
-            return new T(KindT.ERROR);
+            error = true;
         }
 
         // Llamamos recursivamente a type() en las instrucciones del cuerpo del for
-        for(I ins : cuerpoFor)
+        for (I ins : cuerpoFor)
             ins.type();
+
+        if (error)
+            return new T(KindT.ERROR);
         return new T(KindT.INS);
     }
 

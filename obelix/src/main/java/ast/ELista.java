@@ -38,22 +38,25 @@ public class ELista extends E {
     }
 
     public T type() {
+        boolean error = false;
         if (V.isEmpty())
             return new T(KindT.VECTIX);
         T tipoVector = V.get(0).type();
         for (E elem : V) {
-            if(!ASemUtils.checkEqualTypes(tipoVector, elem.type())) {
+            if (!ASemUtils.checkEqualTypes(tipoVector, elem.type())) {
                 GestionErroresAsterix.errorSemantico("Vector tiene elementos de distinto tipo");
-                return new T(KindT.ERROR);
+                error = true;
             }
         }
+        if (error)
+            return new T(KindT.ERROR);
         return new T(tipoVector, V.size());
     }
 
-	public void bind(SymbolMap ts) {
-        for(E elem : V) {
+    public void bind(SymbolMap ts) {
+        for (E elem : V) {
             elem.bind(ts);
         }
-	}
+    }
 
 }

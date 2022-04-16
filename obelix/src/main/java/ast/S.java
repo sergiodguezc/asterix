@@ -2,7 +2,10 @@ package ast;
 
 import java.util.List;
 
+import asem.ASemUtils;
 import asem.SymbolMap;
+import errors.GestionErroresAsterix;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -95,11 +98,25 @@ public class S implements ASTNode, DefSub {
     }
 
     public T type() {
-        return tRet;
+        for (Arg a : args)
+            a.type();
+        for (I ins : cuerpo)
+            ins.type();
+
+        T tipoVRet = vRet.type();
+        boolean error = false;
+
+        if (!ASemUtils.checkEqualTypes(tipoVRet, tRet)){
+            error = true;
+            GestionErroresAsterix.errorSemantico("El tipo del valor de retorno no coincide con el tipo de la función.");
+        }
+
+
+        return error ? new T(KindT.INS) : new T(KindT.ERROR);
     }
 
-	public List<Arg> getArguments() {
-		return args;
-	}
+    public List<Arg> getArguments() {
+        return args;
+    }
 
 }

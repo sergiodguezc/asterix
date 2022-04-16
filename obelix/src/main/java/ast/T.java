@@ -3,8 +3,6 @@ package ast;
 import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-
 public class T implements ASTNode {
     private KindT kindT;
     private String id; // Identificador que hace referencia a un alias o a un struct
@@ -24,6 +22,10 @@ public class T implements ASTNode {
         this.kindT = KindT.VECTIX;
         this.tipo = tipo;
         this.N = N;
+    }
+
+    public int getVSize() {
+        return N;
     }
 
     public KindT getKindT() {

@@ -5,6 +5,9 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import asem.SymbolMap;
+import errors.GestionErroresAsterix;
+
 public class IWhile extends I {
     private E cond;
     private List<I> cuerpoWhile;
@@ -38,7 +41,29 @@ public class IWhile extends I {
     }
 
     public T type() {
-        return null;
+        T tipocond = cond.type();
+        boolean error = false;
+
+        if (tipocond.getKindT() != KindT.BOOLIX) {
+            error = true;
+            GestionErroresAsterix.errorSemantico("Error de tipo en la condicion del while. Debe ser tipo boolix.");
+        }
+
+        for (I ins : cuerpoWhile) {
+            ins.type();
+        }
+
+
+        return error ? new T(KindT.ERROR) : new T(KindT.BOOLIX);
+    }
+
+    public void bind(SymbolMap ts) {
+        cond.bind(ts);
+        ts.openBlock();
+        for (I ins : cuerpoWhile) {
+            ins.bind(ts);
+        }
+        ts.closeBlock();
     }
 
 }

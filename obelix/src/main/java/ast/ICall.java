@@ -48,7 +48,7 @@ public class ICall extends I {
         return getJSON().toJSONString();
     }
 
-	public T type() {
+    public T type() {
         if (potion == null) {
             GestionErroresAsterix.errorSemantico("ERROR: Llamada a subprograma no existente.");
             return new T(KindT.ERROR);
@@ -61,20 +61,22 @@ public class ICall extends I {
             return new T(KindT.ERROR);
         }
 
+        boolean error = false;
         for (int i = 0; i < params.size(); i++) {
             if (!ASemUtils.checkEqualTypes(params.get(i).type(), argsS.get(i).type())) {
                 GestionErroresAsterix.errorSemantico("ERROR: Tipos de los argumentos incorrectos.");
-                return new T(KindT.ERROR);
+                error = true;
             }
         }
+        if (error)
+            return new T(KindT.ERROR);
+        return new T(KindT.INS);
+    }
 
-		return new T(KindT.INS);
-	}
-
-	public void bind(SymbolMap ts) {
-	   for (E e : params)
-           e.bind(ts);
+    public void bind(SymbolMap ts) {
+        for (E e : params)
+            e.bind(ts);
         potion = (S) ts.searchId(id);
-	}
+    }
 
 }

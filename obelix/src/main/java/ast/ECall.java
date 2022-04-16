@@ -67,12 +67,15 @@ public class ECall extends E {
             return new T(KindT.ERROR);
         }
 
+        boolean error = false;
         for (int i = 0; i < args.size(); i++) {
             if (!ASemUtils.checkEqualTypes(args.get(i).type(), argsS.get(i).type())) {
                 GestionErroresAsterix.errorSemantico("ERROR: Tipos de los argumentos incorrectos.");
-                return new T(KindT.ERROR);
+                error = true;
             }
         }
+        if (error)
+            return new T(KindT.ERROR);
 
         // Devolvemos el tipo del valor que devuelve la función.
         return tRet;

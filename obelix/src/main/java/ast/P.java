@@ -23,6 +23,8 @@ public class P implements ASTNode {
         for (DefSub ds : defsubs) {
             ds.bind(ts);
         }
+
+        ts.closeBlock();
     }
 
     public NodeKind nodeKind() {
@@ -48,6 +50,8 @@ public class P implements ASTNode {
     }
 
     public T type() {
-        return null;
+        for (DefSub df : defsubs)
+            df.type();
+        return new T(KindT.INS);
     }
 }

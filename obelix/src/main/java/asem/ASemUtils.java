@@ -12,6 +12,12 @@ public class ASemUtils {
         // Caso base 2: Tipos iguales no son vectix, se devuelve true
         } else if (t1.getKindT() != KindT.VECTIX) {
             return true;
+        // Caso base 3: Tipos iguales vectix y elemento derecha es una lista vacía
+        } else if (t2.type() == null) {
+            return true;
+        // Caso base 4: Tipos iguales vectix y tamaños distintos
+        } else if (t1.getVSize() != t2.getVSize()) {
+            return false;
         }
         // Caso recursivo: Los dos tipos son vectix, y se compara recursivamente los tipos internos
         else {

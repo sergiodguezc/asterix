@@ -1,6 +1,5 @@
 package ast;
 
-import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public abstract class I implements ASTNode{

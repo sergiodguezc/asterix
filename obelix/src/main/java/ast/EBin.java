@@ -1,6 +1,5 @@
 package ast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -12,7 +11,6 @@ public class EBin extends E {
     private E opnd1;
     private E opnd2;
     private String op;
-    private ArrayList<IDec> decStruct;
 
     public EBin(E opnd1, E opnd2, String op) {
         this.opnd1 = opnd1;
