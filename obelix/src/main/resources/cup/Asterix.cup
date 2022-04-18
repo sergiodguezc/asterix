@@ -259,7 +259,7 @@ for ::= FORIX PAA tipo:t ID:id DOSPUNTOS exp0:lista PAC LLA s:cuerpo LLC
 for ::= FORIX error LLC
     {: System.err.println("Error en la declaracion del forix.");
        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
-for ::= FORIX PAA tipo:t ID:id DOSPUNTOS ID PAC LLA error LLC
+for ::= FORIX PAA tipo:t ID:id DOSPUNTOS exp0:lista PAC LLA error LLC
     {: System.err.println("Error en el cuerpo del forix.");
        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 

@@ -10,7 +10,9 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 import alex.AnalizadorLexicoAsterix;
+import asem.AnalizadorSemanticoAsterix;
 import asint.AnalizadorSintacticoAsterix;
+import ast.P;
 import errors.GestionErroresAsterix;
 
 public class App {
@@ -18,11 +20,13 @@ public class App {
         Reader input = new InputStreamReader(new FileInputStream(args[0]));
         AnalizadorLexicoAsterix alex = new AnalizadorLexicoAsterix(input);
         AnalizadorSintacticoAsterix asint = new AnalizadorSintacticoAsterix(alex);
-        Object archivo = asint.parse().value;
+        P programa = (P) asint.parse().value;
+        AnalizadorSemanticoAsterix asem = new AnalizadorSemanticoAsterix(programa);
+        asem.analizaSemantica();
         if (GestionErroresAsterix.numErroresSemanticos + GestionErroresAsterix.numErroresSintacticos == 0) {
             try (FileWriter file = new FileWriter(args[1])) {
                 try {
-                    file.write(archivo.toString());
+                    file.write(programa.toString());
                     file.flush();
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -20,7 +20,9 @@ public class Arg implements ASTNode {
     }
 
     public void bind(SymbolMap ts) {
-        ts.insertId(id,this);
+        // TODO: Usar los nodekind en los casteos en otro lado
+        IDec dec = new IDecVar(tipo, id);
+        ts.insertId(id,dec);
         tipo.bind(ts);
     }
 
