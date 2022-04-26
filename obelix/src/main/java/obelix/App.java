@@ -17,7 +17,7 @@ import errors.GestionErroresAsterix;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Reader input = new InputStreamReader(new FileInputStream(args[0]));
+        Reader input = new InputStreamReader(new FileInputStream("matrix_mult.atx"));
         AnalizadorLexicoAsterix alex = new AnalizadorLexicoAsterix(input);
         AnalizadorSintacticoAsterix asint = new AnalizadorSintacticoAsterix(alex);
         P programa = (P) asint.parse().value;

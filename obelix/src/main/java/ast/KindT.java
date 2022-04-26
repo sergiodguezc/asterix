@@ -4,10 +4,8 @@ public enum KindT {
     BOOLIX,
     INTIX,
     VECTIX,
-    POT,
     FLOATIX,
-    ALIAS,
-
+    POT,
     // Tipo instruccion correcta
     INS,
     ERROR;

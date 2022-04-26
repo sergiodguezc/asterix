@@ -1,5 +1,6 @@
 package ast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import asem.ASemUtils;
@@ -39,12 +40,13 @@ public class S implements ASTNode, DefSub {
     public S(List<I> cuerpo, E vRet) {
         this.cuerpo = cuerpo;
         this.vRet = vRet;
+        this.id = "panoramix";
+        this.args = new ArrayList<Arg>();
         isMain = true;
     }
 
     public void bind(SymbolMap ts) {
         // Insertamos identificador al ambito general del programa
-        // TODO: NodeKind aquí también. NullPointer error
         ts.insertId(id, this);
         // Creamos el ambito del subprograma
         ts.openBlock();

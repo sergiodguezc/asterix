@@ -44,9 +44,11 @@ public class IFor extends I {
         return getJSON().toJSONString();
     }
 
+    // Devolvemos el tipo de la declaración de la variable auxiliar. Lo necesitamos
+    // cuando hacemos bind() en otros puntos del AST.
     public T type() {
-        T tipo = this.tipo.type();
-        T tipoLista = lista.type(); // Tipo interno de la lista
+        T tipo = this.tipo;
+        T tipoLista = lista.type().type(); // Tipo interno de la lista
 
         // Comprobamos que la declaracion del for esta correctamente tipada
         boolean error = false;
@@ -61,7 +63,7 @@ public class IFor extends I {
 
         if (error)
             return new T(KindT.ERROR);
-        return new T(KindT.INS);
+        return tipo;
     }
 
     public void bind(SymbolMap ts) {
@@ -71,9 +73,7 @@ public class IFor extends I {
         // Llamadas recursivas a bind()
         tipo.bind(ts);
 
-        // Añadimos una referencia a la declaracion del for en la tabla de simbolos
-        IDec dec = new IDecVar(tipo, id);
-        ts.insertId(id, dec);
+        ts.insertId(id, this);
 
         // Llamadas recursivas a bind()
         lista.bind(ts);

@@ -59,11 +59,10 @@ public class IDecVar extends IDec {
     public T type() {
         if(ini) {
             T tipoValor = valor.type();
-            if (ASemUtils.checkEqualTypes(type, tipoValor))
-                return new T(KindT.INS);
-
-            GestionErroresAsterix.errorSemantico("Error de tipado en la declaracion.");
-            return new T(KindT.ERROR);
+            if (!ASemUtils.checkEqualTypes(type, tipoValor)) {
+                GestionErroresAsterix.errorSemantico("Error de tipado en la declaracion.");
+                return new T(KindT.ERROR);
+            }
         }
         return type;
     }

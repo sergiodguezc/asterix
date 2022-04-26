@@ -1,7 +1,7 @@
 // Programa para multiplicar dos matrices, una es una matriz global, la matriz
 // A y la otra la recibimos por consola, la matriz B.
 
-datix matrix vectix<vectix<intix>[2]>[3];
+datix matrix vectix<vectix<intix>[3]>[3];
 matrix A = {{1, 2, 3}, {1, 2, 3}, {1, 2, 3}};
 
 potion readmatrix(B : &matrix) {

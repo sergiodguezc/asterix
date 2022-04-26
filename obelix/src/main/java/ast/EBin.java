@@ -35,7 +35,7 @@ public class EBin extends E {
             return tipoOp1.type();
         else if (op.equals("accS") && checkTAccS(tipoOp1)) {
             // Obtenemos la lista de declaraciones del struct
-            List<IDec> declarations = tipoOp1.getDec().getDeclarations();
+            List<IDec> declarations = tipoOp1.getDec();
 
             // Reccorremos la lista de declaraciones hasta que veamos la que coincide con el opnd2
             for (IDec dec : declarations)
@@ -107,8 +107,5 @@ public class EBin extends E {
     public void bind(SymbolMap ts) {
         opnd1.bind(ts);
         opnd2.bind(ts);
-
-        // Si es un struct guardamos las declaraciones
-        // IDecStruct struct = (IDecStruct) ts.searchId(opnd1.getVal());
     }
 }

@@ -52,7 +52,6 @@ public class ECall extends E {
         T tRet;
         // Comprobamos la existencia del subprograma.
         if (potion == null) {
-            GestionErroresAsterix.errorSemantico("ERROR: Llamada a función no existente.");
             return new T(KindT.ERROR);
             // Comprobamos que no sea un procedimiento.
         } else if ((tRet = potion.type()) == null) {
@@ -84,6 +83,11 @@ public class ECall extends E {
     public void bind(SymbolMap ts) {
         for (E e : args)
             e.bind(ts);
-        potion = (S) ts.searchId(id);
+        ASTNode potion = ts.searchId(id);
+        if (potion == null || potion.nodeKind() != NodeKind.SUBPROGRAMA) {
+            GestionErroresAsterix.errorSemantico("ERROR: Llamada a función no existente.");
+        } else {
+            this.potion = (S) potion;
+        }
     }
 }

@@ -8,7 +8,7 @@ import org.json.simple.JSONObject;
 public class ECte extends E {
     private KindT kindT;
     private String v;
-    private IDec dec;
+    private ASTNode dec;
 
     public ECte(String v) {
         this.v = v;
@@ -53,6 +53,6 @@ public class ECte extends E {
     // Si es una variable dec hace referencia a la declaracion de esa variable
     // En caso contrario, dec es null.
     public void bind(SymbolMap ts) {
-        dec = (IDec) ts.searchId(v);
+        dec = ts.searchId(v);
     }
 }

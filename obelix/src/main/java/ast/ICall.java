@@ -50,7 +50,6 @@ public class ICall extends I {
 
     public T type() {
         if (potion == null) {
-            GestionErroresAsterix.errorSemantico("ERROR: Llamada a subprograma no existente.");
             return new T(KindT.ERROR);
         }
 
@@ -76,7 +75,12 @@ public class ICall extends I {
     public void bind(SymbolMap ts) {
         for (E e : params)
             e.bind(ts);
-        potion = (S) ts.searchId(id);
+        ASTNode potion = ts.searchId(id);
+        if (potion == null || potion.nodeKind() != NodeKind.SUBPROGRAMA) {
+            GestionErroresAsterix.errorSemantico("ERROR: Llamada a procedimiento no declarado.");
+        } else {
+            this.potion = (S) potion;
+        }
     }
 
 }
