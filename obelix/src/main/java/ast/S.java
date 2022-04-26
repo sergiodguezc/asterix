@@ -56,6 +56,10 @@ public class S implements ASTNode, DefSub {
         for (I ins : cuerpo) {
             ins.bind(ts);
         }
+        if(isFunction) {
+            vRet.bind(ts);
+            tRet.bind(ts);
+        }
 
         ts.closeBlock();
     }
@@ -106,20 +110,24 @@ public class S implements ASTNode, DefSub {
         for (I ins : cuerpo)
             ins.type();
 
-        T tipoVRet = vRet.type();
         boolean error = false;
+        if(isFunction) {
+            T tipoVRet = vRet.type();
 
-        if (!ASemUtils.checkEqualTypes(tipoVRet, tRet)){
-            error = true;
-            GestionErroresAsterix.errorSemantico("El tipo del valor de retorno no coincide con el tipo de la función.");
+            if (!ASemUtils.checkEqualTypes(tipoVRet, tRet)) {
+                error = true;
+                GestionErroresAsterix.errorSemantico("El tipo del valor de retorno no coincide con el tipo de la función.");
+            }
+
         }
-
-
-        return error ? new T(KindT.INS) : new T(KindT.ERROR);
+        return !error ? new T(KindT.INS) : new T(KindT.ERROR);
     }
 
     public List<Arg> getArguments() {
         return args;
     }
 
+    public T getType() {
+        return tRet;
+    }
 }

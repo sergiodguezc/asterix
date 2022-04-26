@@ -10,4 +10,9 @@ public interface ASTNode {
     public NodeKind nodeKind();
     public String toString();
     public JSONObject getJSON();
+
+    // Para no tener bucles en la ejecución de type empleamos esta función para
+    // obtener el tipo sin tener que volver a ejecutar type()
+    public default T getType() {return null;};
+
 }

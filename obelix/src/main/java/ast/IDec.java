@@ -9,4 +9,5 @@ public abstract class IDec extends I implements DefSub {
 
     public abstract String getId();
     public abstract JSONObject getJSON();
+    public abstract KindD kindD();
 }

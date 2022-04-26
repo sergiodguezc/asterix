@@ -4,11 +4,13 @@ import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class IDecStruct extends IDec {
     private List<IDec> declarations;
     private String id;
+    private T tipoStruct;
 
     public IDecStruct(String id, List<IDec> declarations) {
         this.declarations = declarations;
@@ -45,7 +47,12 @@ public class IDecStruct extends IDec {
         return obj;
     }
 
-	public List<IDec> getDeclarations() {
+    @Override
+    public KindD kindD() {
+        return KindD.POT;
+    }
+
+    public List<IDec> getDeclarations() {
         return declarations;
     }
 
@@ -55,4 +62,9 @@ public class IDecStruct extends IDec {
             dec.type();
 		return new T(KindT.INS);
 	}
+
+    public T getType() {
+        return new T(declarations);
+    }
+
 }

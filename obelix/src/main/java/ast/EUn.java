@@ -39,8 +39,8 @@ public class EUn extends E {
     public T type() {
         T tipoOpnd = opnd.type();
 
-        if ((op.equals("not") && tipoOpnd.getKindT() != KindT.BOOLIX) ||
-                (op.equals("menos") && tipoOpnd.getKindT() != KindT.INTIX) ||
+        if ((op.equals("not") && tipoOpnd.getKindT() != KindT.BOOLIX) &&
+                (op.equals("menos") && tipoOpnd.getKindT() != KindT.INTIX) &&
                 (op.equals("menos") && tipoOpnd.getKindT() != KindT.FLOATIX)) {
             GestionErroresAsterix.errorSemantico("Expresion unaria mal tipada.");
             return new T(KindT.ERROR);

@@ -40,6 +40,10 @@ public class IFor extends I {
         return obj;
     }
 
+    public T getType() {
+        return tipo;
+    }
+
     public String toString() {
         return getJSON().toJSONString();
     }

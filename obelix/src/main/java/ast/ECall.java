@@ -54,7 +54,7 @@ public class ECall extends E {
         if (potion == null) {
             return new T(KindT.ERROR);
             // Comprobamos que no sea un procedimiento.
-        } else if ((tRet = potion.type()) == null) {
+        } else if ((tRet = potion.getType()) == null) {
             GestionErroresAsterix.errorSemantico("ERROR: Llamada a un procedimiento. No devuelve ningun valor.");
             return new T(KindT.ERROR);
         }

@@ -17,25 +17,27 @@ import errors.GestionErroresAsterix;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Reader input = new InputStreamReader(new FileInputStream("matrix_mult.atx"));
+        Reader input = new InputStreamReader(new FileInputStream("bubblesort.atx"));
         AnalizadorLexicoAsterix alex = new AnalizadorLexicoAsterix(input);
         AnalizadorSintacticoAsterix asint = new AnalizadorSintacticoAsterix(alex);
         P programa = (P) asint.parse().value;
         AnalizadorSemanticoAsterix asem = new AnalizadorSemanticoAsterix(programa);
         asem.analizaSemantica();
-        if (GestionErroresAsterix.numErroresSemanticos + GestionErroresAsterix.numErroresSintacticos == 0) {
-            try (FileWriter file = new FileWriter(args[1])) {
-                try {
-                    file.write(programa.toString());
-                    file.flush();
+        if (args.length>1) {
+            if (GestionErroresAsterix.numErroresSemanticos + GestionErroresAsterix.numErroresSintacticos == 0 ) {
+                try (FileWriter file = new FileWriter(args[1])) {
+                    try {
+                        file.write(programa.toString());
+                        file.flush();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } else {
+                System.err.println("*** Errores en el código, no se genera salida.");
             }
-        } else {
-            System.err.println("*** Errores en el código, no se genera salida.");
         }
     }
 }

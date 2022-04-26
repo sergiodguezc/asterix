@@ -77,6 +77,10 @@ public class T implements ASTNode {
         return obj;
     }
 
+    public T getType() {
+        return this;
+    }
+
     // Si es un ALIAS : Devuelve el tipo al que hace referencia
     // Si es un VECTIX : Devuelve el tipo de los elementos del vector
     // En cc : Devolvemos el tipo

@@ -45,6 +45,11 @@ public class IDecVar extends IDec {
         return obj;
     }
 
+    @Override
+    public KindD kindD() {
+        return KindD.VAR;
+    }
+
     public void bind(SymbolMap ts) {
         type.bind(ts);
         if(ini)
@@ -57,6 +62,7 @@ public class IDecVar extends IDec {
     }
 
     public T type() {
+        type.type();
         if(ini) {
             T tipoValor = valor.type();
             if (!ASemUtils.checkEqualTypes(type, tipoValor)) {
@@ -64,6 +70,10 @@ public class IDecVar extends IDec {
                 return new T(KindT.ERROR);
             }
         }
+        return type;
+    }
+
+    public T getType() {
         return type;
     }
 }

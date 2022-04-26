@@ -5,10 +5,13 @@ import errors.GestionErroresAsterix;
 
 import org.json.simple.JSONObject;
 
+import java.util.List;
+
 public class ECte extends E {
     private KindT kindT;
     private String v;
     private ASTNode dec;
+    private T tipoECte;
 
     public ECte(String v) {
         this.v = v;
@@ -35,15 +38,20 @@ public class ECte extends E {
         return obj;
     }
 
+    @Override
+    public T getType() {
+        return tipoECte;
+    }
+
     public T type() {
-        if (dec != null)
-            return dec.type();
-        else if (kindT == KindT.INTIX || kindT == KindT.FLOATIX || kindT == KindT.BOOLIX)
-            return new T(kindT);
-        else {
-            GestionErroresAsterix.errorSemantico("Variable '" + v + "' sin declarar");
-            return new T(KindT.ERROR);
+        if (dec != null) {
+            return dec.getType();
         }
+        else if (kindT == KindT.INTIX || kindT == KindT.FLOATIX || kindT == KindT.BOOLIX)
+            return (tipoECte = new T(kindT));
+
+        GestionErroresAsterix.errorSemantico("Variable '" + v + "' sin declarar");
+        return (tipoECte = new T(KindT.ERROR));
     }
 
     public String toString() {

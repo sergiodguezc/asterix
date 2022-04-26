@@ -11,6 +11,7 @@ public class EBin extends E {
     private E opnd1;
     private E opnd2;
     private String op;
+    private T tipoExp;
 
     public EBin(E opnd1, E opnd2, String op) {
         this.opnd1 = opnd1;
@@ -20,17 +21,20 @@ public class EBin extends E {
 
     public T type() {
         T tipoOp1 = opnd1.type();
-        T tipoOp2 = opnd2.type();
+        T tipoOp2 = null;
+        if (!op.equals("accS")) {
+             tipoOp2 = opnd2.type();
+        }
 
         if ((op.equals("or") || op.equals("and")) && checkTEBool(tipoOp1, tipoOp2))
             return new T(KindT.BOOLIX);
         else if ((op.equals("igual") || op.equals("mayor") || op.equals("menor") || op.equals("geq")
                 || op.equals("leq") || op.equals("dis")) && checkTEComp(tipoOp1, tipoOp2))
-            return new T(KindT.BOOLIX);
+            return (tipoExp = new T(KindT.BOOLIX));
         else if (checkTEInt(tipoOp1, tipoOp2))
-            return new T(KindT.INTIX);
+            return (tipoExp = new T(KindT.INTIX));
         else if (checkTEFloat(tipoOp1, tipoOp2))
-            return new T(KindT.FLOATIX);
+            return (tipoExp = new T(KindT.FLOATIX));
         else if (op.equals("accA") && checkTAccA(tipoOp1, tipoOp2))
             return tipoOp1.type();
         else if (op.equals("accS") && checkTAccS(tipoOp1)) {
@@ -40,13 +44,13 @@ public class EBin extends E {
             // Reccorremos la lista de declaraciones hasta que veamos la que coincide con el opnd2
             for (IDec dec : declarations)
                 if(opnd2.getVal().equals(dec.getId()))
-                    return dec.type();
+                    return (tipoExp = dec.getType());
 
             // En caso contrario no devuelve nada y sale de esta condicion
             // Devolviendo KindT.ERROR.
         }
         GestionErroresAsterix.errorSemantico("Error de tipado en la expresion binaria");
-        return new T(KindT.ERROR);
+        return (tipoExp = new T(KindT.ERROR));
     }
 
     private boolean checkTAccS(T tipoOp1) {
@@ -90,6 +94,10 @@ public class EBin extends E {
         obj.put("operando 1", opnd1.getJSON());
         obj.put("operando 2", opnd2.getJSON());
         return obj;
+    }
+
+    public T getType() {
+        return tipoExp;
     }
 
     public KindE kind() {

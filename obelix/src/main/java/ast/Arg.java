@@ -45,5 +45,9 @@ public class Arg implements ASTNode {
         obj.put("id", id);
         return obj;
     }
+
+    public T getType() {
+        return tipo;
+    }
 }
 
