@@ -17,7 +17,7 @@ import errors.GestionErroresAsterix;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Reader input = new InputStreamReader(new FileInputStream("bubblesort.atx"));
+        Reader input = new InputStreamReader(new FileInputStream("struct_test.atx"));
         AnalizadorLexicoAsterix alex = new AnalizadorLexicoAsterix(input);
         AnalizadorSintacticoAsterix asint = new AnalizadorSintacticoAsterix(alex);
         P programa = (P) asint.parse().value;

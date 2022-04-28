@@ -1,0 +1,10 @@
+pot structtest {
+    intix n = 0;
+    pot structtest2 {
+            intix n2 = 0;
+    };
+};
+
+potion panoramix() -> intix {
+    return 0;
+}

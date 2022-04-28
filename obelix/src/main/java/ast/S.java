@@ -1,5 +1,6 @@
 package ast;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ import errors.GestionErroresAsterix;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class S implements ASTNode, DefSub {
+public class S implements DefSub {
     private List<I> cuerpo;
     private List<Arg> args;
     private boolean isFunction;
@@ -62,6 +63,11 @@ public class S implements ASTNode, DefSub {
         }
 
         ts.closeBlock();
+    }
+
+    public void generateCode(PrintWriter pw) {
+        String code = null;
+        pw.write(code);
     }
 
     public NodeKind nodeKind() {

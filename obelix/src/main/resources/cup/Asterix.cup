@@ -73,10 +73,12 @@ cuerpo ::= cuerpo:listadefSub alias:nuevo PUNTOCOMA
 s ::= s:listains i:nuevo
     {: listains.add(nuevo);
         RESULT = listains; :};
-s ::=  i:ins
+/*s ::=  i:ins
     {: List<I> listains = new ArrayList<I>();
        listains.add(ins);
-       RESULT = listains; :};
+       RESULT = listains; :};*/
+s ::=
+    {: RESULT = new ArrayList<I>(); :};
 
 i ::= dec:idec PUNTOCOMA
     {: RESULT = idec; :};
@@ -101,9 +103,6 @@ main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s:cuerpo RET exp0:vRet PUNTOCOMA 
     {: RESULT = new  S(cuerpo,vRet); :};
 main ::= POTION PANOR error LLA s:cuerpo RET exp0:vRet PUNTOCOMA LLC
     {: System.err.println("Error en la declaración de la función panoramix.");
-       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
-main ::= POTION PANOR PAA PAC FLECHA INTIX LLA error RET exp0:vRet PUNTOCOMA LLC
-    {: System.err.println("Error en el cuerpo de la función panoramix.");
        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s:cuerpo error LLC
     {: System.err.println("Error en el return de la función panoramix.");
@@ -191,9 +190,6 @@ subprograma ::= POTION ID:id largp:args FLECHA tipo:tRet LLA s:cuerpo RET exp0:v
 subprograma ::= POTION error LLA s:cuerpo LLC
     {: System.err.println("Error en la declaración de la función.");
        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
-subprograma ::= POTION ID:id largp:args FLECHA tipo:tRet LLA error LLC
-    {: System.err.println("Error en el cuerpo de la función.");
-       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 largp ::= PAA PAC
     {:RESULT = new ArrayList<Arg>();:};
@@ -236,31 +232,18 @@ ifelse ::= IF PAA exp0:cond PAC LLA s:cuerpo LLC
 ifelse ::= IF PAA exp0:cond PAC LLA s:cuerpoIf LLC ELSE LLA s:cuerpoElse LLC
     {:RESULT = new IIf(cond,cuerpoIf,cuerpoElse);:};
 ifelse ::= IF error LLC
-    {: System.err.println("Error en la condición del if.");
-       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
-ifelse ::= IF PAA exp0:cond PAC LLA error LLC ELSE LLA s:cuerpoElse LLC
-    {: System.err.println("Error en el cuerpo del if.");
-       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
-ifelse ::= IF PAA exp0:cond PAC LLA s:cuerpoIf LLC ELSE LLA error LLC
-    {: System.err.println("Error en el cuerpo del else.");
-       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
+    {: System.err.println("Error en la condición del if."); :};
 
 while ::= WHILIX PAA exp0:cond PAC LLA s:cuerpo LLC
     {:RESULT = new IWhile(cond,cuerpo);:};
 while ::= WHILIX error LLC
     {: System.err.println("Error en la condicion del whilix.");
        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
-while ::= WHILIX PAA exp0:cond PAC error
-    {: System.err.println("Error en el cuerpo del whilix.");
-       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 for ::= FORIX PAA tipo:t ID:id DOSPUNTOS exp0:lista PAC LLA s:cuerpo LLC
     {:RESULT = new IFor(t,id.lexema,lista,cuerpo);:};
 for ::= FORIX error LLC
     {: System.err.println("Error en la declaracion del forix.");
-       GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
-for ::= FORIX PAA tipo:t ID:id DOSPUNTOS exp0:lista PAC LLA error LLC
-    {: System.err.println("Error en el cuerpo del forix.");
        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 tab ::= TABEL:op PAA exp0:valor PAC

@@ -11,6 +11,7 @@ public class EBin extends E {
     private E opnd1;
     private E opnd2;
     private String op;
+    // Tipo de la expresion
     private T tipoExp;
 
     public EBin(E opnd1, E opnd2, String op) {

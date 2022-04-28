@@ -4,7 +4,9 @@ import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class P implements ASTNode {
     private List<DefSub> defsubs;
@@ -25,6 +27,20 @@ public class P implements ASTNode {
         }
 
         ts.closeBlock();
+    }
+
+    public void generateCode(PrintWriter pw) {
+        // TODO: Escribir encabezado
+        for (DefSub df : defsubs)
+            df.generateCode(pw);
+
+    }
+
+    public int maxMemory(Integer c) {
+        int maxMemSub = 0;
+        for (DefSub df: defsubs)
+            maxMemSub = Integer.max(maxMemSub, df.maxMemory(c));
+        return maxMemSub;
     }
 
     public NodeKind nodeKind() {

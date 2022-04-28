@@ -4,8 +4,14 @@ import asem.SymbolMap;
 import org.json.simple.JSONObject;
 
 public class Arg implements ASTNode {
+
+    // Tipo del argumento
     private T tipo;
+
+    // Nombre del argumento
     private String id;
+
+    // Si se pasa por referencia o no
     private boolean ref;
 
     public Arg (T tipo, String id, boolean ref){
@@ -46,6 +52,7 @@ public class Arg implements ASTNode {
         return obj;
     }
 
+    // Devuelve el tipo del argumento
     public T getType() {
         return tipo;
     }
