@@ -1,5 +1,6 @@
 package ast;
 
+import java.io.PrintWriter;
 import java.util.List;
 
 import org.json.simple.JSONObject;
@@ -28,11 +29,11 @@ public class EBin extends E {
         }
 
         if ((op.equals("or") || op.equals("and")) && checkTEBool(tipoOp1, tipoOp2))
-            return new T(KindT.BOOLIX);
+            return (tipoExp = new T(KindT.BOOLIX));
         else if ((op.equals("igual") || op.equals("mayor") || op.equals("menor") || op.equals("geq")
                 || op.equals("leq") || op.equals("dis")) && checkTEComp(tipoOp1, tipoOp2))
             return (tipoExp = new T(KindT.BOOLIX));
-        else if (checkTEInt(tipoOp1, tipoOp2))
+        else if ((checkTEInt(tipoOp1, tipoOp2) && op.equals("mod")) || checkTEInt(tipoOp1, tipoOp2))
             return (tipoExp = new T(KindT.INTIX));
         else if (checkTEFloat(tipoOp1, tipoOp2))
             return (tipoExp = new T(KindT.FLOATIX));
@@ -64,6 +65,10 @@ public class EBin extends E {
 
     // TODO: Comparaciones y casteos varios
     private boolean checkTEFloat(T tipoOp1, T tipoOp2) {
+        if (op.equals("pow")) {
+            return (tipoOp1.getKindT() == KindT.INTIX || tipoOp1.getKindT() == KindT.FLOATIX)
+                    && (tipoOp2.getKindT() == KindT.INTIX);
+        }
         return (tipoOp1.getKindT() == KindT.INTIX || tipoOp1.getKindT() == KindT.FLOATIX)
                 && (tipoOp2.getKindT() == KindT.INTIX || tipoOp2.getKindT() == KindT.FLOATIX);
     }
@@ -117,4 +122,103 @@ public class EBin extends E {
         opnd1.bind(ts);
         opnd2.bind(ts);
     }
+
+	public void generateCode(PrintWriter pw) {
+        // Como se apilan, primero se calcula el código del operando 2.
+        opnd2.generateCode(pw);
+
+        // Realizamos primero un posible casteo de este operando para que funcionen
+        // las operaciones entre i32 y f32. Siempre el casteo es de i32 -> f32
+        if (!op.equals("pow") && opnd2.getType().getKindT() == KindT.INTIX &&
+                opnd1.getType().getKindT() == KindT.FLOATIX) {
+            pw.println("f32.convert_s/i32");
+        }
+
+        // Segundo, se calcula el código del operando 2.
+        opnd1.generateCode(pw);
+        
+        // Realizamos otro posible casteo de este operando para que funcionen
+        // las operaciones entre i32 y f32. Siempre el casteo es de i32 -> f32
+        if (opnd2.getType().getKindT() == KindT.FLOATIX &&
+                opnd1.getType().getKindT() == KindT.INTIX) {
+            pw.println("f32.convert_s/i32"); }
+
+        // Finalmente calculamos el código de la operacion.
+        opToWat(pw);
+
+	}
+
+    // Función auxiliar para escribir la instrucción correspondiente dentro del
+    // archivo, recibe el pw sobre el que se escribe y realiza la escritura.
+    private void opToWat(PrintWriter pw) {
+        // En el caso en que no sea ni accA, pow o accS, escribimos primero el
+        // tipo de la instrucción que vamos a escribir para que por ejemplo se
+        // escriba primero i32 y luego .add para la suma
+        if (!(op.equals("pow") || op.equals("accS") || op.equals("accA")))
+            tipoExp.generateCode(pw);
+
+        // Ahora procedemos con el resto de las instrucciones. Comenzamos con
+        // aquellas para las cuales no hay que hacer comprobaciones extra.
+        if (op.equals("mas")) pw.println(".add");
+        else if (op.equals("menos")) pw.println(".sub");
+        else if (op.equals("mul")) pw.println(".mul");
+        else if (op.equals("mod")) pw.println(".rem_s");
+        else if (op.equals("or")) pw.println(".or");
+        else if (op.equals("and")) pw.println(".and");
+        else if (op.equals("igual")) pw.println(".eq");
+        else if (op.equals("dis")) pw.println(".ne");
+        
+        // Seguimos ahora con aquellas para las cuales hay que hacer
+        // comprobaciones de tipos o que no vienen de forma nativa en wasm.
+        // Comenzamos con los casos para los que hay que comprobar tipos.
+        else if (op.equals("div")) {
+            if (opnd1.getType().getKindT() == KindT.INTIX)
+                pw.println(".div_s");
+            else pw.println(".div");
+        }
+        else if (op.equals("leq")) {
+            if (opnd1.getType().getKindT() == KindT.INTIX)
+                pw.println(".le_s");
+            else pw.println(".le");
+        }
+        else if (op.equals("geq")) {
+            if (opnd1.getType().getKindT() == KindT.INTIX)
+                pw.println(".ge_s");
+            else pw.println(".ge");
+        }
+        else if (op.equals("mayor")) {
+            if (opnd1.getType().getKindT() == KindT.INTIX)
+                pw.println(".gt_s");
+            else pw.println(".gt");
+        }
+        else if (op.equals("menor")) {
+            if (opnd1.getType().getKindT() == KindT.INTIX)
+                pw.println(".lt_s");
+            else pw.println(".lt");
+        }
+
+        // Caso con llamada a función creada por nosotros y que incluimos en
+        // todos los ejecutables.
+        else if (op.equals("pow")) {
+            if (tipoExp.getKindT() == KindT.FLOATIX) {
+                pw.println("call $powf");
+            } else {
+                pw.println("call $powi");
+            }
+        } 
+        
+        // Ultimos casos especiales, accA y accS.
+        else if (op.equals("accA")) {
+           // TODO: accA
+        }
+        else if (op.equals("accS")) {
+            // TODO: accS
+        }
+    }
+
+    // Por ahora, esta función solo la necesitamos en ECte, pero también la
+    // añadimos aquí para que sea accesible simplemente desde E.
+	public void generateSinLoad(PrintWriter pw) {
+		
+	}
 }

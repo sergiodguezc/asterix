@@ -7,6 +7,7 @@ import asem.ASemUtils;
 import asem.SymbolMap;
 import errors.GestionErroresAsterix;
 
+import java.io.PrintWriter;
 import java.util.List;
 
 public class ECall extends E {
@@ -90,4 +91,16 @@ public class ECall extends E {
             this.potion = (S) potion;
         }
     }
+
+	@Override
+	public void generateCode(PrintWriter pw) {
+		// TODO Auto-generated method stub
+		
+	}
+
+    // Por ahora, esta función solo la necesitamos en ECte, pero también la
+    // añadimos aquí para que sea accesible simplemente desde E.
+	public void generateSinLoad(PrintWriter pw) {
+		
+	}
 }

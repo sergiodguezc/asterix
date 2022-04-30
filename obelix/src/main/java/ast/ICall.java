@@ -7,7 +7,9 @@ import asem.ASemUtils;
 import asem.SymbolMap;
 import errors.GestionErroresAsterix;
 
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ICall extends I {
     private List<E> params;
@@ -81,6 +83,16 @@ public class ICall extends I {
         } else {
             this.potion = (S) potion;
         }
+    }
+
+    @Override
+    public void generateCode(PrintWriter pw) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+        // Esta instrucción no puede tener variables declaradas, dejamos este
     }
 
 }

@@ -3,6 +3,7 @@ package ast;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import asem.ASemUtils;
 import asem.SymbolMap;
@@ -20,6 +21,7 @@ public class S implements DefSub {
     private T tRet;
     private E vRet;
 
+    // Funciones
     public S(List<I> cuerpo, List<Arg> args, String id, T tRet, E vRet) {
         this.cuerpo = cuerpo;
         this.args = args;
@@ -30,6 +32,7 @@ public class S implements DefSub {
         isMain = false;
     }
 
+    // Procedimientos
     public S(List<I> cuerpo, List<Arg> args, String id) {
         this.cuerpo = cuerpo;
         this.id = id;
@@ -38,12 +41,15 @@ public class S implements DefSub {
         isFunction = false;
     }
 
+    // Main
     public S(List<I> cuerpo, E vRet) {
         this.cuerpo = cuerpo;
         this.vRet = vRet;
+        this.tRet = new T(KindT.INTIX);
         this.id = "panoramix";
         this.args = new ArrayList<Arg>();
         isMain = true;
+        isFunction = true;
     }
 
     public void bind(SymbolMap ts) {
@@ -66,11 +72,58 @@ public class S implements DefSub {
     }
 
     public void generateCode(PrintWriter pw) {
-        String code = null;
-        pw.write(code);
+        // Cabecera con el nombre de la función
+        pw.print("(func $" + id + " ");
+        // Generamos código para los parámetros
+        for (Arg a : args)
+            a.generateCode(pw);
+
+        // Generamos ahora el código del resultado si hubiere
+        if (isFunction && !isMain) {
+            pw.print("(result ");
+            tRet.generateCode(pw);
+            pw.println(")");
+        } else pw.println(); // Salto de línea por si no es una función
+
+        // Calculamos los delta para cada cada variable. Comenzamos en 8
+        // porque es el valor de esta variable en el encabezado despues de 
+        // realizar sus operaciones. Aquí uso AtomicInteger en vez de
+        // Integer porque al final Integer no es un puntero a un int,
+        // en cambio, AtomicInteger sí.
+        AtomicInteger size = new AtomicInteger(8);
+        AtomicInteger localSize = new AtomicInteger(8);
+        for (I ins : cuerpo) {
+            ins.setDelta(size, localSize);
+        }
+
+        // Escribimos el encabezado que necesitan todas las funciones
+        pw.println(generateEncabezado(size));
+
+        // Inicializamos las variables locales que lo necesiten
+        for (I ins : cuerpo)
+            ins.generateCode(pw);
+
+        // En caso de que sea una función escribimos el valor del retorno al
+        // final
+        if (isFunction && !isMain)
+            vRet.generateCode(pw);
+
+        // Antes de cerrar la función tenemos que llamar a la función
+        // $freeStack
+
+        // TODO: Arreglar el "parche" de poner drop
+        // Me sale un error de que necesita la pila vacía para llamar a
+        // freeStack, pero es que entonces no sé cómo podremos devolver un
+        // valor (¿ igual guardarlo en memoria ?)
+        pw.println("drop");
+        pw.println("call $freeStack");
+        // Cerramos la función
+        pw.println(")");
+            
     }
 
-    public NodeKind nodeKind() {
+
+	public NodeKind nodeKind() {
         return NodeKind.SUBPROGRAMA;
     }
 
@@ -136,4 +189,27 @@ public class S implements DefSub {
     public T getType() {
         return tRet;
     }
+
+    // Método privado que devuelve el encabezado de cada función en wat. Todas
+    // necesitan las dos variables locales localStart y temp, del mismo modo
+    // tienen que hacer las operaciones con los punteros globales.
+	private String generateEncabezado(AtomicInteger size) {
+		return "(local $temp i32)\n"
+            + "(local $localStart i32)\n"
+            + "i32.const " + size + " ;; let this be the stack size needed (params+locals+2)*4\n"
+            + "call $reserveStack  ;; returns old MP (dynamic link)\n"
+            + "set_local $temp\n"
+            + "get_global $MP\n"
+            + "get_local $temp\n"
+            + "i32.store\n"
+            + "get_global $MP\n"
+            + "get_global $SP\n"
+            + "i32.store offset=4\n"
+            + "get_global $MP\n"
+            + "i32.const 8\n"
+            + "i32.add\n"
+            + "set_local $localStart\n"
+            + "\n\n ;; instrucciones ";
+	}
+
 }

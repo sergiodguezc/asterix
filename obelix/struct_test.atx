@@ -1,10 +1,9 @@
-pot structtest {
-    intix n = 0;
-    pot structtest2 {
-            intix n2 = 0;
-    };
-};
-
 potion panoramix() -> intix {
+    intix i = 0;
+    whilix (i < 10) {
+        i = i+1;
+    }
+
+    tabellae(i);
     return 0;
 }

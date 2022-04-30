@@ -13,6 +13,7 @@ import alex.AnalizadorLexicoAsterix;
 import asem.AnalizadorSemanticoAsterix;
 import asint.AnalizadorSintacticoAsterix;
 import ast.P;
+import code.CodeGenerator;
 import errors.GestionErroresAsterix;
 
 public class App {
@@ -23,6 +24,11 @@ public class App {
         P programa = (P) asint.parse().value;
         AnalizadorSemanticoAsterix asem = new AnalizadorSemanticoAsterix(programa);
         asem.analizaSemantica();
+        CodeGenerator cg = new CodeGenerator(programa,"struct_test");
+
+        if (GestionErroresAsterix.numErroresSemanticos + GestionErroresAsterix.numErroresSintacticos == 0 )
+            cg.generateCode();
+
         if (args.length>1) {
             if (GestionErroresAsterix.numErroresSemanticos + GestionErroresAsterix.numErroresSintacticos == 0 ) {
                 try (FileWriter file = new FileWriter(args[1])) {

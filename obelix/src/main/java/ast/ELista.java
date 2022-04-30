@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 import asem.ASemUtils;
 import asem.SymbolMap;
 
+import java.io.PrintWriter;
 import java.util.List;
 
 public class ELista extends E {
@@ -59,4 +60,15 @@ public class ELista extends E {
         }
     }
 
+	@Override
+	public void generateCode(PrintWriter pw) {
+		// TODO Auto-generated method stub
+		
+	}
+
+    // Por ahora, esta función solo la necesitamos en ECte, pero también la
+    // añadimos aquí para que sea accesible simplemente desde E.
+	public void generateSinLoad(PrintWriter pw) {
+		
+	}
 }

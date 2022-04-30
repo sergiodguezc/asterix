@@ -5,7 +5,7 @@ import errors.GestionErroresAsterix;
 
 import org.json.simple.JSONObject;
 
-import java.util.List;
+import java.io.PrintWriter;
 
 public class ECte extends E {
     private KindT kindT;
@@ -45,7 +45,7 @@ public class ECte extends E {
 
     public T type() {
         if (dec != null) {
-            return dec.getType();
+            return (tipoECte = dec.getType());
         }
         else if (kindT == KindT.INTIX || kindT == KindT.FLOATIX || kindT == KindT.BOOLIX)
             return (tipoECte = new T(kindT));
@@ -63,4 +63,33 @@ public class ECte extends E {
     public void bind(SymbolMap ts) {
         dec = ts.searchId(v);
     }
+
+	public void generateCode(PrintWriter pw) {
+        // Este caso corresponde con constantes: 1, 1.0, galo, romano, etc
+		if (dec == null) {
+            tipoECte.generateCode(pw);
+            // Convertimos galo y romano a 1 y 0 en wasm, respectivamente.
+            if (kindT == KindT.BOOLIX)
+                v = v.equals("galo") ? "1" : "0";
+            pw.println(".const " + v);
+        // Caso correspondiente a accesos a variables ya declaradas
+        } else {
+            // Buscamos en memoria la dirección de la variable
+            pw.println("get_local $localStart");
+            IDec decVar = (IDec) dec; // Casteo seguro porque dec != null
+            pw.println("i32.const " + decVar.getDelta());
+            pw.println("i32.add");
+            decVar.getType().generateCode(pw);
+            pw.println(".load");
+        }
+	}
+
+	public void generateSinLoad(PrintWriter pw) {
+	    if (dec != null) {
+            pw.println("get_local $localStart");
+            IDec decVar = (IDec) dec; // Casteo seguro porque dec != null
+            pw.println("i32.const " + decVar.getDelta());
+            pw.println("i32.add");
+        }
+	}
 }

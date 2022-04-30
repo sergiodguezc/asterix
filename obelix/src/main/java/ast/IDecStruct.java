@@ -4,17 +4,18 @@ import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
+// TODO: Arreglar esta mierda
 public class IDecStruct extends IDec {
     private List<IDec> declarations;
-    private String id;
     private T tipoStruct;
 
     public IDecStruct(String id, List<IDec> declarations) {
+        super(id);
         this.declarations = declarations;
-        this.id = id;
     }
 
     public String toString(){
@@ -22,22 +23,18 @@ public class IDecStruct extends IDec {
     }
 
     public void bind(SymbolMap ts) {
-        ts.insertId(id, this);
+        ts.insertId(getId(), this);
         ts.openBlock();
         for (IDec dec : declarations)
             dec.bind(ts);
         ts.closeBlock();
     }
 
-    public String getId() {
-        return id;
-    }
-
     @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "INSTRUCCION STRUCT");
-        obj.put("id", id);
+        obj.put("id", getId());
         if(declarations.isEmpty())
             return obj;
         JSONArray arr = new JSONArray();
@@ -47,7 +44,6 @@ public class IDecStruct extends IDec {
         return obj;
     }
 
-    @Override
     public KindD kindD() {
         return KindD.POT;
     }
@@ -66,5 +62,29 @@ public class IDecStruct extends IDec {
     public T getType() {
         return new T(declarations);
     }
+
+    // Generamos el código para guardar los valores por defecto inicializados
+    // en el struct.
+	public void generateCode(PrintWriter pw) {
+        // Colocamos el localStart en el delta del struct.
+        pw.println("i32.const " + getDelta());
+        pw.println("set_local $localStart");
+
+        for (IDec iDec : declarations) {
+            iDec.generateCode(pw);
+        }
+        
+        // Devolvemos el localStart al inicial.
+        pw.println("i32.const " + "-" + getDelta());
+        pw.println("set_local $localStart");
+	}
+
+	public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+        // Ponemos el localsize a 0 porque nos encontramos con un struct.
+        AtomicInteger newLocalSize = new AtomicInteger(0);
+        for (IDec idec : declarations) {
+            idec.setDelta(size, newLocalSize);
+        }
+	}
 
 }

@@ -17,9 +17,6 @@ public interface ASTNode {
     // Método para generar el código wasm
     public void generateCode(PrintWriter pw);
 
-    // Método para calcular la memoria estatica máxima del programa
-    public int maxMemory(Integer c);
-
     // En la vinculacion, lo utilizamos para distinguir el ASTNode
     public NodeKind nodeKind();
 

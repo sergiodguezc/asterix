@@ -1,6 +1,8 @@
 package ast;
 
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import asem.SymbolMap;
 import org.json.simple.JSONArray;
@@ -90,4 +92,18 @@ public class IIf extends I {
             ts.closeBlock();
         }
     }
+
+	@Override
+	public void generateCode(PrintWriter pw) {
+		// TODO Auto-generated method stub
+		
+	}
+
+    public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+        for (I ins : cuerpoIf)
+            ins.setDelta(size, localSize);
+        for (I ins : cuerpoElse)
+            ins.setDelta(size, localSize);
+		
+	}
 }

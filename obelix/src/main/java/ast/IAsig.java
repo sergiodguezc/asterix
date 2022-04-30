@@ -3,6 +3,10 @@ package ast;
 import asem.ASemUtils;
 import asem.SymbolMap;
 import errors.GestionErroresAsterix;
+
+import java.io.PrintWriter;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.json.simple.JSONObject;
 
 public class IAsig extends I {
@@ -47,6 +51,28 @@ public class IAsig extends I {
 
         GestionErroresAsterix.errorSemantico("Error de tipado en la asignacion");
 		return new T(KindT.ERROR);
+	}
+
+	@Override
+	public void generateCode(PrintWriter pw) {
+        // Generamos el código que calcula el valor de la expresión
+        valor.generateCode(pw);
+
+        // Necesitamos es calcular la posicion de memoria de la al que queremos
+        // asignar el valor de la expresión. En este caso, necesitamos la
+        // posicion de id.
+        id.generateSinLoad(pw); // en el caso en que sea una variable calcula su
+                             // posición con el localStart ya sumado.
+
+        // Generamos el código que calcula el tipo que devuelve y lo 
+        // yuxtaponemos a '.store'.
+        id.getType().generateCode(pw);
+        pw.println(".store");
+        
+	}
+
+    public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+        // Las asignaciones no crean variables. No hacemos nada.
 	}
 
 }

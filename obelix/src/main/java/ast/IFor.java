@@ -6,7 +6,9 @@ import errors.GestionErroresAsterix;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class IFor extends I {
     private T tipo;
@@ -87,5 +89,16 @@ public class IFor extends I {
         // Cierro el ambito del for
         ts.closeBlock();
     }
+
+	@Override
+	public void generateCode(PrintWriter pw) {
+		// TODO Auto-generated method stub
+		
+	}
+
+    public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+        for (I ins : cuerpoFor)
+            ins.setDelta(size, localSize);
+	}
 
 }

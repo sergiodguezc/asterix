@@ -1,6 +1,10 @@
 package ast;
 
 import asem.SymbolMap;
+
+import java.io.PrintWriter;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.json.simple.JSONObject;
 
 public class IES extends I {
@@ -45,4 +49,19 @@ public class IES extends I {
     public void bind(SymbolMap ts) {
         valor.bind(ts);
     }
+
+	@Override
+	public void generateCode(PrintWriter pw) {
+        // Traducir instrucciones de stilus y tabellae a read y print
+        String iocall = label.equals("stilus") ? "read" : "print";
+
+        // Escribimos la instrucción
+        valor.generateCode(pw);
+        pw.println("call $" + iocall);
+	}
+
+	public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+        // Las funciones de entrada salida no declaran variables
+		
+	}
 }

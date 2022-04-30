@@ -1,6 +1,9 @@
 package ast;
 
 import asem.SymbolMap;
+
+import java.io.PrintWriter;
+
 import org.json.simple.JSONObject;
 
 public class Arg implements ASTNode {
@@ -56,5 +59,13 @@ public class Arg implements ASTNode {
     public T getType() {
         return tipo;
     }
+
+    // TODO: Guardar en memoria los valores de las variables.
+    // Ahora mismo solo se permiten pasos por valor (no por referencia).
+	public void generateCode(PrintWriter pw) {
+	    pw.print("(param $" + id );
+        tipo.generateCode(pw);
+        pw.print(")");
+	}
 }
 

@@ -4,6 +4,9 @@ import asem.ASemUtils;
 import asem.SymbolMap;
 import errors.GestionErroresAsterix;
 
+import java.io.PrintWriter;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.json.simple.JSONObject;
 
 public class IDecVar extends IDec {
@@ -12,15 +15,17 @@ public class IDecVar extends IDec {
     private boolean ini; // Booleano que indica si tambien se inicializa
     private E valor;
 
+    // Variable no inicializada
     public IDecVar(T type, String id) {
+        super(id);
         this.type = type;
-        this.id = id;
         ini = false;
     }
 
+    // Variable inicializada
     public IDecVar(T type, String id, E valor) {
+        super(id);
         this.type = type;
-        this.id = id;
         this.valor = valor;
         ini = true;
     }
@@ -29,15 +34,11 @@ public class IDecVar extends IDec {
         return KindI.DEC;
     }
 
-    public String getId() {
-        return id;
-    }
-
     @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "INSTRUCCION DECLARACION");
-        obj.put("id", id);
+        obj.put("id", getId());
         obj.put("tipo", type.getJSON());
         if (!ini)
             return obj;
@@ -54,7 +55,7 @@ public class IDecVar extends IDec {
         type.bind(ts);
         if(ini)
             valor.bind(ts);
-        ts.insertId(id, this);
+        ts.insertId(getId(), this);
     }
 
     public String toString() {
@@ -76,4 +77,32 @@ public class IDecVar extends IDec {
     public T getType() {
         return type;
     }
+
+    // Generamos el código para guardar el valor de las variables inicializadas
+    // en memoria
+	public void generateCode(PrintWriter pw) {
+        if (ini) {
+            // Generamos el código que calcula el valor
+            valor.generateCode(pw);
+            // Generamos el código que ponga en la pila el delta más el
+            // localStart. Como calculamos esto, no hace falta poner un offset.
+            pw.println("get_local $localStart");
+            pw.println("i32.const " + getDelta());
+            // Generamos el codigo del tipo primero para luego concatenarlo
+            // con el .load, así podríamos escribir por ejemplo i32.load
+            type.generateCode(pw);
+            pw.println(".store");
+        }
+	}
+
+	public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+        // Igualamos el delta a la posicion local sobre la que lo calculamos.
+        setDelta(localSize.intValue());
+        // Calculamos primero el tamaño del tipo y luego sumamos al size y localSize
+        // el tamaño del tipo.
+        type.setSizeT();
+        localSize.set(localSize.intValue() + type.getSizeT());
+        size.set(size.intValue() + type.getSizeT());
+
+	}
 }

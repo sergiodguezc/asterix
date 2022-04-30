@@ -1,6 +1,10 @@
 package ast;
 
 import asem.SymbolMap;
+
+import java.io.PrintWriter;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.json.simple.JSONObject;
 
 public class IAlias extends I implements DefSub {
@@ -43,5 +47,15 @@ public class IAlias extends I implements DefSub {
     public String toString() {
         return getJSON().toJSONString();
     }
+
+	@Override
+	public void generateCode(PrintWriter pw) {
+		// TODO Auto-generated method stub
+	}
+
+	public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+        // Los alias no declaran variables. No hacemos nada.		
+		
+	}
 
 }
