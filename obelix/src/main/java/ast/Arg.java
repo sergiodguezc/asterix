@@ -61,7 +61,9 @@ public class Arg implements ASTNode {
     }
 
     // TODO: Guardar en memoria los valores de las variables.
-    // Ahora mismo solo se permiten pasos por valor (no por referencia).
+    // TODO: Aqui no se esta permitiendo nada, para que sea
+    // por valor : Se ha de copiar los valores en el marco de activacion a partir de SP + 8
+    // por referencia : Se ha de copiar la DIRECCION en la posicion del marco de activacion que le corresponde
 	public void generateCode(PrintWriter pw) {
 	    pw.print("(param $" + id );
         tipo.generateCode(pw);

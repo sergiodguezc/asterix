@@ -92,15 +92,4 @@ public class ECall extends E {
         }
     }
 
-	@Override
-	public void generateCode(PrintWriter pw) {
-		// TODO Auto-generated method stub
-		
-	}
-
-    // Por ahora, esta función solo la necesitamos en ECte, pero también la
-    // añadimos aquí para que sea accesible simplemente desde E.
-	public void generateSinLoad(PrintWriter pw) {
-		
-	}
 }

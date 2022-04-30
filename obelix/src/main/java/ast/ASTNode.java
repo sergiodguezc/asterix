@@ -15,7 +15,9 @@ public interface ASTNode {
     public void bind(SymbolMap ts);
 
     // Método para generar el código wasm
-    public void generateCode(PrintWriter pw);
+    // TODO: Considerar este metodo solo en P y en S
+    // TODO: Por otro lado, si es una I -> generateCodeI, si es una E-> generateCodeE, generateCodeD
+    // TODO: public void generateCode(PrintWriter pw);
 
     // En la vinculacion, lo utilizamos para distinguir el ASTNode
     public NodeKind nodeKind();

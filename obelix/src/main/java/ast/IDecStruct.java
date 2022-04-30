@@ -16,6 +16,10 @@ public class IDecStruct extends IDec {
     public IDecStruct(String id, List<IDec> declarations) {
         super(id);
         this.declarations = declarations;
+        // Recorremos las declaraciones viendo si alguna está inicializada
+        // En este caso, ponemos que el struct también los está.
+        for (IDec idec : declarations)
+            if (idec.isIni()) setIni(true);
     }
 
     public String toString(){
@@ -65,18 +69,26 @@ public class IDecStruct extends IDec {
 
     // Generamos el código para guardar los valores por defecto inicializados
     // en el struct.
-	public void generateCode(PrintWriter pw) {
-        // Colocamos el localStart en el delta del struct.
-        pw.println("i32.const " + getDelta());
-        pw.println("set_local $localStart");
+	public void generateCodeI(PrintWriter pw) {
+        // Generamos codigo sii alguna variable dentro del struct esta inicializada
+        if(isIni()) {
+            // Colocamos el valor de localStart en la pila para recuperarlo despues
+            pw.println("get_local $localStart ;; save localStart, at the end we revert this change");
 
-        for (IDec iDec : declarations) {
-            iDec.generateCode(pw);
+            // Cambiamos el localStart a localStart + delta
+            pw.println("i32.const " + getDelta());
+            pw.println("get_local $localStart");
+            pw.println("i32.add");
+            pw.println("set_local $localStart");
+
+            // Generamos codigo para las declaraciones internas del struct si estan inicializadas
+            for (IDec iDec : declarations) {
+                iDec.generateCodeI(pw);
+            }
+
+            // Devolvemos el localStart al inicial. Este valor se encontraba ya en la pila.
+            pw.println("set_local $localStart");
         }
-        
-        // Devolvemos el localStart al inicial.
-        pw.println("i32.const " + "-" + getDelta());
-        pw.println("set_local $localStart");
 	}
 
 	public void setDelta(AtomicInteger size, AtomicInteger localSize) {

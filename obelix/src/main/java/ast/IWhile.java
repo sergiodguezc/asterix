@@ -70,7 +70,7 @@ public class IWhile extends I {
         ts.closeBlock();
     }
 
-	public void generateCode(PrintWriter pw) {
+	public void generateCodeI(PrintWriter pw) {
         // Abrimos un bloque nuevo para el bucle
         pw.println("(block");
 
@@ -82,13 +82,13 @@ public class IWhile extends I {
         // creo que está mal, no actualiza el valor en memoria.
         // Generamos el código de la condicion y la cargamos desde memoria
         // a la pila
-        cond.generateCode(pw);
+        cond.generateCodeE(pw);
         pw.println("i32.eqz");
         pw.println("br_if 1");
 
         // Recorremos ahora el cuerpo del bucle generando el código
         for (I ins : cuerpoWhile)
-            ins.generateCode(pw);
+            ins.generateCodeI(pw);
 
         // Salto incondicional al inicio del bucle, etiqueta 0 representa este
         // punto.

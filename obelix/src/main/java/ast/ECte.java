@@ -87,6 +87,7 @@ public class ECte extends E {
 	public void generateSinLoad(PrintWriter pw) {
 	    if (dec != null) {
             pw.println("get_local $localStart");
+            // TODO: No tiene porque ser un IDec
             IDec decVar = (IDec) dec; // Casteo seguro porque dec != null
             pw.println("i32.const " + decVar.getDelta());
             pw.println("i32.add");

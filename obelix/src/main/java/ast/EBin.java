@@ -123,9 +123,9 @@ public class EBin extends E {
         opnd2.bind(ts);
     }
 
-	public void generateCode(PrintWriter pw) {
+	public void generateCodeE(PrintWriter pw) {
         // Como se apilan, primero se calcula el código del operando 2.
-        opnd2.generateCode(pw);
+        opnd2.generateCodeE(pw);
 
         // Realizamos primero un posible casteo de este operando para que funcionen
         // las operaciones entre i32 y f32. Siempre el casteo es de i32 -> f32
@@ -135,7 +135,7 @@ public class EBin extends E {
         }
 
         // Segundo, se calcula el código del operando 2.
-        opnd1.generateCode(pw);
+        opnd1.generateCodeE(pw);
         
         // Realizamos otro posible casteo de este operando para que funcionen
         // las operaciones entre i32 y f32. Siempre el casteo es de i32 -> f32
@@ -147,6 +147,47 @@ public class EBin extends E {
         opToWat(pw);
 
 	}
+
+    public void generateCodeD(PrintWriter pw) {
+        // TODO: Solamente es necesario para arrays, structs y variables
+        // Acceso a array
+        if(op.equals("accA")) {
+            // Generar codigo D para el opnd1
+            opnd1.generateCodeD(pw);
+
+            // Generar codigo E para el opnd2
+            opnd2.generateCodeE(pw);
+
+            // Calcular el tamaño del array
+            int dim = opnd1.getType().getVSize();
+            pw.println("i32.const " + dim);
+
+            // Accedemos a la posicion de inicio del array
+            pw.println("i32.mul");
+
+            // Calculamos el code E de opnd2
+            opnd2.generateCodeE(pw);
+
+            // Accedemos a la posicion dada por opnd2
+            pw.println("i32.add");
+        }
+
+        // Acceso a struct
+        else if (op.equals("accS")) {
+            // Calculamos el code D del opnd1
+            opnd1.generateCodeD(pw);
+
+            // Calculamos la posicion relativa del opnd2
+            pw.println("i32.const " + opnd2.getDelta());
+
+            // Los sumamos para obtener el designador del struct
+            pw.println("i32.add");
+        }
+    }
+
+    public int delta() {
+        return 0;
+    }
 
     // Función auxiliar para escribir la instrucción correspondiente dentro del
     // archivo, recibe el pw sobre el que se escribe y realiza la escritura.
@@ -208,17 +249,9 @@ public class EBin extends E {
         } 
         
         // Ultimos casos especiales, accA y accS.
-        else if (op.equals("accA")) {
-           // TODO: accA
-        }
-        else if (op.equals("accS")) {
-            // TODO: accS
+        else {
+            //
+            pw.println("i32.load");
         }
     }
-
-    // Por ahora, esta función solo la necesitamos en ECte, pero también la
-    // añadimos aquí para que sea accesible simplemente desde E.
-	public void generateSinLoad(PrintWriter pw) {
-		
-	}
 }

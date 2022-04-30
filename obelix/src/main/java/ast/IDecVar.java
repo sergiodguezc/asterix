@@ -12,14 +12,13 @@ import org.json.simple.JSONObject;
 public class IDecVar extends IDec {
     private T type;
     private String id;
-    private boolean ini; // Booleano que indica si tambien se inicializa
     private E valor;
 
     // Variable no inicializada
     public IDecVar(T type, String id) {
         super(id);
         this.type = type;
-        ini = false;
+        setIni(false);
     }
 
     // Variable inicializada
@@ -27,7 +26,7 @@ public class IDecVar extends IDec {
         super(id);
         this.type = type;
         this.valor = valor;
-        ini = true;
+        setIni(true);
     }
 
     public KindI kind() {
@@ -40,7 +39,7 @@ public class IDecVar extends IDec {
         obj.put("node", "INSTRUCCION DECLARACION");
         obj.put("id", getId());
         obj.put("tipo", type.getJSON());
-        if (!ini)
+        if (!isIni())
             return obj;
         obj.put("valor", valor.getJSON());
         return obj;
@@ -53,7 +52,7 @@ public class IDecVar extends IDec {
 
     public void bind(SymbolMap ts) {
         type.bind(ts);
-        if(ini)
+        if(isIni())
             valor.bind(ts);
         ts.insertId(getId(), this);
     }
@@ -64,7 +63,7 @@ public class IDecVar extends IDec {
 
     public T type() {
         type.type();
-        if(ini) {
+        if(isIni()) {
             T tipoValor = valor.type();
             if (!ASemUtils.checkEqualTypes(type, tipoValor)) {
                 GestionErroresAsterix.errorSemantico("Error de tipado en la declaracion.");
@@ -80,14 +79,17 @@ public class IDecVar extends IDec {
 
     // Generamos el código para guardar el valor de las variables inicializadas
     // en memoria
-	public void generateCode(PrintWriter pw) {
-        if (ini) {
-            // Generamos el código que calcula el valor
-            valor.generateCode(pw);
+	public void generateCodeI(PrintWriter pw) {
+        if (isIni()) {
             // Generamos el código que ponga en la pila el delta más el
             // localStart. Como calculamos esto, no hace falta poner un offset.
             pw.println("get_local $localStart");
             pw.println("i32.const " + getDelta());
+            pw.println("i32.add");
+
+            // Generamos el código que calcula el valor
+            valor.generateCodeE(pw);
+
             // Generamos el codigo del tipo primero para luego concatenarlo
             // con el .load, así podríamos escribir por ejemplo i32.load
             type.generateCode(pw);

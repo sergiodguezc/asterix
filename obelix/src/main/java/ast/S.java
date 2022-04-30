@@ -78,13 +78,14 @@ public class S implements DefSub {
         for (Arg a : args)
             a.generateCode(pw);
 
-        // Generamos ahora el código del resultado si hubiere
+        // Generamos ahora el código del resultado si hubiera
         if (isFunction && !isMain) {
             pw.print("(result ");
             tRet.generateCode(pw);
             pw.println(")");
         } else pw.println(); // Salto de línea por si no es una función
 
+        // TODO: Explicarme porque Atomic Integer
         // Calculamos los delta para cada cada variable. Comenzamos en 8
         // porque es el valor de esta variable en el encabezado despues de 
         // realizar sus operaciones. Aquí uso AtomicInteger en vez de
@@ -101,12 +102,12 @@ public class S implements DefSub {
 
         // Inicializamos las variables locales que lo necesiten
         for (I ins : cuerpo)
-            ins.generateCode(pw);
+            ins.generateCodeI(pw);
 
         // En caso de que sea una función escribimos el valor del retorno al
         // final
         if (isFunction && !isMain)
-            vRet.generateCode(pw);
+            vRet.generateCodeE(pw);
 
         // Antes de cerrar la función tenemos que llamar a la función
         // $freeStack
@@ -115,6 +116,8 @@ public class S implements DefSub {
         // Me sale un error de que necesita la pila vacía para llamar a
         // freeStack, pero es que entonces no sé cómo podremos devolver un
         // valor (¿ igual guardarlo en memoria ?)
+        // TODO: No estaras calculando el tamaño bien
+        // TODO: Se han de devolver las cosas dejandolo en la pila (es como viene en el ejemplo del lab)
         pw.println("drop");
         pw.println("call $freeStack");
         // Cerramos la función

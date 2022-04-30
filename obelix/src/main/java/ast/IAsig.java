@@ -54,15 +54,15 @@ public class IAsig extends I {
 	}
 
 	@Override
-	public void generateCode(PrintWriter pw) {
-        // Generamos el código que calcula el valor de la expresión
-        valor.generateCode(pw);
-
+	public void generateCodeI(PrintWriter pw) {
         // Necesitamos es calcular la posicion de memoria de la al que queremos
         // asignar el valor de la expresión. En este caso, necesitamos la
         // posicion de id.
-        id.generateSinLoad(pw); // en el caso en que sea una variable calcula su
+        id.generateCodeD(pw); // en el caso en que sea una variable calcula su
                              // posición con el localStart ya sumado.
+
+        // Generamos el código que calcula el valor de la expresión
+        valor.generateCodeE(pw);
 
         // Generamos el código que calcula el tipo que devuelve y lo 
         // yuxtaponemos a '.store'.
