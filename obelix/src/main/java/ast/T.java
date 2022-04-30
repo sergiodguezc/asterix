@@ -140,67 +140,30 @@ public class T implements ASTNode {
     // en los param de las funciones o cuando apliquemos operaciones sobre estos
     // tipos: sum, sub, mul, etc.
     public void generateCode(PrintWriter pw) {
-        switch (kindT) {
-            case INTIX:
-            case BOOLIX:
-                pw.print("i32");
-                break;
-            case FLOATIX:
-                pw.print("f32");
-            case POT:
-                // TODO: Comprobar si esto es correcto
-                // En este caso también se representaría la dirección de memoria
-                // donde se encuentra el struct.
-                pw.print("i32");
-                break;
-            case VECTIX:
-                // TODO: Comprobar si esto tiene sentido.
-                // En este caso representa la dirección de memoria donde se
-                // encuentra el array.
-                pw.print("i32");
-                break;
-            // En este caso entrarían los hipotéticos casos (imposibles) de
-            // ERROR e INS.
-            default:
-                break;
-        }
-
+        pw.println((kindT == KindT.FLOATIX) ? "i32" : "f32");
     }
 
     // Método que calcula el tamaño de los tipos en bytes de forma recursiva.
     public void setSizeT() {
-        switch (kindT) {
-            // Casos base.
-            case INTIX:
-            case FLOATIX:
-            case BOOLIX:
-                sizeT = 4;
-                break;
-            // Casos que necesitan de la recursión.
-            case VECTIX:
-                // Calculamos primero el tamaño del tipo interno del vector
-                // y luego lo multiplicamos por el tamaño del mismo.
-                tipo.setSizeT();
-                sizeT = tipo.getSizeT()*N;
-                break;
-            case POT:
-                sizeT = 0;
-                for (IDec d : decs) {
-                    // Calculamos primero recursivamente el tamaño de los tipos
-                    // internos de struct y luego los sumamos al tamaño del 
-                    // mismo.
-                    d.getType().setSizeT();
-                    sizeT += d.getType().getSizeT();
-                }
-                break;
-            // No calculamos nada si el tipo es ERROR o INS
-            default:
-                break;
+        if (kindT == KindT.VECTIX) {
+            tipo.setSizeT();
+            sizeT = tipo.getSizeT()*N;
         }
+        else if (kindT == KindT.POT) {
+            for (IDec d : decs) {
+                d.getType().setSizeT();
+                sizeT += d.getType().getSizeT();
+            }
+        }
+        else sizeT = 4;
     }
 
     // Método público para devolver el tamaño del tipo en bytes.
     public int getSizeT() {
         return sizeT;
+    }
+
+    public KindT getKindTBasico() {
+        return (tipo == null) ? kindT : getKindTBasico();
     }
 }

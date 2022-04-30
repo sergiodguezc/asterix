@@ -81,24 +81,8 @@ public class IDecVar extends IDec {
     // Generamos el código para guardar el valor de las variables inicializadas
     // en memoria
 	public void generateCodeI(PrintWriter pw) {
-        if (isIni()) {
-            if(valor.getType().getKindT() != KindT.VECTIX) {
-                // Obtenemos la posicion donde almacenamos elem
-                pw.println("get_local $localStart");
-                pw.println("i32.const " + getDelta());
-                pw.println("i32.add");
-
-                // Evaluamos elem
-                valor.generateCodeE(pw);
-
-                // Almacenamos elem en esa posicion
-                type.generateCode(pw);
-                pw.println(".store");
-            }
-            else {
-                
-            }
-        }
+        if (isIni())
+            generateCodeRecursively(pw, getDelta(), valor);
 	}
 
 	public void setDelta(AtomicInteger size, AtomicInteger localSize) {
@@ -117,29 +101,51 @@ public class IDecVar extends IDec {
 
 	}
 
-    private void generateCodeRecursively(PrintWriter pw, int offset, E elem) {
+    private void generateCodeRecursively(PrintWriter pw, int offset, E valor) {
         // Caso Base: Es un tipo basico
-        if(elem.getType().getKindT() != KindT.VECTIX) {
+        if(valor.getType().getKindT() != KindT.VECTIX) {
             // Obtenemos la posicion donde almacenamos elem
             pw.println("get_local $localStart");
             pw.println("i32.const " + offset);
             pw.println("i32.add");
 
             // Evaluamos elem
-            elem.generateCodeE(pw);
+            valor.generateCodeE(pw);
 
             // Almacenamos elem en esa posicion
             type.generateCode(pw);
             pw.println(".store");
         }
 
-        // Caso Recursivo : Es un vector
-        else {
-            elem.generateCodeD(pw);
+        // Caso Recursivo : Es un vector y valor es una ELista
+        else if (valor.kind() == KindE.LISTA) {
+           List<E> lista = ((ELista) valor).getLista();
 
-            generateCodeRecursively(pw, offset, e);
-            e.getType().setSizeT();
-            offset += e.getType().getSizeT();
+           for(E elem : lista) {
+               generateCodeRecursively(pw, offset, elem);
+               elem.getType().setSizeT();
+               offset += elem.getType().getSizeT();
+           }
+        }
+
+        // Caso Base : Caso de que sea una llamada a una funcion o un vector ya definido
+        else {
+            // Obtenemos la direccion de memoria del vector ya definido
+            valor.generateCodeD(pw);
+
+            // Obtenemos la direccion de memoria del nuevo vector
+            pw.println("get_local $localStart");
+            pw.println("i32.const " + getDelta() + " ;; delta del vector");
+            pw.println("i32.add");
+
+            // Obtenemos el tamaño del vector
+            type.setSizeT();
+            pw.println("i32.const " + type.getSizeT() + " ;; tamaño del vector");
+
+            // Llamamos a la funcion copyn
+            P.copyni = type.getKindTBasico() == KindT.INTIX;
+            P.copynf = type.getKindTBasico() == KindT.FLOATIX;
+            pw.println((type.getKindTBasico() == KindT.INTIX) ? "call $copyni" : "call $copynf");
         }
     }
 }

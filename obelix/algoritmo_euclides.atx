@@ -3,6 +3,14 @@ potion panoramix() -> intix {
 
     forix (vectix<intix>[3] fila : v) {
         forix (intix elem : fila) {
+            tabellae(elem^2);
+        }
+    }
+
+    vectix<vectix<intix[3]>[3] v2 = v
+
+    forix (vectix<intix>[3] fila : v2) {
+        forix (intix elem : fila) {
             tabellae(elem);
         }
     }

@@ -25,7 +25,6 @@ public class EUn extends E {
         return KindE.EUn;
     }
 
-    @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "EXPRESION UNARIA");
@@ -60,7 +59,11 @@ public class EUn extends E {
             // si es 1, le asignamos 0 y viceversa.
             opnd().generateCodeE(pw);
             pw.println("i32.const 1");
-            pw.println("i32.xor ");
+            pw.println("i32.xor");
+        } else {
+            opnd().generateCodeE(pw);
+            pw.println("i32.const 0");
+            pw.println("i32.sub");
         }
     }
 }

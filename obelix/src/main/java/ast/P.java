@@ -10,6 +10,12 @@ import java.util.List;
 public class P implements ASTNode {
     private List<DefSub> defsubs;
 
+    public static boolean copyni = false;
+    public static boolean copynf = false;
+    public static boolean powi = false;
+    public static boolean powf = false;
+
+
     public P(List<DefSub> defsubs, DefSub nuevo) {
         this.defsubs = defsubs;
         defsubs.add(nuevo);
@@ -46,6 +52,152 @@ public class P implements ASTNode {
         pw.print(")");
     }
 
+    private String generateAuxFunc() {
+        String auxCode = auxFunc();
+        if (copyni) {
+           auxCode += "(func $copyni (type $_sig_i32i32i32) ;; copy $n i32 slots from $src to $dest\n"
+                     + "(param $src i32)\n"
+                     + "(param $dest i32)\n"
+                     + "(param $n i32)\n"
+                     + "block\n"
+                     + "loop\n"
+                     + "get_local $n\n"
+                     + "i32.eqz\n"
+                     + "br_if 1\n"
+                     + "get_local $n\n"
+                     + "i32.const 1\n"
+                     + "i32.sub\n"
+                     + "set_local $n\n"
+                     + "get_local $dest\n"
+                     + "get_local $src\n"
+                     + "i32.load\n"
+                     + "i32.store\n"
+                     + "get_local $dest\n"
+                     + "i32.const 4\n"
+                     + "i32.add\n"
+                     + "set_local $dest\n"
+                     + "get_local $src\n"
+                     + "i32.const 4\n"
+                     + "i32.add\n"
+                     + "set_local $src\n"
+                     + "br 0\n"
+                     + "end\n"
+                     + "end\n"
+                     + ")\n";
+        }
+        if (copynf) {
+            auxCode += "(func $copynf (type $_sig_i32i32i32) ;; copy $n i32 slots from $src to $dest\n"
+                    + "(param $src i32)\n"
+                    + "(param $dest i32)\n"
+                    + "(param $n i32)\n"
+                    + "block\n"
+                    + "loop\n"
+                    + "get_local $n\n"
+                    + "i32.eqz\n"
+                    + "br_if 1\n"
+                    + "get_local $n\n"
+                    + "i32.const 1\n"
+                    + "i32.sub\n"
+                    + "set_local $n\n"
+                    + "get_local $dest\n"
+                    + "get_local $src\n"
+                    + "i32.load\n"
+                    + "i32.store\n"
+                    + "get_local $dest\n"
+                    + "i32.const 4\n"
+                    + "i32.add\n"
+                    + "set_local $dest\n"
+                    + "get_local $src\n"
+                    + "i32.const 4\n"
+                    + "i32.add\n"
+                    + "set_local $src\n"
+                    + "br 0\n"
+                    + "end\n"
+                    + "end\n"
+                    + ")\n";
+        }
+        if (powi) {
+            auxCode += "(func $powi (export \"powi\") (param $x i32) (param $y i32) (result i32) ;; pow of integer\n"
+                      + "(local $out i32)\n"
+                      + "(local $index i32)\n"
+                      + "i32.const 1\n"
+                      + "set_local $out\n"
+                      + "i32.const 1\n"
+                      + "set_local $index\n"
+                      + "get_local $y\n"
+                      + "(i32.const 0)\n"
+                      + "i32.eq\n"
+                      + "if $i0\n"
+                      + "  i32.const 1\n"
+                      + "return\n"
+                      + "end\n"
+
+                      + " (block $b0\n"
+                      + "(loop $l0\n"
+                      + "(i32.mul \n"
+                      + "(get_local $out)\n"
+                      + "(get_local $x)\n"
+                      + ")\n"
+                      + "set_local $out\n"
+
+                      + "(i32.add \n"
+                      + "(get_local $index)\n"
+                      + "(i32.const 1)\n"
+                      + ")\n"
+                      + "tee_local $index\n"
+                      + "get_local $y\n"
+                      + "i32.gt_s\n"
+                      + "br_if 1\n"
+
+                      + "br 0\n"
+                      + ")\n"
+                      + ")\n"
+                      + "  get_local $out\n"
+                      + ")\n";
+        }
+        if (powf) {
+            auxCode += "(func $powf (export \"powf\") (param $x f32) (param $y i32) (result f32) ;; pow of float\n"
+                    + "(local $out f32)\n"
+                    + "(local $index i32)\n"
+                    + "f32.const 1.0\n"
+                    + "set_local $out\n"
+                    + "i32.const 1\n"
+                    + "set_local $index\n"
+
+                    + "get_local $y\n"
+                    + "(i32.const 0)\n"
+                    + "i32.eq\n"
+                    + "if $i0\n"
+                    + "  f32.const 1.0\n"
+                    + "return\n"
+                    + "end\n"
+
+                    + " (block $b0\n"
+                    + "(loop $l0\n"
+                    + "(f32.mul \n"
+                    + "(get_local $out)\n"
+                    + "(get_local $x)\n"
+                    + ")\n"
+                    + "set_local $out\n"
+
+                    + "(i32.add \n"
+                    + "(get_local $index)\n"
+                    + "(i32.const 1)\n"
+                    + ")\n"
+                    + "tee_local $index\n"
+                    + "get_local $y\n"
+                    + "i32.gt_s\n"
+                    + "br_if 1\n"
+
+                    + "br 0\n"
+                    + ")\n"
+                    + ")\n"
+                    + "  get_local $out\n"
+                    + ")\n";
+        }
+        return auxCode;
+    }
+
     private String generateCabecera() {
 		return 
               "(type $_sig_i32i32i32 (func (param i32 i32 i32) ))\n"
@@ -63,7 +215,7 @@ public class P implements ASTNode {
             + "(global $NP (mut i32) (i32.const 131071996)) ;; heap 2000*64*1024-4\n" ;
 	}
 
-	private String generateAuxFunc() {
+	private String auxFunc() {
         return 
             "(func $reserveStack (param $size i32)\n"
              + "(result i32)\n"
@@ -90,112 +242,7 @@ public class P implements ASTNode {
              + "get_global $MP\n"
              + "i32.load\n"
              + "set_global $MP   \n"
-            + ")\n"
-            + "(func $copyn (type $_sig_i32i32i32) ;; copy $n i32 slots from $src to $dest\n"
-             + "(param $src i32)\n"
-             + "(param $dest i32)\n"
-             + "(param $n i32)\n"
-             + "block\n"
-             + "loop\n"
-             + "get_local $n\n"
-             + "i32.eqz\n"
-             + "br_if 1\n"
-             + "get_local $n\n"
-             + "i32.const 1\n"
-             + "i32.sub\n"
-             + "set_local $n\n"
-             + "get_local $dest\n"
-             + "get_local $src\n"
-             + "i32.load\n"
-             + "i32.store\n"
-             + "get_local $dest\n"
-             + "i32.const 4\n"
-             + "i32.add\n"
-             + "set_local $dest\n"
-             + "get_local $src\n"
-             + "i32.const 4\n"
-             + "i32.add\n"
-             + "set_local $src\n"
-             + "br 0\n"
-             + "end\n"
-             + "end\n"
-             + ")\n"
-    + "(func $powi (export \"powi\") (param $x i32) (param $y i32) (result i32) ;; pow of integer\n"
-    + "(local $out i32)\n"
-    + "(local $index i32)\n"
-    + "i32.const 1\n"
-    + "set_local $out\n"
-    + "i32.const 1\n"
-    + "set_local $index\n"
-
-    + "get_local $y\n"
-    + "(i32.const 0)\n"
-    + "i32.eq\n"
-    + "if $i0\n"
-    + "  i32.const 1\n"
-      + "return\n"
-    + "end\n"
-
-   + " (block $b0\n"
-      + "(loop $l0\n"
-        + "(i32.mul \n"
-          + "(get_local $out)\n"
-          + "(get_local $x)\n"
-   + ")\n"
-        + "set_local $out\n"
-
-        + "(i32.add \n"
-          + "(get_local $index)\n"
-          + "(i32.const 1)\n"
-        + ")\n"
-        + "tee_local $index\n"
-        + "get_local $y\n"
-        + "i32.gt_s\n"
-        + "br_if 1\n"
-
-        + "br 0\n"
-    + ")\n"
-    + ")\n"
-  + "  get_local $out\n"
-  + ")\n"
-    + "(func $powf (export \"powf\") (param $x f32) (param $y i32) (result f32) ;; pow of float\n"
-    + "(local $out f32)\n"
-    + "(local $index i32)\n"
-    + "f32.const 1.0\n"
-    + "set_local $out\n"
-    + "i32.const 1\n"
-    + "set_local $index\n"
-
-    + "get_local $y\n"
-    + "(i32.const 0)\n"
-    + "i32.eq\n"
-    + "if $i0\n"
-    + "  f32.const 1.0\n"
-      + "return\n"
-    + "end\n"
-
-   + " (block $b0\n"
-      + "(loop $l0\n"
-        + "(f32.mul \n"
-          + "(get_local $out)\n"
-          + "(get_local $x)\n"
-   + ")\n"
-        + "set_local $out\n"
-
-        + "(i32.add \n"
-          + "(get_local $index)\n"
-          + "(i32.const 1)\n"
-        + ")\n"
-        + "tee_local $index\n"
-        + "get_local $y\n"
-        + "i32.gt_s\n"
-        + "br_if 1\n"
-
-        + "br 0\n"
-    + ")\n"
-    + ")\n"
-  + "  get_local $out\n"
-  + ")\n";
+            + ")\n";
 	}
 
     public NodeKind nodeKind() {

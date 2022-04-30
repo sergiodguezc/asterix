@@ -254,8 +254,10 @@ public class EBin extends E {
         // todos los ejecutables.
         else if (op.equals("pow")) {
             if (tipoExp.getKindT() == KindT.FLOATIX) {
+                P.powf = true;
                 pw.println("call $powf");
             } else {
+                P.powi = true;
                 pw.println("call $powi");
             }
         }
