@@ -86,7 +86,7 @@ public class ICall extends I {
     }
 
     @Override
-    public void generateCode(PrintWriter pw) {
+    public void generateCodeI(PrintWriter pw) {
         // TODO Auto-generated method stub
 
     }

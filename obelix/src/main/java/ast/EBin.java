@@ -38,7 +38,7 @@ public class EBin extends E {
         else if (checkTEFloat(tipoOp1, tipoOp2))
             return (tipoExp = new T(KindT.FLOATIX));
         else if (op.equals("accA") && checkTAccA(tipoOp1, tipoOp2))
-            return tipoOp1.type();
+            return (tipoExp = tipoOp1.type());
         else if (op.equals("accS") && checkTAccS(tipoOp1)) {
             // Obtenemos la lista de declaraciones del struct
             List<IDec> declarations = tipoOp1.getDec();
@@ -124,28 +124,44 @@ public class EBin extends E {
     }
 
 	public void generateCodeE(PrintWriter pw) {
-        // Como se apilan, primero se calcula el código del operando 2.
-        opnd2.generateCodeE(pw);
+        if(op.equals("accA")) {
+            // Calculo el designador del vector dado por opnd1
+            opnd1.generateCodeD(pw);
 
-        // Realizamos primero un posible casteo de este operando para que funcionen
-        // las operaciones entre i32 y f32. Siempre el casteo es de i32 -> f32
-        if (!op.equals("pow") && opnd2.getType().getKindT() == KindT.INTIX &&
-                opnd1.getType().getKindT() == KindT.FLOATIX) {
-            pw.println("f32.convert_s/i32");
+            // Accedo a la posicion dada por el opnd2
+            opnd2.generateCodeE(pw);
+            pw.println("i32.add");
+
+            // Pongo el valor en la pila
+            pw.println("i32.load");
         }
+        else if (op.equals("accS")) {
 
-        // Segundo, se calcula el código del operando 2.
-        opnd1.generateCodeE(pw);
-        
-        // Realizamos otro posible casteo de este operando para que funcionen
-        // las operaciones entre i32 y f32. Siempre el casteo es de i32 -> f32
-        if (opnd2.getType().getKindT() == KindT.FLOATIX &&
-                opnd1.getType().getKindT() == KindT.INTIX) {
-            pw.println("f32.convert_s/i32"); }
+        }
+        else {
+            // Como se apilan, primero se calcula el código del operando 1.
+            opnd1.generateCodeE(pw);
 
-        // Finalmente calculamos el código de la operacion.
-        opToWat(pw);
+            // Realizamos primero un posible casteo de este operando para que funcionen
+            // las operaciones entre i32 y f32. Siempre el casteo es de i32 -> f32
+            if (!op.equals("pow") && opnd2.getType().getKindT() == KindT.INTIX &&
+                    opnd1.getType().getKindT() == KindT.FLOATIX) {
+                pw.println("f32.convert_s/i32");
+            }
 
+            // Segundo, se calcula el código del operando 2.
+            opnd2.generateCodeE(pw);
+
+            // Realizamos otro posible casteo de este operando para que funcionen
+            // las operaciones entre i32 y f32. Siempre el casteo es de i32 -> f32
+            if (opnd2.getType().getKindT() == KindT.FLOATIX &&
+                    opnd1.getType().getKindT() == KindT.INTIX) {
+                pw.println("f32.convert_s/i32");
+            }
+
+            // Finalmente calculamos el código de la operacion.
+            opToWat(pw);
+        }
 	}
 
     public void generateCodeD(PrintWriter pw) {
@@ -153,20 +169,20 @@ public class EBin extends E {
         // Acceso a array
         if(op.equals("accA")) {
             // Generar codigo D para el opnd1
+            pw.println(";; codigo designador accA");
+            pw.println(";; codigo designador operando 1");
             opnd1.generateCodeD(pw);
 
-            // Generar codigo E para el opnd2
+            // Calculamos el code E de opnd2
+            pw.println(";; codigo E operando 2");
             opnd2.generateCodeE(pw);
 
             // Calcular el tamaño del array
             int dim = opnd1.getType().getVSize();
-            pw.println("i32.const " + dim);
+            pw.println("i32.const " + dim + ";; tamaño vector");
 
             // Accedemos a la posicion de inicio del array
             pw.println("i32.mul");
-
-            // Calculamos el code E de opnd2
-            opnd2.generateCodeE(pw);
 
             // Accedemos a la posicion dada por opnd2
             pw.println("i32.add");
@@ -178,15 +194,11 @@ public class EBin extends E {
             opnd1.generateCodeD(pw);
 
             // Calculamos la posicion relativa del opnd2
-            pw.println("i32.const " + opnd2.getDelta());
+            // pw.println("i32.const " + opnd2.getDelta());
 
             // Los sumamos para obtener el designador del struct
             pw.println("i32.add");
         }
-    }
-
-    public int delta() {
-        return 0;
     }
 
     // Función auxiliar para escribir la instrucción correspondiente dentro del
@@ -246,12 +258,6 @@ public class EBin extends E {
             } else {
                 pw.println("call $powi");
             }
-        } 
-        
-        // Ultimos casos especiales, accA y accS.
-        else {
-            //
-            pw.println("i32.load");
         }
     }
 }

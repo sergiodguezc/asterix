@@ -1,0 +1,11 @@
+potion panoramix() -> intix {
+    vectix<vectix<intix>[3]>[3] v = {{1,2,3},{4,5,6},{7,8,9}};
+
+    forix (vectix<intix>[3] fila : v) {
+        forix (intix elem : fila) {
+            tabellae(elem);
+        }
+    }
+
+    return 0;
+}

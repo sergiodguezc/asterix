@@ -64,7 +64,7 @@ public class ECte extends E {
         dec = ts.searchId(v);
     }
 
-	public void generateCode(PrintWriter pw) {
+	public void generateCodeE(PrintWriter pw) {
         // Este caso corresponde con constantes: 1, 1.0, galo, romano, etc
 		if (dec == null) {
             tipoECte.generateCode(pw);
@@ -75,22 +75,77 @@ public class ECte extends E {
         // Caso correspondiente a accesos a variables ya declaradas
         } else {
             // Buscamos en memoria la dirección de la variable
-            pw.println("get_local $localStart");
-            IDec decVar = (IDec) dec; // Casteo seguro porque dec != null
-            pw.println("i32.const " + decVar.getDelta());
-            pw.println("i32.add");
-            decVar.getType().generateCode(pw);
-            pw.println(".load");
+            pw.println(";; Obtener valor de variable ya declarada");
+            I insVar = (I) dec; // Casteo seguro porque dec != null
+            if (insVar.kind() == KindI.DEC) {
+                IDec decVar = (IDec) dec;
+                pw.println("get_local $localStart");
+                pw.println("i32.const " + decVar.getDelta() + " ;; delta: variable declarada");
+                pw.println("i32.add");
+                decVar.getType().generateCode(pw);
+                pw.println(".load");
+            } else if (insVar.kind() == KindI.FOR) {
+                IFor ifor = (IFor) insVar;
+                // Obtenemos la dirección de memoria de la variable delclarada
+                // en el for.
+                pw.println(";; Codigo de la lista que estamos recorriendo");
+                ifor.getLista().generateCodeD(pw);
+                pw.println(";; Fin del codigo de la lista que estamos recorriendo");
+
+                /*
+                // Obtenemos la posicion inicial del vector que se recorre
+                pw.println("get_local $localStart");
+                pw.println("i32.const " + ifor.getVarDelta() + " ;; delta: Lista del for");
+                pw.println("i32.add");
+                */
+
+                // Obtenemos la iteracion en la que nos encontramos
+                pw.println("get_local $localStart");
+                pw.println("i32.const " + ifor.getItDelta() + " ;; pos del iterador");
+                pw.println("i32.add");
+                pw.println("i32.load");
+
+                // Calculamos el tamaño del tipo interno del
+                ifor.getType().setSizeT();
+                pw.println("i32.const " + ifor.getType().getSizeT() + " ;; tamaño del tipo interno que recorremos ");
+
+                // Accedemos a la posicion del vector
+                pw.println("i32.mul");
+                pw.println("i32.add");
+                pw.println("i32.load");
+            }
         }
 	}
 
-	public void generateSinLoad(PrintWriter pw) {
+	public void generateCodeD(PrintWriter pw) {
 	    if (dec != null) {
-            pw.println("get_local $localStart");
-            // TODO: No tiene porque ser un IDec
-            IDec decVar = (IDec) dec; // Casteo seguro porque dec != null
-            pw.println("i32.const " + decVar.getDelta());
-            pw.println("i32.add");
+            pw.println(";; codigo del designador");
+            I insVar = (I) dec; // Casteo seguro porque dec != null
+            if (insVar.kind() == KindI.DEC) {
+                IDec decVar = (IDec) insVar;
+                pw.println("get_local $localStart");
+                pw.println("i32.const " + decVar.getDelta() + " ;; delta: declaración");
+                pw.println("i32.add");
+            } else if (insVar.kind() == KindI.FOR) {
+                IFor ifor = (IFor) insVar;
+
+                // Generamos el codigo del designador de la lista
+                ifor.getLista().generateCodeD(pw);
+
+                // Obtenemos la iteracion en la que nos encontramos
+                pw.println("get_local $localStart");
+                pw.println("i32.const " + ifor.getItDelta() + " ;; pos del iterador");
+                pw.println("i32.add");
+                pw.println("i32.load");
+
+                // Calculamos el tamaño del tipo interno del vector
+                ifor.getType().setSizeT();
+                pw.println("i32.const " + ifor.getType().getSizeT() + " ;; tamaño del tipo interno que recorremos ");
+
+                // Obtenemos la posicion del vector
+                pw.println("i32.mul");
+                pw.println("i32.add");
+            }
         }
 	}
 }

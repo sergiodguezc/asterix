@@ -15,6 +15,7 @@ public class ECall extends E {
     private String id;
     private S potion;
     boolean noParams;
+    private T tipoECall;
 
     public ECall(List<E> args, String id) {
         this.args = args;
@@ -53,11 +54,11 @@ public class ECall extends E {
         T tRet;
         // Comprobamos la existencia del subprograma.
         if (potion == null) {
-            return new T(KindT.ERROR);
+            return (tipoECall = new T(KindT.ERROR));
             // Comprobamos que no sea un procedimiento.
         } else if ((tRet = potion.getType()) == null) {
             GestionErroresAsterix.errorSemantico("ERROR: Llamada a un procedimiento. No devuelve ningun valor.");
-            return new T(KindT.ERROR);
+            return (tipoECall = new T(KindT.ERROR));
         }
 
         // Obtenemos la lista de argumentos del subprograma al que se hace referencia.
@@ -90,6 +91,10 @@ public class ECall extends E {
         } else {
             this.potion = (S) potion;
         }
+    }
+
+    public T getType() {
+        return tipoECall;
     }
 
 }

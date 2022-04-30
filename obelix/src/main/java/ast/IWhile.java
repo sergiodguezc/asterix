@@ -72,21 +72,21 @@ public class IWhile extends I {
 
 	public void generateCodeI(PrintWriter pw) {
         // Abrimos un bloque nuevo para el bucle
+        pw.println(";; intruccion while");
         pw.println("(block");
 
         // Creamos ahora el loop
         pw.println("(loop");
 
-        // TODO: Arreglar condición, creo que está al revés en EBin o algo
-        // así porque siempre sale del bucle sin hacer nada. También Asig
-        // creo que está mal, no actualiza el valor en memoria.
         // Generamos el código de la condicion y la cargamos desde memoria
         // a la pila
+        pw.println(";; codigo condicion while");
         cond.generateCodeE(pw);
         pw.println("i32.eqz");
         pw.println("br_if 1");
 
         // Recorremos ahora el cuerpo del bucle generando el código
+        pw.println(";; codigo cuerpo while");
         for (I ins : cuerpoWhile)
             ins.generateCodeI(pw);
 

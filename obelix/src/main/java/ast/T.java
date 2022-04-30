@@ -85,6 +85,10 @@ public class T implements ASTNode {
         return this;
     }
 
+    public T getTInterno() {
+        return tipo;
+    }
+
     // Si es un ALIAS : Devuelve el tipo al que hace referencia
     // Si es un VECTIX : Devuelve el tipo de los elementos del vector
     // En cc : Devolvemos el tipo
@@ -177,8 +181,8 @@ public class T implements ASTNode {
                 // Calculamos primero el tamaño del tipo interno del vector
                 // y luego lo multiplicamos por el tamaño del mismo.
                 tipo.setSizeT();
-                int sizeInterno = tipo.getSizeT();
-                sizeT = sizeInterno*N;
+                sizeT = tipo.getSizeT()*N;
+                break;
             case POT:
                 sizeT = 0;
                 for (IDec d : decs) {
@@ -188,6 +192,7 @@ public class T implements ASTNode {
                     d.getType().setSizeT();
                     sizeT += d.getType().getSizeT();
                 }
+                break;
             // No calculamos nada si el tipo es ERROR o INS
             default:
                 break;

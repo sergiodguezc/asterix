@@ -94,16 +94,26 @@ public class IIf extends I {
     }
 
 	@Override
-	public void generateCode(PrintWriter pw) {
-		// TODO Auto-generated method stub
-		
+	public void generateCodeI(PrintWriter pw) {
+        // Primero creamos el código de la condición
+        cond.generateCodeE(pw);
+        pw.println("if");
+        for (I ins : cuerpoIf)
+            ins.generateCodeI(pw);
+        if (ifelse) {
+            pw.println("else");
+            for (I ins : cuerpoElse)
+                ins.generateCodeI(pw);
+        }
+        pw.println("end");
 	}
 
     public void setDelta(AtomicInteger size, AtomicInteger localSize) {
         for (I ins : cuerpoIf)
             ins.setDelta(size, localSize);
-        for (I ins : cuerpoElse)
-            ins.setDelta(size, localSize);
+        if (ifelse)
+            for (I ins : cuerpoElse)
+                ins.setDelta(size, localSize);
 		
 	}
 }

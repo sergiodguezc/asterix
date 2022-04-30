@@ -48,13 +48,17 @@ public class IAlias extends I implements DefSub {
         return getJSON().toJSONString();
     }
 
-	@Override
-	public void generateCode(PrintWriter pw) {
-		// TODO Auto-generated method stub
+	public void generateCodeI(PrintWriter pw) {
 	}
 
 	public void setDelta(AtomicInteger size, AtomicInteger localSize) {
         // Los alias no declaran variables. No hacemos nada.		
+		
+	}
+
+    // Esta función es necesaria para crear los códigos de las instrucciones
+    // globales. 
+	public void generateCode(PrintWriter pw) {
 		
 	}
 

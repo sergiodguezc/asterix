@@ -22,8 +22,4 @@ public abstract class E implements ASTNode {
     // TODO: Codigo D, que es designador (para las asignaciones)
     public void generateCodeD(PrintWriter pw){}
 
-    // TODO: Para calcular la posicion relativa dentro de su bloque
-    // TODO: Creo que lo tenemos que calcular antes de hacer generacion de codigo
-    public int getDelta(){return delta;}
-    public void setDelta(int delta){this.delta = delta;}
 }

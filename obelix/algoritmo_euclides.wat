@@ -15,7 +15,7 @@
 (func $panoramix 
 (local $temp i32)
 (local $localStart i32)
-i32.const 12 ;; let this be the stack size needed (params+locals+2)*4
+i32.const 52 ;; let this be the stack size needed (params+locals+2)*4
 call $reserveStack  ;; returns old MP (dynamic link)
 set_local $temp
 get_global $MP
@@ -31,38 +31,137 @@ set_local $localStart
 
 
  ;; instrucciones 
+get_local $localStart
 i32.const 0
+i32.add
+i32.const 1
+i32.store
+get_local $localStart
+i32.const 4
+i32.add
+i32.const 2
+i32.store
 get_local $localStart
 i32.const 8
+i32.add
+i32.const 3
+i32.store
+get_local $localStart
+i32.const 12
+i32.add
+i32.const 4
+i32.store
+get_local $localStart
+i32.const 16
+i32.add
+i32.const 5
+i32.store
+get_local $localStart
+i32.const 20
+i32.add
+i32.const 6
+i32.store
+get_local $localStart
+i32.const 24
+i32.add
+i32.const 7
+i32.store
+get_local $localStart
+i32.const 28
+i32.add
+i32.const 8
+i32.store
+get_local $localStart
+i32.const 32
+i32.add
+i32.const 9
+i32.store
+;; Bucle for
+get_local $localStart
+i32.const 36
+i32.add
+i32.const 0
 i32.store
 (block
 (loop
-i32.const 10
 get_local $localStart
-i32.const 8
+i32.const 36
 i32.add
 i32.load
+i32.const 3
 i32.lt_s
+i32.eqz
 br_if 1
-i32.const 1
+;; Cuerpo del for
+;; Bucle for
 get_local $localStart
-i32.const 8
+i32.const 40
+i32.add
+i32.const 0
+i32.store
+(block
+(loop
+get_local $localStart
+i32.const 40
 i32.add
 i32.load
+i32.const 3
+i32.lt_s
+i32.eqz
+br_if 1
+;; Cuerpo del for
+;; Obtener valor de variable ya declarada
+;; Codigo de la lista que estamos recorriendo
+;; codigo del designador
+;; codigo del designador
+get_local $localStart
+i32.const 0 ;; delta: declaración
 i32.add
 get_local $localStart
-i32.const 8
+i32.const 36 ;; pos del iterador
+i32.add
+i32.load
+i32.const 12 ;; tamaño del tipo interno que recorremos 
+i32.mul
+i32.add
+;; Fin del codigo de la lista que estamos recorriendo
+get_local $localStart
+i32.const 40 ;; pos del iterador
+i32.add
+i32.load
+i32.const 4 ;; tamaño del tipo interno que recorremos 
+i32.mul
+i32.add
+i32.load
+call $print
+;; Fin del cuerpo del for
+get_local $localStart
+i32.const 40
+i32.add
+get_local $localStart
+i32.const 40
+i32.add
+i32.load
+i32.const 1
 i32.add
 i32.store
 br 0
 )
 )
+;; Fin del cuerpo del for
 get_local $localStart
-i32.const 8
+i32.const 36
+i32.add
+get_local $localStart
+i32.const 36
 i32.add
 i32.load
-call $print
-drop
+i32.const 1
+i32.add
+i32.store
+br 0
+)
+)
 call $freeStack
 )
 (func $reserveStack (param $size i32)

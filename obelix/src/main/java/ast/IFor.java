@@ -14,6 +14,7 @@ public class IFor extends I {
     private T tipo;
     private String id;
     private E lista;
+    private int itDelta;
     private List<I> cuerpoFor;
 
     public IFor(T tipo, String id, E lista, List<I> cuerpoFor) {
@@ -90,15 +91,88 @@ public class IFor extends I {
         ts.closeBlock();
     }
 
-	@Override
-	public void generateCode(PrintWriter pw) {
-		// TODO Auto-generated method stub
-		
+	public void generateCodeI(PrintWriter pw) {
+        // Antes de abrir el bloque para el bucle tenemos que poner a 0 el 
+        // iterador del for.
+        pw.println(";; Bucle for");
+        pw.println("get_local $localStart");
+        pw.println("i32.const " + itDelta);
+        pw.println("i32.add");
+        pw.println("i32.const 0");
+        pw.println("i32.store");
+        
+        // Abrimos un bloque nuevo para el bucle
+        pw.println("(block");
+
+        // Creamos ahora el loop
+        pw.println("(loop");
+
+        // Generamos el código de la condicion y la cargamos desde memoria
+        // a la pila
+        
+        // Codigo para la condicion del bucle, i.e haber dado tantas
+        // vueltas como el tamaño de la lista. Para ello primero tenemos que
+        // crear una variable local en memoria que usemos como contador.
+        pw.println("get_local $localStart");
+        pw.println("i32.const " + itDelta);
+        pw.println("i32.add");
+        pw.println("i32.load");
+        pw.println("i32.const " + lista.getType().getVSize());
+        pw.println("i32.lt_s");
+
+        pw.println("i32.eqz");
+        pw.println("br_if 1");
+
+        // Ahora tenemos que calcular el varDelta, tenemos que conseguir
+        // el delta del primer elemento de la lista de declaraciones
+
+        // Recorremos ahora el cuerpo del bucle generando el código
+        pw.println(";; Cuerpo del for");
+        for (I ins : cuerpoFor)
+            ins.generateCodeI(pw);
+        pw.println(";; Fin del cuerpo del for");
+        // Antes de cerrar el for tenemos que incrementar en 1 el valor del
+        // iterador.
+        // Calcular posición de i
+        pw.println("get_local $localStart");
+        pw.println("i32.const " + itDelta);
+        pw.println("i32.add");
+        // Calcular i + 1
+        pw.println("get_local $localStart");
+        pw.println("i32.const " + itDelta);
+        pw.println("i32.add");
+        pw.println("i32.load"); // lectura del valor del iterador
+        pw.println("i32.const 1"); 
+        pw.println("i32.add"); // sumamos uno con el valor del iterador
+
+        // Escribir i + 1 en i
+        pw.println("i32.store"); // guardamos el valor en la posicion primera.
+                                 
+        // Salto incondicional al inicio del bucle, etiqueta 0 representa este
+        // punto.
+        pw.println("br 0");
+        // Cerramos el loop y el bloque
+        pw.println(")");
+        pw.println(")");
 	}
 
     public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+        // Reservamos 4 bytes para el entero que usaremos en la condición del
+        // bucle como iterador.
+        itDelta = localSize.get();
+        size.set(size.get() + 4);
+        localSize.set(localSize.get() + 4);
+
         for (I ins : cuerpoFor)
             ins.setDelta(size, localSize);
 	}
+    
+    // Getters y setters para los delta
+	public int getItDelta() {
+		return itDelta;
+	}
 
+    public E getLista() {
+        return lista;
+    }
 }

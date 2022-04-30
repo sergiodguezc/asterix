@@ -99,4 +99,8 @@ public class IDecStruct extends IDec {
         }
 	}
 
+    // Función que se llamará cuando el struct sea global.
+	public void generateCode(PrintWriter pw) {
+	}
+
 }

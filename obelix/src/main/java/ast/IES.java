@@ -51,13 +51,20 @@ public class IES extends I {
     }
 
 	@Override
-	public void generateCode(PrintWriter pw) {
-        // Traducir instrucciones de stilus y tabellae a read y print
-        String iocall = label.equals("stilus") ? "read" : "print";
+	public void generateCodeI(PrintWriter pw) {
+        // Mostrar valor por consola
+        if (label.equals("tabellae")) {
+            valor.generateCodeE(pw); // Calculamos el valor a escribir y lo ponemos en la pila
+            pw.println("call $print");
+        // Leer valor de la consola
+        } else {
+            // Calculamos la posición de memoria de la variable donde queremos escribir la lectura
+            valor.generateCodeD(pw);
 
-        // Escribimos la instrucción
-        valor.generateCode(pw);
-        pw.println("call $" + iocall);
+            pw.println("call $read"); // leemos una entrada y la ponemos en la pila
+            valor.getType().generateCode(pw); // Guardamos en memoria el valor leido
+            pw.println(".store");
+        }
 	}
 
 	public void setDelta(AtomicInteger size, AtomicInteger localSize) {

@@ -1,9 +1,0 @@
-potion panoramix() -> intix {
-    intix i = 0;
-    whilix (i < 10) {
-        i = i+1;
-    }
-
-    tabellae(i);
-    return 0;
-}

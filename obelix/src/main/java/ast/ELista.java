@@ -12,6 +12,7 @@ import java.util.List;
 
 public class ELista extends E {
     private List<E> V;
+    private T tipoELista;
 
     public ELista(List<E> V) {
         this.V = V;
@@ -38,10 +39,14 @@ public class ELista extends E {
         return getJSON().toJSONString();
     }
 
+    public List<E> getLista() {
+        return V;
+    }
+
     public T type() {
         boolean error = false;
         if (V.isEmpty())
-            return new T(KindT.VECTIX);
+            return (tipoELista = new T(KindT.VECTIX));
         T tipoVector = V.get(0).type();
         for (E elem : V) {
             if (!ASemUtils.checkEqualTypes(tipoVector, elem.type())) {
@@ -50,13 +55,17 @@ public class ELista extends E {
             }
         }
         if (error)
-            return new T(KindT.ERROR);
-        return new T(tipoVector, V.size());
+            return (tipoELista = new T(KindT.ERROR));
+        return (tipoELista = new T(tipoVector, V.size()));
     }
 
     public void bind(SymbolMap ts) {
         for (E elem : V) {
             elem.bind(ts);
         }
+    }
+
+    public T getType() {
+        return tipoELista;
     }
 }

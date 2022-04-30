@@ -1,25 +1,25 @@
 const { readFileSync } = require("fs");
 const readline = require('readline');
 
-// const insrc = readline.createInterface({
-//   input: process.stdin,
-//   output: process.stdout
-// });
+const insrc = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
 
 entrada = [];
-i = 0; 
+i = 0;
 
-// async function readInput(n){
-//     var line;
-// //    console.log(line);
-//     for await (line of insrc) {
-// //	console.log(line);
-// 	entrada.push(parseInt(line));
-// 	n--;
-// 	if (n==0) return;
-//     }
-//     insrc.close();
-// }
+async function readInput(n){
+    var line;
+//    console.log(line);
+    for await (line of insrc) {
+//	console.log(line);
+        entrada.push(parseInt(line));
+        n--;
+        if (n==0) return;
+    }
+    insrc.close();
+}
 
 var importObjects = {
     runtime: {
@@ -47,13 +47,14 @@ var importObjects = {
     }};
 
 async function start() {
-    const code = readFileSync("struct_test.wasm");
+    const code = readFileSync("algoritmo_euclides.wasm");
     wasmModule = await WebAssembly.compile(code);
     instance = await WebAssembly.instantiate(wasmModule, importObjects);
     // await instance.exports.init();
 }
 
 async function run() {
+    await readInput(1);
     start();
 }
 

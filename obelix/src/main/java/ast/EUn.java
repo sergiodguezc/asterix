@@ -53,4 +53,14 @@ public class EUn extends E {
     public void bind(SymbolMap ts) {
         opnd.bind(ts);
     }
+
+    public void generateCodeE(PrintWriter pw) {
+        if (op.equals("not")) {
+            // Tenemos que asignarle a la variable el valor opuesto al que tiene
+            // si es 1, le asignamos 0 y viceversa.
+            opnd().generateCodeE(pw);
+            pw.println("i32.const 1");
+            pw.println("i32.xor ");
+        }
+    }
 }

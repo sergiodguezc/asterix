@@ -5,6 +5,7 @@ import asem.SymbolMap;
 import errors.GestionErroresAsterix;
 
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONObject;
@@ -81,19 +82,22 @@ public class IDecVar extends IDec {
     // en memoria
 	public void generateCodeI(PrintWriter pw) {
         if (isIni()) {
-            // Generamos el código que ponga en la pila el delta más el
-            // localStart. Como calculamos esto, no hace falta poner un offset.
-            pw.println("get_local $localStart");
-            pw.println("i32.const " + getDelta());
-            pw.println("i32.add");
+            if(valor.getType().getKindT() != KindT.VECTIX) {
+                // Obtenemos la posicion donde almacenamos elem
+                pw.println("get_local $localStart");
+                pw.println("i32.const " + getDelta());
+                pw.println("i32.add");
 
-            // Generamos el código que calcula el valor
-            valor.generateCodeE(pw);
+                // Evaluamos elem
+                valor.generateCodeE(pw);
 
-            // Generamos el codigo del tipo primero para luego concatenarlo
-            // con el .load, así podríamos escribir por ejemplo i32.load
-            type.generateCode(pw);
-            pw.println(".store");
+                // Almacenamos elem en esa posicion
+                type.generateCode(pw);
+                pw.println(".store");
+            }
+            else {
+                
+            }
         }
 	}
 
@@ -107,4 +111,35 @@ public class IDecVar extends IDec {
         size.set(size.intValue() + type.getSizeT());
 
 	}
+
+    // Generar código para las variables globales
+	public void generateCode(PrintWriter pw) {
+
+	}
+
+    private void generateCodeRecursively(PrintWriter pw, int offset, E elem) {
+        // Caso Base: Es un tipo basico
+        if(elem.getType().getKindT() != KindT.VECTIX) {
+            // Obtenemos la posicion donde almacenamos elem
+            pw.println("get_local $localStart");
+            pw.println("i32.const " + offset);
+            pw.println("i32.add");
+
+            // Evaluamos elem
+            elem.generateCodeE(pw);
+
+            // Almacenamos elem en esa posicion
+            type.generateCode(pw);
+            pw.println(".store");
+        }
+
+        // Caso Recursivo : Es un vector
+        else {
+            elem.generateCodeD(pw);
+
+            generateCodeRecursively(pw, offset, e);
+            e.getType().setSizeT();
+            offset += e.getType().getSizeT();
+        }
+    }
 }

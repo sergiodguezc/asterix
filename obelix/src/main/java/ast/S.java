@@ -85,14 +85,13 @@ public class S implements DefSub {
             pw.println(")");
         } else pw.println(); // Salto de línea por si no es una función
 
-        // TODO: Explicarme porque Atomic Integer
         // Calculamos los delta para cada cada variable. Comenzamos en 8
         // porque es el valor de esta variable en el encabezado despues de 
         // realizar sus operaciones. Aquí uso AtomicInteger en vez de
         // Integer porque al final Integer no es un puntero a un int,
         // en cambio, AtomicInteger sí.
         AtomicInteger size = new AtomicInteger(8);
-        AtomicInteger localSize = new AtomicInteger(8);
+        AtomicInteger localSize = new AtomicInteger(0);
         for (I ins : cuerpo) {
             ins.setDelta(size, localSize);
         }
@@ -112,13 +111,10 @@ public class S implements DefSub {
         // Antes de cerrar la función tenemos que llamar a la función
         // $freeStack
 
-        // TODO: Arreglar el "parche" de poner drop
         // Me sale un error de que necesita la pila vacía para llamar a
         // freeStack, pero es que entonces no sé cómo podremos devolver un
         // valor (¿ igual guardarlo en memoria ?)
-        // TODO: No estaras calculando el tamaño bien
         // TODO: Se han de devolver las cosas dejandolo en la pila (es como viene en el ejemplo del lab)
-        pw.println("drop");
         pw.println("call $freeStack");
         // Cerramos la función
         pw.println(")");
