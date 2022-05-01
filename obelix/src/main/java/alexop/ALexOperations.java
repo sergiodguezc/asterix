@@ -1,7 +1,7 @@
 package alexop;
 
-import asint.ClaseLexica;
 import alex.AnalizadorLexicoAsterix;
+import asint.ClaseLexica;
 
 public class ALexOperations {
   private AnalizadorLexicoAsterix alex;

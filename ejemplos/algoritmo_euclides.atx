@@ -1,0 +1,21 @@
+// Para poder usar este algoritmo_euclides,
+// en el main.js hay que poner await readInput(2)
+potion panoramix() -> intix {
+    intix M;
+    intix N;
+
+    stilus(M);
+    stilus(N);
+
+    whilix (!(M == N)) {
+        if (M <= N) {
+            N = N - M;
+        } else {
+            M = M - N;
+        }
+    }
+
+    tabellae(M);
+
+    return 0;
+}

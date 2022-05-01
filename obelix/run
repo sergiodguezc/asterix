@@ -1,0 +1,6 @@
+gradle run
+echo "Gradle build done!"
+wat2wasm test.wat
+echo "Converted wat -> wasm"
+node main.js
+rm test.wasm

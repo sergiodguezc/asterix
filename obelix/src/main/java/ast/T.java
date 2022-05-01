@@ -140,7 +140,7 @@ public class T implements ASTNode {
     // en los param de las funciones o cuando apliquemos operaciones sobre estos
     // tipos: sum, sub, mul, etc.
     public void generateCode(PrintWriter pw) {
-        pw.println((kindT == KindT.FLOATIX) ? "i32" : "f32");
+        pw.print((kindT == KindT.FLOATIX) ? "f32" : "i32");
     }
 
     // Método que calcula el tamaño de los tipos en bytes de forma recursiva.
@@ -164,6 +164,6 @@ public class T implements ASTNode {
     }
 
     public KindT getKindTBasico() {
-        return (tipo == null) ? kindT : getKindTBasico();
+        return (tipo == null) ? kindT : tipo.getKindTBasico();
     }
 }

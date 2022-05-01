@@ -112,7 +112,9 @@ public class ECte extends E {
                 // Accedemos a la posicion del vector
                 pw.println("i32.mul");
                 pw.println("i32.add");
-                pw.println("i32.load");
+
+                ifor.getType().generateCode(pw);
+                pw.println(".load");
             }
         }
 	}

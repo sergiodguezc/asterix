@@ -97,4 +97,9 @@ public class ECall extends E {
         return tipoECall;
     }
 
+    public void generateCodeE(PrintWriter pw){
+    }
+
+    public void generateCodeD(PrintWriter pw){}
+
 }

@@ -106,14 +106,14 @@ public class IDecVar extends IDec {
         if(valor.getType().getKindT() != KindT.VECTIX) {
             // Obtenemos la posicion donde almacenamos elem
             pw.println("get_local $localStart");
-            pw.println("i32.const " + offset);
+            pw.println("i32.const " + offset + " ;; offset");
             pw.println("i32.add");
 
             // Evaluamos elem
             valor.generateCodeE(pw);
 
             // Almacenamos elem en esa posicion
-            type.generateCode(pw);
+            valor.getType().generateCode(pw);
             pw.println(".store");
         }
 

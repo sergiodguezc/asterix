@@ -34,7 +34,7 @@ import alexop.*;
 letra  = ([A-Z]|[a-z])
 digitoPositivo = [1-9]
 digito = ({digitoPositivo}|0)
-parteDecimal = {digito}* {digitoPositivo}
+parteDecimal = {digito}*{digito}
 separador = [ \t\r\b\n]
 comentario = \/\/[^\n]*
 
@@ -52,16 +52,15 @@ operadorModulo = \%
 operadorPotencia = \^
 operadorNot = \!
 operadorReferencia = &
-operadorPunto = \.
 
 identificador = {letra}({letra}|{digito})*
 operadorAsignacion = \=
 intix = intix
-integer = ({digitoPositivo}{digito}*|{digito})
+integer = {digito}{digito}*
 boolix = boolix
 galo = galo
 romano = romano
-coma  = ,
+coma  = \,
 puntoComa = \;
 floatix = floatix
 floating = {integer}\.{parteDecimal}
@@ -69,6 +68,7 @@ datix = datix
 
 pot = pot
 vectix = vectix
+operadorPunto = \.
 mayor = \>
 menor = \<
 corcheteAbierto = \[
@@ -103,8 +103,8 @@ stilus = stilus
 {coma}                   {return ops.unidadComa();}
 {flecha}              {return ops.unidadFlecha();}
 
-{integer}                   {return ops.unidadInteger();}
 {floating}                   {return ops.unidadFloating();}
+{integer}                   {return ops.unidadInteger();}
 {galo}                   {return ops.unidadGalo();}
 {romano}                   {return ops.unidadRomano();}
 {menor}                   {return ops.unidadMenor();}

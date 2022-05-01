@@ -18,13 +18,13 @@ import errors.GestionErroresAsterix;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        Reader input = new InputStreamReader(new FileInputStream("algoritmo_euclides.atx"));
+        Reader input = new InputStreamReader(new FileInputStream("test.atx"));
         AnalizadorLexicoAsterix alex = new AnalizadorLexicoAsterix(input);
         AnalizadorSintacticoAsterix asint = new AnalizadorSintacticoAsterix(alex);
         P programa = (P) asint.parse().value;
         AnalizadorSemanticoAsterix asem = new AnalizadorSemanticoAsterix(programa);
         asem.analizaSemantica();
-        CodeGenerator cg = new CodeGenerator(programa,"algoritmo_euclides");
+        CodeGenerator cg = new CodeGenerator(programa,"test");
 
         if (GestionErroresAsterix.numErroresSemanticos + GestionErroresAsterix.numErroresSintacticos == 0 )
             cg.generateCode();

@@ -55,7 +55,12 @@ public class IES extends I {
         // Mostrar valor por consola
         if (label.equals("tabellae")) {
             valor.generateCodeE(pw); // Calculamos el valor a escribir y lo ponemos en la pila
-            pw.println("call $print");
+            if (valor.getType().getKindT() == KindT.INTIX)
+                pw.println("call $printi");
+            else if (valor.getType().getKindT() == KindT.FLOATIX)
+                pw.println("call $printf");
+            else if (valor.getType().getKindT() == KindT.BOOLIX)
+                pw.println("call $printi");
         // Leer valor de la consola
         } else {
             // Calculamos la posición de memoria de la variable donde queremos escribir la lectura

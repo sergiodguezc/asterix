@@ -144,8 +144,8 @@ public class EBin extends E {
 
             // Realizamos primero un posible casteo de este operando para que funcionen
             // las operaciones entre i32 y f32. Siempre el casteo es de i32 -> f32
-            if (!op.equals("pow") && opnd2.getType().getKindT() == KindT.INTIX &&
-                    opnd1.getType().getKindT() == KindT.FLOATIX) {
+            if (!op.equals("pow") && opnd2.getType().getKindT() == KindT.FLOATIX &&
+                    opnd1.getType().getKindT() == KindT.INTIX) {
                 pw.println("f32.convert_s/i32");
             }
 
@@ -154,8 +154,8 @@ public class EBin extends E {
 
             // Realizamos otro posible casteo de este operando para que funcionen
             // las operaciones entre i32 y f32. Siempre el casteo es de i32 -> f32
-            if (opnd2.getType().getKindT() == KindT.FLOATIX &&
-                    opnd1.getType().getKindT() == KindT.INTIX) {
+            if (!op.equals("pow") && opnd2.getType().getKindT() == KindT.INTIX &&
+                    opnd1.getType().getKindT() == KindT.FLOATIX) {
                 pw.println("f32.convert_s/i32");
             }
 

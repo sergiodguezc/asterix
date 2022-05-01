@@ -1,0 +1,10 @@
+potion panoramix() -> intix {
+    pot par {
+        intix der;
+        intix izq;
+    }
+
+    tabellae(par.der);
+
+    return 0;
+}
