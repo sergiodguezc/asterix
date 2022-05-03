@@ -1,14 +1,21 @@
 package ast;
 
 import asem.SymbolMap;
+import com.rits.cloning.Cloner;
 import errors.GestionErroresAsterix;
 import org.json.simple.JSONObject;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class T implements ASTNode {
     private KindT kindT;
+
+    public String getId() {
+        return id;
+    }
+
     private String id; // Identificador que hace referencia a un alias o a un struct
     private int N; // Longitud del vector
     private T tipo; // Tipo del vector o del alias (significado doble)
@@ -21,7 +28,7 @@ public class T implements ASTNode {
         this.kindT = kindT;
     }
 
-    //  CONSTRUCTOR PARA EL ALIAS
+    //  CONSTRUCTOR PARA EL ALIAS O PARA UN STRUCT DECLARADO PREVIAMENTE
     public T(String id) {
         this.id = id;
     }
@@ -35,6 +42,11 @@ public class T implements ASTNode {
 
     // CONSTRUCTOR PARA EL STRUCT
     public T(List<IDec> decs) {
+        this.kindT = KindT.POT;
+        this.decs = decs;
+    }
+    public T(List<IDec> decs, String id) {
+        this.id = id;
         this.kindT = KindT.POT;
         this.decs = decs;
     }
@@ -88,6 +100,9 @@ public class T implements ASTNode {
     public T getTInterno() {
         return tipo;
     }
+    public void setTInterno(T tipo) {
+        this.tipo = tipo;
+    }
 
     // Si es un ALIAS : Devuelve el tipo al que hace referencia
     // Si es un VECTIX : Devuelve el tipo de los elementos del vector
@@ -102,22 +117,24 @@ public class T implements ASTNode {
             } else {
                 I def = (I) astDef;
                 // Despues comprobamos que la instruccion es realmente un alias o un struct
-                if (def.kind() != KindI.ALIAS && def.kind() != KindI.DEC) {
+                if (def.kind() != KindI.ALIAS && def.kind() != KindI.POTDEF) {
                     GestionErroresAsterix.errorSemantico("ERROR: Tipo no reconocido");
                     kindT = KindT.ERROR;
                 } else if (def.kind() == KindI.ALIAS) {
                     copy(astDef.type());
                 } else {
                     // Obtenemos la lista de declaraciones del struct
-                    List<IDec> decs = ((IDecStruct) astDef).getDeclarations();
+                    List<IDec> decs = ((IDefStruct) astDef).getDeclarations();
                     // Devolvemos el tipo struct con esta lista de declaraciones
-                    copy(new T(decs));
+                    copy(new T(decs, id));
                 }
             }
         }
         // Es un vector, devolvemos su tipo interno
-        else if (kindT == KindT.VECTIX)
+        else if (kindT == KindT.VECTIX) {
+            tipo.type();
             return tipo;
+        }
 
         // Devolvemos el tipo
         return this;
@@ -145,6 +162,7 @@ public class T implements ASTNode {
 
     // Método que calcula el tamaño de los tipos en bytes de forma recursiva.
     public void setSizeT() {
+        sizeT = 0;
         if (kindT == KindT.VECTIX) {
             tipo.setSizeT();
             sizeT = tipo.getSizeT()*N;

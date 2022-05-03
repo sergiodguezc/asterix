@@ -1,10 +1,22 @@
-potion panoramix() -> intix {
-    pot par {
-        intix der;
-        intix izq;
-    }
 
-    tabellae(par.der);
+potion panoramix() -> intix {
+    pot Punto {
+        intix x = 2;
+        intix y = 4;
+    };
+
+    pot Recta {
+        Punto p1;
+        Punto p2;
+    };
+
+
+    vectix<Recta>[2] rectas;
+
+    forix (Recta r : rectas){
+        tabellae(r.p1.x);
+        tabellae(r.p2.y);
+    }
 
     return 0;
 }

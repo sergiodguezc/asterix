@@ -203,7 +203,6 @@ public class P implements ASTNode {
               "(type $_sig_i32i32i32 (func (param i32 i32 i32) ))\n"
             + "(type $_sig_i32ri32 (func (param i32) (result i32)))\n"
             + "(type $_sig_i32 (func (param i32)))\n"
-            + "(type $_sig_f32 (func (param f32)))\n"
             + "(type $_sig_ri32 (func (result i32)))\n"
             + "(type $_sig_rf32 (func (result f32)))\n"
             + "(type $_sig_void (func ))\n"

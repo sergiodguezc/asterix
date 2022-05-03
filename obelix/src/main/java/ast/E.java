@@ -5,8 +5,6 @@ import java.io.PrintWriter;
 import org.json.simple.JSONObject;
 
 public abstract class E implements ASTNode {
-    private int delta;
-
     public abstract KindE kind();
     public abstract JSONObject getJSON();
     public E opnd1() {throw new UnsupportedOperationException("opnd1");} 
@@ -21,5 +19,8 @@ public abstract class E implements ASTNode {
 
     // TODO: Codigo D, que es designador (para las asignaciones)
     public void generateCodeD(PrintWriter pw){}
+
+    // Código designador para los accesos a struct
+    public void generateCodeAccS(PrintWriter pw, E opnd2, boolean designador){}
 
 }

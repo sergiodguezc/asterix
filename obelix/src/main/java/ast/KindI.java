@@ -2,6 +2,7 @@ package ast;
 
 public enum KindI {
     DEC,
+    POTDEF,
     ASIG,
     ALIAS,
     FOR,

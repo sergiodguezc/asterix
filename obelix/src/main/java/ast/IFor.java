@@ -54,12 +54,13 @@ public class IFor extends I {
     // Devolvemos el tipo de la declaración de la variable auxiliar. Lo necesitamos
     // cuando hacemos bind() en otros puntos del AST.
     public T type() {
+        tipo.type();
         T tipo = this.tipo;
         T tipoLista = lista.type().type(); // Tipo interno de la lista
 
         // Comprobamos que la declaracion del for esta correctamente tipada
         boolean error = false;
-        if (!ASemUtils.checkEqualTypes(tipo, tipoLista)) {
+        if (!ASemUtils.checkEqualTypes(tipo, tipoLista) || (tipo.getKindT() == KindT.POT && !tipo.getId().equals(tipoLista.getId()))) {
             GestionErroresAsterix.errorSemantico("Error de tipado en la declaracion del for");
             error = true;
         }
@@ -92,9 +93,9 @@ public class IFor extends I {
     }
 
 	public void generateCodeI(PrintWriter pw) {
-        // Antes de abrir el bloque para el bucle tenemos que poner a 0 el 
+        // Antes de abrir el bloque para el bucle tenemos que poner a 0 el
         // iterador del for.
-        pw.println(";; Bucle for");
+        pw.println("\n;; Bucle for");
         pw.println("get_local $localStart");
         pw.println("i32.const " + itDelta);
         pw.println("i32.add");

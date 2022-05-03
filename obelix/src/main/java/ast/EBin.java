@@ -125,18 +125,35 @@ public class EBin extends E {
 
 	public void generateCodeE(PrintWriter pw) {
         if(op.equals("accA")) {
-            // Calculo el designador del vector dado por opnd1
+            // Generar codigo D para el opnd1
+            pw.println(";; codigo designador accA");
+            pw.println(";; codigo designador operando 1");
             opnd1.generateCodeD(pw);
 
-            // Accedo a la posicion dada por el opnd2
+            // Calculamos el code E de opnd2
+            pw.println(";; codigo E operando 2");
             opnd2.generateCodeE(pw);
+
+            // Calcular el tamaño del array
+
+            opnd1.getType().getTInterno().setSizeT();
+            int tamInterno = opnd1.getType().getTInterno().getSizeT();
+            pw.println("i32.const " + tamInterno + " ;; tamaño vector");
+
+            // Accedemos a la posicion de inicio del array
+            pw.println("i32.mul");
+
+            // Accedemos a la posicion dada por opnd2
             pw.println("i32.add");
 
             // Pongo el valor en la pila
             pw.println("i32.load");
         }
         else if (op.equals("accS")) {
-
+            // Calculamos aquí el valor de la expresión de accS, el false de la función
+            // indica que va a escribir también el tipo para que nosotros ahora solamente
+            // tengamos que escribir el .load
+            opnd1.generateCodeAccS(pw, opnd2, false);
         }
         else {
             // Como se apilan, primero se calcula el código del operando 1.
@@ -177,9 +194,12 @@ public class EBin extends E {
             pw.println(";; codigo E operando 2");
             opnd2.generateCodeE(pw);
 
-            // Calcular el tamaño del array
-            int dim = opnd1.getType().getVSize();
-            pw.println("i32.const " + dim + ";; tamaño vector");
+            // Nosotros no usamos la dimensión porque no
+            // calculamos el acceso todo de golpe, con
+            // el tamaño nos vale
+            opnd1.getType().getTInterno().setSizeT();
+            int tamInterno = opnd1.getType().getTInterno().getSizeT();
+            pw.println("i32.const " + tamInterno + " ;; tamaño vector");
 
             // Accedemos a la posicion de inicio del array
             pw.println("i32.mul");
@@ -191,13 +211,7 @@ public class EBin extends E {
         // Acceso a struct
         else if (op.equals("accS")) {
             // Calculamos el code D del opnd1
-            opnd1.generateCodeD(pw);
-
-            // Calculamos la posicion relativa del opnd2
-            // pw.println("i32.const " + opnd2.getDelta());
-
-            // Los sumamos para obtener el designador del struct
-            pw.println("i32.add");
+            opnd1.generateCodeAccS(pw, opnd2, true);
         }
     }
 
@@ -259,6 +273,33 @@ public class EBin extends E {
             } else {
                 P.powi = true;
                 pw.println("call $powi");
+            }
+        }
+    }
+
+    // Structs de structs y array de structs
+    public void generateCodeAccS(PrintWriter pw, E opnd2, boolean designador){
+        if (designador) {
+            generateCodeD(pw);
+            // Falta sumar el delta de opnd2
+            for (IDec idec : tipoExp.getDec()) {
+                if (idec.getId().equals(opnd2.getVal())) {
+                    pw.println("i32.const " + idec.getDelta() + " ;; delta interno struct");
+                    pw.println("i32.add");
+                }
+            }
+        }
+        else {
+            generateCodeD(pw);
+            // Falta sumar el delta de opnd2
+            for (IDec idec : tipoExp.getDec()) {
+                if (idec.getId().equals(opnd2.getVal())) {
+                    pw.println("i32.const " + idec.getDelta() + " ;; delta interno struct");
+                    pw.println("i32.add");
+                    // si no es un designador escribimos su tipo, así luego solo tendríamos que yuxtaponer el .load/.store
+                    idec.getType().generateCode(pw);
+                    pw.println(".load ;; load accS");
+                }
             }
         }
     }

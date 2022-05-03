@@ -31,7 +31,8 @@ terminal TokenValue PUNTOCOMA, COMA, INTEGER, FLOATING, GALO, ROMANO,
 non terminal P programa;
 non terminal S subprograma, main;
 non terminal I i, ifelse, while, for, tab, stilus, asignation, callf;
-non terminal IDec dec,struct;
+non terminal IDec dec;
+non terminal IDefStruct struct;
 non terminal IAlias alias;
 non terminal E exp0, exp1, exp2, exp3, exp4, exp5, exp6, exp7, exp8, exp9;
 non terminal T tipo;
@@ -73,13 +74,11 @@ cuerpo ::= cuerpo:listadefSub alias:nuevo PUNTOCOMA
 s ::= s:listains i:nuevo
     {: listains.add(nuevo);
         RESULT = listains; :};
-/*s ::=  i:ins
-    {: List<I> listains = new ArrayList<I>();
-       listains.add(ins);
-       RESULT = listains; :};*/
 s ::=
     {: RESULT = new ArrayList<I>(); :};
 
+i ::= struct:decStruct PUNTOCOMA
+    {: RESULT = decStruct; :};
 i ::= dec:idec PUNTOCOMA
     {: RESULT = idec; :};
 i ::= for:ifor
@@ -109,11 +108,9 @@ main ::= POTION PANOR PAA PAC FLECHA INTIX LLA s:cuerpo error LLC
        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 dec ::= tipo:type ID:id ASIG exp0:valor
-    {: RESULT = new IDecVar(type, id.lexema, valor); :};
+    {: RESULT = new IDec(type, id.lexema, valor); :};
 dec ::= tipo:type ID:id
-    {: RESULT = new IDecVar(type, id.lexema); :};
-dec ::= struct:decStruct
-    {: RESULT = decStruct; :};
+    {: RESULT = new IDec(type, id.lexema); :};
 dec ::= tipo:type error
     {: System.err.println("Error en la declaración. Identificador no reconocido.");
        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
@@ -167,7 +164,7 @@ tipo ::= VECTIX error MAYOR
            GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
 struct ::= POT ID:id LLA structint:listdec LLC
-    {: RESULT = new IDecStruct(id.lexema, listdec);:};
+    {: RESULT = new IDefStruct(id.lexema, listdec);:};
 struct ::= POT error LLA structint:listdec LLC
     {: System.err.println("Error en la declaración del pot. Identificador no reconocido.");
        GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
