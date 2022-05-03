@@ -77,39 +77,46 @@ public class ECte extends E {
         } else {
             // Buscamos en memoria la dirección de la variable
             pw.println(";; Obtener valor de variable ya declarada");
-            I insVar = (I) dec; // Casteo seguro porque dec != null
-            if (insVar.kind() == KindI.DEC) {
-                IDec decVar = (IDec) dec;
-                pw.println("get_local $localStart");
-                pw.println("i32.const " + decVar.getDelta() + " ;; delta: variable declarada");
-                pw.println("i32.add");
+            if (dec.nodeKind() == NodeKind.ARG) {
+                Arg arg = (Arg) dec;
+                pw.println("get_local $" + arg.getId());
+            }
+            if (dec.nodeKind() == NodeKind.INSTRUCCION) {
+                I insVar = (I) dec; // Casteo seguro porque dec != null
+                if (insVar.kind() == KindI.DEC) {
+                    IDec decVar = (IDec) dec;
+                    pw.println("get_local $localStart");
+                    pw.println("i32.const " + decVar.getDelta() + " ;; delta: variable declarada");
+                    pw.println("i32.add");
 
-                decVar.getType().generateCode(pw);
-                pw.println(".load");
-            } else if (insVar.kind() == KindI.FOR) {
-                IFor ifor = (IFor) insVar;
-                // Obtenemos la dirección de memoria de la variable delclarada
-                // en el for.
-                pw.println(";; Codigo de la lista que estamos recorriendo");
-                ifor.getLista().generateCodeD(pw);
-                pw.println(";; Fin del codigo de la lista que estamos recorriendo");
+                    decVar.getType().generateCode(pw);
+                    pw.println(".load");
+                } else if (insVar.kind() == KindI.FOR) {
+                    IFor ifor = (IFor) insVar;
+                    // Obtenemos la dirección de memoria de la variable delclarada
+                    // en el for.
+                    pw.println(";; Codigo de la lista que estamos recorriendo");
+                    ifor.getLista().generateCodeD(pw);
+                    pw.println(";; Fin del codigo de la lista que estamos recorriendo");
 
-                // Obtenemos la iteracion en la que nos encontramos
-                pw.println("get_local $localStart");
-                pw.println("i32.const " + ifor.getItDelta() + " ;; pos del iterador");
-                pw.println("i32.add");
-                pw.println("i32.load");
+                    // Obtenemos la iteracion en la que nos encontramos
+                    pw.println("get_local $localStart");
+                    pw.println("i32.const " + ifor.getItDelta() + " ;; pos del iterador");
+                    pw.println("i32.add");
+                    pw.println("i32.load");
 
-                // Calculamos el tamaño del tipo interno del
-                ifor.getType().setSizeT();
-                pw.println("i32.const " + ifor.getType().getSizeT() + " ;; tamaño del tipo interno que recorremos ");
+                    // Calculamos el tamaño del tipo interno del
+                    ifor.getType().setSizeT();
+                    pw.println("i32.const " + ifor.getType().getSizeT() + " ;; tamaño del tipo interno que recorremos ");
 
-                // Accedemos a la posicion del vector
-                pw.println("i32.mul");
-                pw.println("i32.add");
+                    // Accedemos a la posicion del vector
+                    pw.println("i32.mul");
+                    pw.println("i32.add");
 
-                ifor.getType().generateCode(pw);
-                pw.println(".load");
+                    ifor.getType().generateCode(pw);
+                    pw.println(".load");
+                }
+
             }
         }
     }

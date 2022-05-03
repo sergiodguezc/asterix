@@ -15,6 +15,53 @@
 (global $SP (mut i32) (i32.const 0)) ;; start of stack
 (global $MP (mut i32) (i32.const 0)) ;; mark pointer
 (global $NP (mut i32) (i32.const 131071996)) ;; heap 2000*64*1024-4
+(func $esPar (param $x i32)(result i32)
+(local $temp i32)
+(local $localStart i32)
+i32.const 4 ;; let this be the stack size needed (params+locals+2)*4
+call $reserveStack  ;; returns old MP (dynamic link)
+set_local $temp
+get_global $MP
+get_local $temp
+i32.store
+get_global $MP
+get_global $SP
+i32.store offset=4
+get_global $MP
+i32.const 8
+i32.add
+set_local $localStart
+
+
+ ;; instrucciones 
+;; inicialización de variable sol
+get_local $localStart
+i32.const 0 ;; offset
+i32.add
+;; valor a guardar
+i32.const 0
+i32.store
+;; Obtener valor de variable ya declarada
+get_local $x
+i32.const 2
+i32.rem_s
+i32.const 0
+i32.eq
+if
+;; codigo del designador
+get_local $localStart
+i32.const 0 ;; delta: declaración
+i32.add
+i32.const 1
+i32.store
+end
+;; Obtener valor de variable ya declarada
+get_local $localStart
+i32.const 0 ;; delta: variable declarada
+i32.add
+i32.load
+call $freeStack
+)
 (func $panoramix 
 (local $temp i32)
 (local $localStart i32)
@@ -299,6 +346,31 @@ i32.store
 br 0
 )
 )
+;; codigo designador accA
+;; codigo designador operando 1
+;; codigo del designador
+get_local $localStart
+i32.const 0 ;; delta: declaración
+i32.add
+;; codigo E operando 2
+i32.const 0
+i32.const 16 ;; tamaño vector
+i32.mul
+i32.add
+i32.const 0 ;; delta interno struct
+i32.add
+i32.const 0 ;; delta interno struct
+i32.add
+i32.load ;; load accS
+call $esPar
+i32.load
+if
+i32.const 1
+call $printi
+else
+i32.const 0
+call $printi
+end
 call $freeStack
 )
 (func $reserveStack (param $size i32)

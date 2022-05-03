@@ -98,6 +98,11 @@ public class ECall extends E {
     }
 
     public void generateCodeE(PrintWriter pw){
+        for (E arg : args) {
+            arg.generateCodeE(pw);
+        }
+        pw.println("call $" + id);
+        pw.println("i32.load");
     }
 
     public void generateCodeD(PrintWriter pw){}

@@ -1,7 +1,6 @@
 package ast;
 
 import asem.SymbolMap;
-import com.rits.cloning.Cloner;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -86,5 +85,4 @@ public class IDefStruct extends I {
     public void setIni(boolean ini) {
         this.ini = ini;
     }
-
 }
