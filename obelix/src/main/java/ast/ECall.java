@@ -120,6 +120,7 @@ public class ECall extends E {
 
 
         pw.println("call $" + id);
+        // TODO : Gestionar la memoria del return
         pw.println("i32.load");
     }
 
@@ -129,6 +130,7 @@ public class ECall extends E {
         // Caso Base: Es un tipo basico
         if (tipo.getKindT() != KindT.VECTIX) {
             pw.println("get_global $SP offset=" + offset);
+            valor.generateCodeE(pw);
             tipo.generateCode(pw); pw.println(".store");
         }
 
@@ -137,11 +139,65 @@ public class ECall extends E {
             List<E> lista = ((ELista) valor).getLista();
 
             for (E elem : lista) {
-                generateCodeRecursively(elem, offset, pw);
+                elem.getType().setSizeT();
+                generateCodeRecursively(elem, offset + elem.getType().getSizeT(), pw);
             }
         }
 
-        // TODO: Que hacer si es un struct o un vector de structs
+        // Caso Base : Es un struct o un vector de structs
+        else if (tipo.getKindTBasico() == KindT.POT) {
+            // Caso vector de structs
+            if (tipo.getKindT() == KindT.VECTIX) {
+                //Cloner c = new Cloner();
+                //T tBasic = c.deepClone(tipo);
+                T tBasic = tipo;
+                // Calculamos cuántos elementos básicos tiene el vector
+                int basicElements = tBasic.getVSize();
+                while (tBasic.getKindT() == KindT.VECTIX){
+                    basicElements *= tBasic.getVSize();
+                    tBasic = tBasic.getTInterno();
+                }
+                // Por cada elemento básico, copiamos su valor a la pila de la función.
+                for (int i = 0; i < basicElements; i++) {
+                    pw.println(";; struct " + i + " del vector " + id);
+
+                    tBasic.setSizeT();
+                    // Calculamos el tamaño del struct básico
+                    int size = tBasic.getSizeT();
+
+                    // obtener el puntero donde comenzamos a copiar el struct
+                    pw.println("get_local $localStart ;; guardamos el valor para recuperarlo luego");
+                    pw.println("get_local $localStart");
+                    pw.println("i32.const " + size * i + " ;; size*i: " + size + "*" + i);
+                    pw.println("i32.add");
+
+                    pw.println("set_local $localStart");
+
+                    // Por cada declaración del struct, copiamos sus elementos a esa posición.
+                    for (IDec idec : tBasic.getDec()) {
+                        idec.generateCodeCall(pw, offset);
+                        offset += tipo.getSizeT();
+                    }
+                    pw.println("set_local $localStart ;; recuperamos el valor original");
+                }
+            // Caso en que es un struct
+            } else {
+                // Colocamos el valor de localStart en la pila para recuperarlo despues
+                pw.println("get_local $localStart ;; save localStart, at the end we revert this change");
+                valor.generateCodeD(pw);
+                pw.println("set_local $localStart");
+
+                // Por cada declaración del struct, copiamos sus elementos a esa posición.
+                tipo.setSizeT();
+                for (IDec iDec : tipo.getDec()) {
+                    iDec.generateCodeCall(pw, offset);
+                    offset += tipo.getSizeT();
+                }
+
+                // Devolvemos el localStart al inicial. Este valor se encontraba ya en la pila.
+                pw.println("set_local $localStart ;; devolvemos el localStart al valor original");
+            }
+        }
 
         // Caso Base : Caso de que sea una llamada a una funcion o un vector ya definido
         else {
@@ -152,9 +208,9 @@ public class ECall extends E {
             pw.println("get_global $SP offset =" + offset);
 
             // Llamamos a la funcion copyn
-            P.copyni = tipo.getKindTBasico() == KindT.INTIX;
+            P.copyni = tipo.getKindTBasico() == KindT.INTIX || tipo.getKindTBasico() == KindT.BOOLIX;
             P.copynf = tipo.getKindTBasico() == KindT.FLOATIX;
-            pw.println((tipo.getKindTBasico() == KindT.INTIX) ? "call $copyni" : "call $copynf");
+            pw.println((tipo.getKindTBasico() == KindT.FLOATIX) ? "call $copynf" : "call $copyni");
         }
     }
 

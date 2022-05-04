@@ -16,8 +16,8 @@ public class IDec extends I implements DefSub {
     private int delta; // Posición relativa de la variable dentro del bloque
     private Boolean ini;
     private T type;
-
     private E valor;
+
     private List<IDec> declarations; // En caso de que sea un struct
 
     // Variable no inicializada
@@ -234,4 +234,67 @@ public class IDec extends I implements DefSub {
     // Getter para el delta de la variable
     public int getDelta() {return delta;}
     public E getValor() {return valor;}
+
+    public void generateCodeCall(PrintWriter pw, int offset) {
+        // Caso Base : El tipo es un vector con tipo interno distinto de pot
+        if(type.getKindT() == KindT.VECTIX && type.getKindTBasico() != KindT.POT) {
+            // Calculamos la posición donde lo vamos a copiar
+            pw.println("i32.const " + delta);
+            pw.println("get_global $SP offset=" + offset);
+            type.setSizeT();
+            pw.println("i32.const " + type.getSizeT());
+
+            // Llamamos a copy n bytes
+            P.copyni = type.getKindTBasico() == KindT.INTIX || type.getKindTBasico() == KindT.BOOLIX;
+            P.copynf = type.getKindTBasico() == KindT.FLOATIX;
+            pw.println((type.getKindTBasico() == KindT.FLOATIX) ? "call $copynf" : "call $copyni");
+        }
+        // Caso Recursivo : Tipo Pot
+        else if (type.getKindTBasico() == KindT.POT) {
+            if (type.getKindT() == KindT.VECTIX) {
+                T tBasic = type;
+                // Calculamos cuántos elementos básicos tiene el vector
+                int basicElements = tBasic.getVSize();
+                while (tBasic.getKindT() == KindT.VECTIX){
+                    basicElements *= tBasic.getVSize();
+                    tBasic = tBasic.getTInterno();
+                }
+
+                // Por cada struct interno que tiene el vector de structs (puede ser
+                // vectix<vectix<pot>[2]>[2] y en este caso habría 4 structs)
+                for (int i = 0; i < basicElements; i++) {
+                    for (IDec idec : type.getDec()) {
+                        idec.generateCodeCall(pw,offset);
+                        // Sumamos al offset el tamaño de la declaración
+                        idec.getType().setSizeT();
+                        offset += idec.getType().getSizeT();
+                    }
+                }
+            }
+            // Caso en que sea un struct
+            else {
+                // Por cada declaración calculamos de forma recursiva su código
+                for (IDec idec : type.getDec()) {
+                    idec.generateCodeCall(pw,offset);
+                    // Sumamos al offset el tamaño de la declaración
+                    idec.getType().setSizeT();
+                    offset += idec.getType().getSizeT();
+                }
+            }
+        }
+        // Caso base: Tipos básicos; intix, floatix, boolix
+        else {
+            // Obtenemos la posición en memoria donde copiaremos el
+            // valor del tipo básico.
+            pw.println("get_global $SP offset=" + offset);
+            // Ponemos en la pila el valor del elemento básico
+            pw.println("i32.const " + delta);
+            type.generateCode(pw);
+            pw.println(".load");
+            // Guardamos en la posición que calculamos antes el
+            // valor que tenemos en la pila
+            type.generateCode(pw);
+            pw.println(".store");
+        }
+    }
 }

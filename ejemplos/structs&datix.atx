@@ -1,0 +1,35 @@
+datix numero intix;
+pot Punto {
+    numero x = 2;
+    numero y = 4;
+};
+
+pot Recta {
+    Punto p1;
+    Punto p2;
+};
+
+potion esPar(x : numero) -> boolix {
+    boolix sol = romano;
+    if (x%2==0) {
+        sol = galo;
+    }
+    return sol;
+}
+
+potion panoramix() -> intix {
+    vectix<Recta>[2] rectas;
+
+    forix (Recta r : rectas){
+        tabellae(r.p1.x);
+        tabellae(r.p2.y);
+    }
+
+    if (esPar(rectas[0].p1.x)) {
+        tabellae(1);
+    } else {
+        tabellae(0);
+    }
+
+    return 0;
+}
