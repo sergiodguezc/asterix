@@ -140,33 +140,8 @@ public class ECall extends E {
                 generateCodeRecursively(elem, offset, pw);
             }
         }
-        /*
-        else if (tipo.getKindT() == KindT.VECTIX && tipo.getKindTBasico() == KindT.POT) {
-            Cloner c = new Cloner();
-            T tBasic = c.deepClone(type);
-            int basicElements = tBasic.getVSize();
-            while (tBasic.getKindT() == KindT.VECTIX){
-                basicElements *= tBasic.getVSize();
-                tBasic = tBasic.getTInterno();
-            }
-            for (int i = 0; i < basicElements; i++) {
-                pw.println(";; struct " + i + " del vector " + id);
-                tBasic.setSizeT();
-                int size = tBasic.getSizeT();
-                pw.println("get_local $localStart ;; guardamos el valor para recuperarlo luego");
-                pw.println("get_local $localStart");
-                pw.println("i32.const " + size * i + " ;; size*i: " + size + "*" + i);
-                pw.println("i32.add");
 
-                pw.println("set_local $localStart");
-                for (IDec idec : declarations) {
-                    // sumamos la posición inicial del vector
-                    idec.generateCodeI(pw);
-                }
-                pw.println("set_local $localStart ;; recuperamos el valor original");
-            }
-        }
-        */
+        // TODO: Que hacer si es un struct o un vector de structs
 
         // Caso Base : Caso de que sea una llamada a una funcion o un vector ya definido
         else {
