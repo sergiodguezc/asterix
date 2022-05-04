@@ -8,7 +8,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class IDefStruct extends I {
+public class IDefStruct extends I implements DefSub {
     private String id;
     private List<IDec> declarations;
     private boolean ini;
@@ -84,5 +84,10 @@ public class IDefStruct extends I {
 
     public void setIni(boolean ini) {
         this.ini = ini;
+    }
+
+    @Override
+    public void generateCode(PrintWriter pw) {
+        setDelta(new AtomicInteger(0),new AtomicInteger(0));
     }
 }

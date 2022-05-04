@@ -49,6 +49,7 @@ public class IAlias extends I implements DefSub {
     }
 
 	public void generateCodeI(PrintWriter pw) {
+
 	}
 
 	public void setDelta(AtomicInteger size, AtomicInteger localSize) {

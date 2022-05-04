@@ -6,11 +6,9 @@ import com.rits.cloning.Cloner;
 import errors.GestionErroresAsterix;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.checkerframework.checker.units.qual.C;
 import org.json.simple.JSONObject;
 
 public class IDec extends I implements DefSub {
@@ -19,10 +17,8 @@ public class IDec extends I implements DefSub {
     private Boolean ini;
     private T type;
 
-
     private E valor;
     private List<IDec> declarations; // En caso de que sea un struct
-    //private List<List<IDec>> vstructs = new ArrayList<>(); // En caso de que sea un struct
 
     // Variable no inicializada
     public IDec(T type, String id) {

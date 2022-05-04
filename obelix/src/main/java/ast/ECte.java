@@ -171,7 +171,6 @@ public class ECte extends E {
         // Recorremos las declaraciones en busca del delta del operando 2.
         for (IDec idec : declaraciones) {
             if (idec.getId().equals(opnd2.getVal())) {
-                // TODO: El delta no corresponde al de la declaración
                 pw.println("i32.const " + idec.getDelta() + " ;; delta interno struct");
                 pw.println("i32.add");
                 // si no es un designador escribimos su tipo, así luego solo tendríamos que yuxtaponer el .load/.store

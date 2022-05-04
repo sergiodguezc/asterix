@@ -90,7 +90,7 @@ public class S implements DefSub {
         // realizar sus operaciones. Aquí uso AtomicInteger en vez de
         // Integer porque al final Integer no es un puntero a un int,
         // en cambio, AtomicInteger sí.
-        AtomicInteger size = new AtomicInteger(0);
+        AtomicInteger size = new AtomicInteger(8);
         AtomicInteger localSize = new AtomicInteger(0);
         for (I ins : cuerpo) {
             ins.setDelta(size, localSize);

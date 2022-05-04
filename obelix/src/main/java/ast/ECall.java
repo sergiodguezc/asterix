@@ -1,5 +1,6 @@
 package ast;
 
+import com.rits.cloning.Cloner;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -98,11 +99,88 @@ public class ECall extends E {
     }
 
     public void generateCodeE(PrintWriter pw){
-        for (E arg : args) {
-            arg.generateCodeE(pw);
+        List<Arg> argumentos = potion.getArguments();
+        int offset = 8;
+
+        for (int i = 0; i < argumentos.size(); i++) {
+            if(argumentos.get(i).isRef()) {
+                // Copiamos la direccion de los parametros por referencia en el lugar que le corresponde
+                pw.println("get_global $SP offset=" + offset);
+                args.get(i).generateCodeD(pw);
+                pw.println("i32.store");
+                offset += 4;
+            }
+            else {
+                // Evaluamos las expresiones de los parametros por valor y copiamos el resultado en el lugar que le corresponde
+                generateCodeRecursively(args.get(i), offset, pw);
+                args.get(i).getType().setSizeT();
+                offset += args.get(i).getType().getSizeT();
+            }
         }
+
+
         pw.println("call $" + id);
         pw.println("i32.load");
+    }
+
+    private void generateCodeRecursively(E valor, int offset, PrintWriter pw) {
+        T tipo = valor.getType();
+
+        // Caso Base: Es un tipo basico
+        if (tipo.getKindT() != KindT.VECTIX) {
+            pw.println("get_global $SP offset=" + offset);
+            tipo.generateCode(pw); pw.println(".store");
+        }
+
+        // Caso Recursivo : Es un vector y valor es una ELista
+        else if (valor.kind() == KindE.LISTA) {
+            List<E> lista = ((ELista) valor).getLista();
+
+            for (E elem : lista) {
+                generateCodeRecursively(elem, offset, pw);
+            }
+        }
+        /*
+        else if (tipo.getKindT() == KindT.VECTIX && tipo.getKindTBasico() == KindT.POT) {
+            Cloner c = new Cloner();
+            T tBasic = c.deepClone(type);
+            int basicElements = tBasic.getVSize();
+            while (tBasic.getKindT() == KindT.VECTIX){
+                basicElements *= tBasic.getVSize();
+                tBasic = tBasic.getTInterno();
+            }
+            for (int i = 0; i < basicElements; i++) {
+                pw.println(";; struct " + i + " del vector " + id);
+                tBasic.setSizeT();
+                int size = tBasic.getSizeT();
+                pw.println("get_local $localStart ;; guardamos el valor para recuperarlo luego");
+                pw.println("get_local $localStart");
+                pw.println("i32.const " + size * i + " ;; size*i: " + size + "*" + i);
+                pw.println("i32.add");
+
+                pw.println("set_local $localStart");
+                for (IDec idec : declarations) {
+                    // sumamos la posición inicial del vector
+                    idec.generateCodeI(pw);
+                }
+                pw.println("set_local $localStart ;; recuperamos el valor original");
+            }
+        }
+        */
+
+        // Caso Base : Caso de que sea una llamada a una funcion o un vector ya definido
+        else {
+            // Obtenemos la direccion de memoria del vector ya definido
+            valor.generateCodeD(pw);
+
+            // Ponemos la direccion de memoria donde queremos copiarlo
+            pw.println("get_global $SP offset =" + offset);
+
+            // Llamamos a la funcion copyn
+            P.copyni = tipo.getKindTBasico() == KindT.INTIX;
+            P.copynf = tipo.getKindTBasico() == KindT.FLOATIX;
+            pw.println((tipo.getKindTBasico() == KindT.INTIX) ? "call $copyni" : "call $copynf");
+        }
     }
 
     public void generateCodeD(PrintWriter pw){}

@@ -73,5 +73,9 @@ public class Arg implements ASTNode {
         tipo.generateCode(pw);
         pw.print(")");
 	}
+
+    public boolean isRef() {
+        return ref;
+    }
 }
 

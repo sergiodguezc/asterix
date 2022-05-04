@@ -290,7 +290,10 @@ public class EBin extends E {
             }
         }
         else {
+            // Aquí generamos código de designador, del primer operando porque
+            // el único load que hacemos es el del offset del operando dos.
             generateCodeD(pw);
+
             // Falta sumar el delta de opnd2
             for (IDec idec : tipoExp.getDec()) {
                 if (idec.getId().equals(opnd2.getVal())) {

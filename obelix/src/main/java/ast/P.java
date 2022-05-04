@@ -41,8 +41,10 @@ public class P implements ASTNode {
         pw.print(generateCabecera());
         
         // Generamos el código de las funciones y las definiciones
-        for (DefSub df : defsubs)
+        for (DefSub df : defsubs) {
             df.generateCode(pw);
+        }
+
 
         // Antes de cerrar el módulo, creamos las funciones auxiliares $reserveStack
         // $freeStack y $copyn.

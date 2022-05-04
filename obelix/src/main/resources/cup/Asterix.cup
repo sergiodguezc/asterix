@@ -61,6 +61,10 @@ cuerpo ::= alias:nuevo PUNTOCOMA
     {: List<DefSub> lista = new ArrayList<DefSub>();
        lista.add(nuevo);
        RESULT = lista; :};
+cuerpo ::= struct:nuevo PUNTOCOMA
+    {: List<DefSub> lista = new ArrayList<DefSub>();
+       lista.add(nuevo);
+       RESULT = lista; :};
 cuerpo ::= cuerpo:listadefSub subprograma:nuevo
     {: listadefSub.add(nuevo);
     RESULT = listadefSub; :};
@@ -68,6 +72,9 @@ cuerpo ::= cuerpo:listadefSub dec:nuevo PUNTOCOMA
     {: listadefSub.add(nuevo);
     RESULT = listadefSub; :};
 cuerpo ::= cuerpo:listadefSub alias:nuevo PUNTOCOMA
+    {: listadefSub.add(nuevo);
+    RESULT = listadefSub; :};
+cuerpo ::= cuerpo:listadefSub struct:nuevo PUNTOCOMA
     {: listadefSub.add(nuevo);
     RESULT = listadefSub; :};
 
