@@ -39,44 +39,31 @@ non terminal T tipo;
 
 non terminal List<IDec> structint;
 non terminal List<I> s;
-non terminal List<DefSub> cuerpo;
+non terminal List<I> definiciones;
+non terminal List<S> subprogramas;
 
 non terminal List<E> lista, largc, listaint;
 non terminal List<Arg> largp, args;
 
-programa ::= main : submain
-    {:RESULT = new P(new ArrayList<DefSub>(), submain); :};
-programa ::= cuerpo: listadefsub main: submain
-    {:RESULT = new P(listadefsub, submain); :};
+programa ::= definiciones : listaDefs subprogramas : listaSubs main : submain
+    {: RESULT = new P(listaDefs, listaSubs, submain); :};
+programa ::= definiciones subprogramas error
+    {:System.err.println("No se permiten definiciones globales despues de subprogramas");
+    GestionErroresAsterix.numErroresSintacticos++; RESULT = null; :};
 
-cuerpo ::= subprograma:nuevo
-    {: List<DefSub> lista = new ArrayList<DefSub>();
-       lista.add(nuevo);
-       RESULT = lista; :};
-cuerpo ::= dec:nuevo PUNTOCOMA
-    {: List<DefSub> lista = new ArrayList<DefSub>();
-       lista.add(nuevo);
-       RESULT = lista; :};
-cuerpo ::= alias:nuevo PUNTOCOMA
-    {: List<DefSub> lista = new ArrayList<DefSub>();
-       lista.add(nuevo);
-       RESULT = lista; :};
-cuerpo ::= struct:nuevo PUNTOCOMA
-    {: List<DefSub> lista = new ArrayList<DefSub>();
-       lista.add(nuevo);
-       RESULT = lista; :};
-cuerpo ::= cuerpo:listadefSub subprograma:nuevo
-    {: listadefSub.add(nuevo);
-    RESULT = listadefSub; :};
-cuerpo ::= cuerpo:listadefSub dec:nuevo PUNTOCOMA
-    {: listadefSub.add(nuevo);
-    RESULT = listadefSub; :};
-cuerpo ::= cuerpo:listadefSub alias:nuevo PUNTOCOMA
-    {: listadefSub.add(nuevo);
-    RESULT = listadefSub; :};
-cuerpo ::= cuerpo:listadefSub struct:nuevo PUNTOCOMA
-    {: listadefSub.add(nuevo);
-    RESULT = listadefSub; :};
+definiciones ::= definiciones : lista struct : nuevo PUNTOCOMA
+    {: lista.add(nuevo); RESULT = lista; :};
+definiciones ::= definiciones : lista dec : nuevo PUNTOCOMA
+    {: nuevo.setGlobal(true); lista.add(nuevo); RESULT = lista; :};
+definiciones ::= definiciones : lista alias : nuevo PUNTOCOMA
+    {: lista.add(nuevo); RESULT = lista; :};
+definiciones ::=
+    {: RESULT = new ArrayList<I>(); :};
+
+subprogramas ::= subprogramas: lista subprograma: nuevo
+    {:lista.add(nuevo); RESULT = lista; :};
+subprogramas ::=
+    {:RESULT = new ArrayList<S>();:};
 
 s ::= s:listains i:nuevo
     {: listains.add(nuevo);

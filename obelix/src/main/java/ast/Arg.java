@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONObject;
+import utils.Entero;
 
 public class Arg implements ASTNode {
 
@@ -75,18 +76,18 @@ public class Arg implements ASTNode {
         return ref;
     }
 
-    public void setDelta(AtomicInteger size, AtomicInteger localsize) {
+    public void setDelta(Entero size, Entero localsize) {
         if (ref) {
             delta = localsize.get(); // size del puntero
-            size.getAndAdd(4);
-            localsize.getAndAdd(4);
+            size.add(4);
+            localsize.add(4);
         } else {
             delta = localsize.get(); // size del tipo que copiamos
 
             // Aumentamos el size y el localsize
             tipo.setSizeT();
-            size.getAndAdd(tipo.getSizeT());
-            localsize.getAndAdd(tipo.getSizeT());
+            size.add(tipo.getSizeT());
+            localsize.add(tipo.getSizeT());
         }
 
     }

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONObject;
+import utils.Entero;
 
 public class IES extends I {
     private E valor;
@@ -53,7 +54,7 @@ public class IES extends I {
 	@Override
 	public void generateCodeI(PrintWriter pw) {
         // Mostrar valor por consola
-        if (label.equals("tabellae")) {
+        if (label.equals("stilus")) {
             valor.generateCodeE(pw); // Calculamos el valor a escribir y lo ponemos en la pila
             if (valor.getType().getKindT() == KindT.INTIX)
                 pw.println("call $printi");
@@ -66,13 +67,19 @@ public class IES extends I {
             // Calculamos la posición de memoria de la variable donde queremos escribir la lectura
             valor.generateCodeD(pw);
 
-            pw.println("call $read"); // leemos una entrada y la ponemos en la pila
+            if (valor.getType().getKindT() == KindT.INTIX)
+                pw.println("call $readi");
+            else if (valor.getType().getKindT() == KindT.FLOATIX)
+                pw.println("call $readf");
+            else if (valor.getType().getKindT() == KindT.BOOLIX)
+                pw.println("call $readi");
+
             valor.getType().generateCode(pw); // Guardamos en memoria el valor leido
             pw.println(".store");
         }
 	}
 
-	public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+	public void setDelta(Entero size, Entero localSize) {
         // Las funciones de entrada salida no declaran variables
 		
 	}

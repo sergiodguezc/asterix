@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import utils.Entero;
 
 public class IIf extends I {
     private E cond;
@@ -108,12 +109,25 @@ public class IIf extends I {
         pw.println("end");
 	}
 
-    public void setDelta(AtomicInteger size, AtomicInteger localSize) {
-        for (I ins : cuerpoIf)
-            ins.setDelta(size, localSize);
+    public void setDelta(Entero size, Entero localSize) {
+        Entero newLocalSizeIf = new Entero(localSize.get());
+        Entero newSizeIf = new Entero(0);
+        Entero newLocalSizeElse = new Entero(localSize.get());
+        Entero newSizeElse = new Entero(0);
+
+        for (I ins : cuerpoIf) {
+            ins.setDelta(newSizeIf, newLocalSizeIf);
+        }
         if (ifelse)
             for (I ins : cuerpoElse)
-                ins.setDelta(size, localSize);
-		
+                ins.setDelta(newSizeElse, newLocalSizeElse);
+
+        if (localSize.get() + newSizeIf.get() > size.get()) {
+            size.set(localSize.get() + newSizeIf.get());
+        }
+
+        if (localSize.get() + newSizeElse.get() > size.get()) {
+            size.set(localSize.get() + newSizeElse.get());
+        }
 	}
 }

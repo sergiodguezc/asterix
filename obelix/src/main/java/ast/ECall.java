@@ -99,7 +99,6 @@ public class ECall extends E {
 
     public void generateCodeE(PrintWriter pw){
         generateCodeD(pw);
-        pw.println("i32.load");
     }
 
     public void generateCodeD(PrintWriter pw){
@@ -129,7 +128,7 @@ public class ECall extends E {
         T tipo = valor.getType();
 
         // Caso Base: Es un tipo basico
-        if (tipo.getKindT() != KindT.VECTIX) {
+        if (tipo.getKindT() != KindT.VECTIX && tipo.getKindT() != KindT.POT) {
             pw.println("get_global $SP");
             valor.generateCodeE(pw);
             tipo.generateCode(pw); pw.println(".store offset=" + offset);

@@ -2,9 +2,9 @@ package ast;
 
 
 import org.json.simple.JSONObject;
+import utils.Entero;
 
 import java.io.PrintWriter;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class I implements ASTNode{
     public abstract KindI kind();
@@ -17,7 +17,7 @@ public abstract class I implements ASTNode{
     // representa la posicion de la memoria desde el inicio hasta la última
     // variable que añadamos, en cambio, localSize representa la posicion 
     // relativa frente a la cual se calcula el delta.
-    public abstract void setDelta(AtomicInteger size, AtomicInteger localSize);
+    public abstract void setDelta(Entero size, Entero localSize);
 
     // Para generar el codigo de instrucciones
     public abstract void generateCodeI(PrintWriter pw);

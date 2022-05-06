@@ -95,7 +95,7 @@ public class ECte extends E {
                 I insVar = (I) dec; // Casteo seguro porque dec != null
                 if (insVar.kind() == KindI.DEC) {
                     IDec decVar = (IDec) dec;
-                    pw.println("get_local $localStart");
+                    pw.println(decVar.isGlobal() ? "i32.const 8 ;; pos inicio variables globales" : "get_local $localStart");
                     pw.println("i32.const " + decVar.getDelta() + " ;; delta: variable declarada");
                     pw.println("i32.add");
 
@@ -149,7 +149,7 @@ public class ECte extends E {
                 I insVar = (I) dec; // Casteo seguro porque dec != null
                 if (insVar.kind() == KindI.DEC) {
                     IDec decVar = (IDec) insVar;
-                    pw.println("get_local $localStart");
+                    pw.println(decVar.isGlobal() ? "i32.const 8 ;; pos inicio variables globales" : "get_local $localStart");
                     pw.println("i32.const " + decVar.getDelta() + " ;; delta: declaración");
                     pw.println("i32.add");
                 } else if (insVar.kind() == KindI.FOR) {
@@ -177,31 +177,38 @@ public class ECte extends E {
     }
 
     public void generateCodeAccS(PrintWriter pw, E opnd2, boolean designador) {
-        I ins = (I) dec;
         List<IDec> declaraciones = null;
+
+        if (dec.nodeKind() == NodeKind.ARG) {
+            Arg arg = (Arg) dec;
+            declaraciones = arg.getType().getDec();
+
+        } else {
+            I ins = (I) dec;
+
+            if (ins.kind() == KindI.FOR) {
+                IFor ifor = (IFor) ins;
+                declaraciones = ifor.getLista().getType().getTInterno().getDec();
+            } else if (ins.kind() == KindI.DEC ) {
+                IDec idec = (IDec) ins;
+                declaraciones = idec.getDeclarations();
+            }
+        }
 
         // Generamos el código del designador (Puede ser dec o ifor)
         generateCodeD(pw);
 
-        if (ins.kind() == KindI.FOR) {
-            IFor ifor = (IFor) ins;
-            declaraciones = ifor.getLista().getType().getTInterno().getDec();
-        } else if (ins.kind() == KindI.DEC ) {
-            IDec idec = (IDec) ins;
-            declaraciones = idec.getDeclarations();
-        }
-
         // Recorremos las declaraciones en busca del delta del operando 2.
-        for (IDec idec : declaraciones) {
-            if (idec.getId().equals(opnd2.getVal())) {
-                pw.println("i32.const " + idec.getDelta() + " ;; delta interno struct");
-                pw.println("i32.add");
-                // si no es un designador escribimos su tipo, así luego solo tendríamos que yuxtaponer el .load/.store
-                if (!designador) {
-                    idec.getType().generateCode(pw);
-                    pw.println(".load ;; load accS");
+            for (IDec idec : declaraciones) {
+                if (idec.getId().equals(opnd2.getVal())) {
+                    pw.println("i32.const " + idec.getDelta() + " ;; delta interno struct");
+                    pw.println("i32.add");
+                    // si no es un designador escribimos su tipo, así luego solo tendríamos que yuxtaponer el .load/.store
+                    if (!designador) {
+                        idec.getType().generateCode(pw);
+                        pw.println(".load ;; load accS");
+                    }
                 }
             }
-        }
     }
 }

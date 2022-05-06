@@ -3,11 +3,11 @@ package ast;
 import asem.SymbolMap;
 
 import java.io.PrintWriter;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONObject;
+import utils.Entero;
 
-public class IAlias extends I implements DefSub {
+public class IAlias extends I {
     private String id;
     private T tipo;
 
@@ -52,7 +52,7 @@ public class IAlias extends I implements DefSub {
 
 	}
 
-	public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+	public void setDelta(Entero size, Entero localSize) {
         // Los alias no declaran variables. No hacemos nada.		
 		
 	}

@@ -24,11 +24,9 @@ async function readInput(n){
 var importObjects = {
     runtime: {
         exceptionHandler : function(code) {
-            let errStr;
-            if (code == 1) {
-                errStr= "Error 1. ";
-            } else if (code == 2) {
-                errStr= "Error 2. ";
+        let errStr;
+        if (code == 1) {
+                errStr= "Array out of Bounds";
 	    } else if (code == 3) {
                 errStr= "Not enough memory. ";
 	    } else {
@@ -55,6 +53,7 @@ async function start() {
 
 async function run() {
     await readInput(1);
+    //await readInput(9);
     start();
 }
 

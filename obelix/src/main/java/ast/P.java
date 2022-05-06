@@ -3,21 +3,24 @@ package ast;
 import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import utils.Entero;
 
 import java.io.PrintWriter;
 import java.util.List;
 
 public class P implements ASTNode {
-    private List<DefSub> defsubs;
+    private List<S> subprogramas;
+    private List<I> definiciones;
 
     public static boolean copyn = false;
     public static boolean powi = false;
     public static boolean powf = false;
 
 
-    public P(List<DefSub> defsubs, DefSub nuevo) {
-        this.defsubs = defsubs;
-        defsubs.add(nuevo);
+    public P(List<I> definiciones, List<S> subprogramas, S main) {
+        this.definiciones = definiciones;
+        this.subprogramas = subprogramas;
+        subprogramas.add(main);
     }
 
     public void bind(SymbolMap ts) {
@@ -26,8 +29,13 @@ public class P implements ASTNode {
         ts.openBlock();
 
         // Recursion a las definiciones
-        for (DefSub ds : defsubs) {
-            ds.bind(ts);
+        for (I def : definiciones) {
+            def.bind(ts);
+        }
+
+        // Recursion a los subprogramas
+        for (S sub : subprogramas) {
+            sub.bind(ts);
         }
 
         ts.closeBlock();
@@ -40,10 +48,10 @@ public class P implements ASTNode {
         pw.print(generateCabecera());
         
         // Generamos el código de las funciones y las definiciones
-        for (DefSub df : defsubs) {
-            df.generateCode(pw);
+        generateMetaMain(pw);
+        for(S sub : subprogramas) {
+            sub.generateCode(pw);
         }
-
 
         // Antes de cerrar el módulo, creamos las funciones auxiliares $reserveStack
         // $freeStack y $copyn.
@@ -51,6 +59,45 @@ public class P implements ASTNode {
         
         // Cerramos el módulo
         pw.print(")");
+    }
+
+    private void generateMetaMain(PrintWriter pw) {
+        pw.println("(func $init");
+
+        // Creamos el código de las definiciones globales
+        Entero size = new Entero(8);
+        Entero localSize = new Entero(0);
+        for(I def : definiciones ) {
+            def.setDelta(size,localSize);
+        }
+
+        // Escribimos el encabezado del subprograma
+        pw.println("(local $temp i32)\n"
+                + "(local $localStart i32)\n"
+                + "i32.const " + size + " ;; let this be the stack size needed (params+locals+2)*4\n"
+                + "call $reserveStack  ;; returns old MP (dynamic link)\n"
+                + "set_local $temp\n"
+                + "get_global $MP\n"
+                + "get_local $temp\n"
+                + "i32.store\n"
+                + "get_global $MP\n"
+                + "get_global $SP\n"
+                + "i32.store offset=4\n"
+                + "get_global $MP\n"
+                + "i32.const 8\n"
+                + "i32.add\n"
+                + "set_local $localStart\n"
+                + "\n\n ;; instrucciones ");
+
+        // Generamos el codigo para las definiciones globales
+        for(I def : definiciones) {
+            def.generateCodeI(pw);
+        }
+
+        // Llamamos a la función panoramix
+        pw.println("call $panoramix");
+        pw.println("call $freeStack");
+        pw.println(")");
     }
 
     private String generateAuxFunc() {
@@ -182,7 +229,7 @@ public class P implements ASTNode {
             + "(import \"runtime\" \"read\" (func $readi (type $_sig_ri32)))\n"
             + "(import \"runtime\" \"read\" (func $readf (type $_sig_rf32)))\n"
             + "(memory 2000)\n"
-            + "(start $panoramix)\n"
+            + "(start $init)\n"
             + "(global $SP (mut i32) (i32.const 0)) ;; start of stack\n"
             + "(global $MP (mut i32) (i32.const 0)) ;; mark pointer\n"
             + "(global $NP (mut i32) (i32.const 131071996)) ;; heap 2000*64*1024-4\n" ;
@@ -230,19 +277,28 @@ public class P implements ASTNode {
     public JSONObject getJSON() {
         JSONObject obj = new JSONObject();
         obj.put("node", "PROGRAMA");
-        if (!defsubs.isEmpty()) {
-            JSONArray defsubsjson = new JSONArray();
-            for (DefSub df : defsubs) {
-                defsubsjson.add(df.getJSON());
+        if(!definiciones.isEmpty()) {
+            JSONArray defjson = new JSONArray();
+            for (I df : definiciones) {
+                defjson.add(df.getJSON());
             }
-            obj.put("DefSub", defsubs);
+            obj.put("Definiciones", defjson);
+        }
+        if (!subprogramas.isEmpty()) {
+            JSONArray subjson = new JSONArray();
+            for (S sub : subprogramas) {
+                subjson.add(sub.getJSON());
+            }
+            obj.put("Subprogramas", subjson);
         }
         return obj;
     }
 
     public T type() {
-        for (DefSub df : defsubs)
-            df.type();
+        for (I def : definiciones)
+            def.type();
+        for (S sub : subprogramas)
+            sub.type();
         return new T(KindT.INS);
     }
 }

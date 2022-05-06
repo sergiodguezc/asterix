@@ -1,4 +1,4 @@
-gradle run
+gradle=$(gradle run)
 echo "Gradle build done!"
 wat2wasm test.wat
 echo "Converted wat -> wasm"

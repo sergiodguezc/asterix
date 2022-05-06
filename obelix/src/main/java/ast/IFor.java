@@ -5,6 +5,7 @@ import asem.SymbolMap;
 import errors.GestionErroresAsterix;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import utils.Entero;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -96,6 +97,7 @@ public class IFor extends I {
         // Antes de abrir el bloque para el bucle tenemos que poner a 0 el
         // iterador del for.
         pw.println("\n;; Bucle for");
+
         pw.println("get_local $localStart");
         pw.println("i32.const " + itDelta);
         pw.println("i32.add");
@@ -114,6 +116,7 @@ public class IFor extends I {
         // Codigo para la condicion del bucle, i.e haber dado tantas
         // vueltas como el tamaño de la lista. Para ello primero tenemos que
         // crear una variable local en memoria que usemos como contador.
+
         pw.println("get_local $localStart");
         pw.println("i32.const " + itDelta);
         pw.println("i32.add");
@@ -157,15 +160,22 @@ public class IFor extends I {
         pw.println(")");
 	}
 
-    public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+    public void setDelta(Entero size, Entero localSize) {
         // Reservamos 4 bytes para el entero que usaremos en la condición del
         // bucle como iterador.
+        // Es un bloque
+
+        Entero newLocalSize = new Entero(localSize.get() + 4);
+        Entero newSize = new Entero(0);
+
         itDelta = localSize.get();
-        size.set(size.get() + 4);
-        localSize.set(localSize.get() + 4);
 
         for (I ins : cuerpoFor)
-            ins.setDelta(size, localSize);
+            ins.setDelta(newSize, newLocalSize);
+
+        if (localSize.get() + newSize.get() > size.get()) {
+            size.set(localSize.get() + newSize.get());
+        }
 	}
     
     // Getters y setters para los delta

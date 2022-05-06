@@ -182,23 +182,47 @@ public class EBin extends E {
 	}
 
     public void generateCodeD(PrintWriter pw) {
-        // TODO: Solamente es necesario para arrays, structs y variables
         // Acceso a array
         if(op.equals("accA")) {
+            // En caso de que lo sea,
             // Generar codigo D para el opnd1
             pw.println(";; codigo designador accA");
+
+            // Comprobamos que es una posicion valida
+            pw.println(";; Comprobación IndexOutOfBounds");
+
+            // indice <= tamaño
+            pw.println(";; Comprobar indice >= tamaño");
+            pw.println(";; indice del vector");
+            opnd2.generateCodeE(pw);
+            pw.println("i32.const " + opnd1.getType().getVSize() + " ;; tamaño interno");
+            pw.println("i32.ge_s");
+            pw.println("if");
+            pw.println("i32.const 1 ;; id ArrayOutOfBounds");
+            pw.println("call $exception");
+            pw.println("end");
+
+            // posicion >= 0
+            pw.println(";; Comprobar indice < 0");
+            pw.println(";; indice del vector");
+            opnd2.generateCodeE(pw);
+            pw.println("i32.const 0 ;; tamaño interno");
+            pw.println("i32.lt_s");
+            pw.println("if");
+            pw.println("i32.const 1 ;; id ArrayOutOfBounds");
+            pw.println("call $exception");
+            pw.println("end");
+
+            // Calculamos el designador del vector
             pw.println(";; codigo designador operando 1");
             opnd1.generateCodeD(pw);
 
-            // Calculamos el code E de opnd2
-            pw.println(";; codigo E operando 2");
-            opnd2.generateCodeE(pw);
-
-            // Nosotros no usamos la dimensión porque no
-            // calculamos el acceso todo de golpe, con
-            // el tamaño nos vale
+            // Calculamos la posicion del vector
             opnd1.getType().getTInterno().setSizeT();
             int tamInterno = opnd1.getType().getTInterno().getSizeT();
+
+            pw.println(";; codigo operando 2: indice ");
+            opnd2.generateCodeE(pw);
             pw.println("i32.const " + tamInterno + " ;; tamaño vector");
 
             // Accedemos a la posicion de inicio del array
@@ -206,6 +230,7 @@ public class EBin extends E {
 
             // Accedemos a la posicion dada por opnd2
             pw.println("i32.add");
+
         }
 
         // Acceso a struct

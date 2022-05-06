@@ -3,12 +3,12 @@ package ast;
 import asem.SymbolMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import utils.Entero;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class IDefStruct extends I implements DefSub {
+public class IDefStruct extends I {
     private String id;
     private List<IDec> declarations;
     private boolean ini;
@@ -65,10 +65,16 @@ public class IDefStruct extends I implements DefSub {
     }
 
     @Override
-    public void setDelta(AtomicInteger size, AtomicInteger localSize) {
-        AtomicInteger newLocalSize = new AtomicInteger(0);
+    public void setDelta(Entero size, Entero localSize) {
+        Entero newLocalSize = new Entero(0);
+        Entero newSize = new Entero(0);
+
         for (IDec iDec : declarations) {
-            iDec.setDelta(new AtomicInteger(0),newLocalSize);
+            iDec.setDelta(newSize,newLocalSize);
+        }
+
+        if (localSize.get() + newSize.get() > size.get()) {
+            size.set(localSize.get() + newSize.get());
         }
     }
 
@@ -86,8 +92,8 @@ public class IDefStruct extends I implements DefSub {
         this.ini = ini;
     }
 
-    @Override
     public void generateCode(PrintWriter pw) {
-        setDelta(new AtomicInteger(0),new AtomicInteger(0));
+        setDelta(new Entero(0),new Entero(0));
     }
+
 }

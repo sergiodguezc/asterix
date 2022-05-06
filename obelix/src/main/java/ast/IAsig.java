@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONObject;
+import utils.Entero;
 
 public class IAsig extends I {
 
@@ -106,7 +107,7 @@ public class IAsig extends I {
                 }
             }
             else {
-                pw.println(";; asignacion a una vector");
+                pw.println(";; asignacion a una vector o un struct");
                 // Obtenemos la direccion de origen
                 pw.println(";; calculamos el designador ($src)");
                 valor.generateCodeD(pw);
@@ -118,7 +119,7 @@ public class IAsig extends I {
                 // Obtenemos el numero de bytes a copiar
                 pw.println(";; calculamos el numero de bytes a copiar");
                 id.getType().setSizeT();
-                pw.println("i32.const " + id.getType());
+                pw.println("i32.const " + id.getType().getSizeT());
 
                 // Llamamos a la función copyn
                 pw.println(";; llamamos a copyn");
@@ -128,7 +129,7 @@ public class IAsig extends I {
         }
 	}
 
-    public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+    public void setDelta(Entero size, Entero localSize) {
         // Las asignaciones no crean variables. No hacemos nada.
 	}
 }

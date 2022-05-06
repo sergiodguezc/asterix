@@ -3,7 +3,6 @@ package ast;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import asem.ASemUtils;
 import asem.SymbolMap;
@@ -11,8 +10,9 @@ import errors.GestionErroresAsterix;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import utils.Entero;
 
-public class S implements DefSub {
+public class S implements ASTNode {
     private List<I> cuerpo;
     private List<Arg> args;
     private boolean isFunction;
@@ -87,8 +87,8 @@ public class S implements DefSub {
         // realizar sus operaciones. Aquí uso AtomicInteger en vez de
         // Integer porque al final Integer no es un puntero a un int,
         // en cambio, AtomicInteger sí.
-        AtomicInteger size = new AtomicInteger(8);
-        AtomicInteger localSize = new AtomicInteger(0);
+        Entero size = new Entero(8);
+        Entero localSize = new Entero(0);
         for (Arg arg: args) {
             arg.setDelta(size, localSize);
         }
@@ -108,7 +108,12 @@ public class S implements DefSub {
         // final
         if (isFunction && !isMain) {
             pw.println(";; valor de retorno");
-            vRet.generateCodeE(pw);
+            if (tRet.getKindT() == KindT.VECTIX || tRet.getKindT() == KindT.POT) {
+                // Obtenemos la direccion de origen
+                vRet.generateCodeD(pw);
+            } else {
+                vRet.generateCodeE(pw);
+            }
         }
 
         // Antes de cerrar la función tenemos que llamar a la función
@@ -170,7 +175,7 @@ public class S implements DefSub {
         boolean error = false;
         if(isFunction) {
             T tipoVRet = vRet.type();
-
+            tRet.type();
             if (!ASemUtils.checkEqualTypes(tipoVRet, tRet)) {
                 error = true;
                 GestionErroresAsterix.errorSemantico("El tipo del valor de retorno no coincide con el tipo de la función.");
@@ -191,7 +196,7 @@ public class S implements DefSub {
     // Método privado que devuelve el encabezado de cada función en wat. Todas
     // necesitan las dos variables locales localStart y temp, del mismo modo
     // tienen que hacer las operaciones con los punteros globales.
-	private String generateEncabezado(AtomicInteger size) {
+	private String generateEncabezado(Entero size) {
 		return "(local $temp i32)\n"
             + "(local $localStart i32)\n"
             + "i32.const " + size + " ;; let this be the stack size needed (params+locals+2)*4\n"

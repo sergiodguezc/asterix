@@ -7,16 +7,17 @@ import errors.GestionErroresAsterix;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONObject;
+import utils.Entero;
 
-public class IDec extends I implements DefSub {
+public class IDec extends I {
     private String id; // Identificador de la variable
     private int delta; // Posición relativa de la variable dentro del bloque
     private Boolean ini;
     private T type;
     private E valor;
+    private boolean global;
 
     private List<IDec> declarations; // En caso de que sea un struct
 
@@ -93,7 +94,7 @@ public class IDec extends I implements DefSub {
                 pw.println("get_local $localStart ;; save localStart, at the end we revert this change");
 
                 // Cambiamos el localStart a localStart + delta
-                pw.println("get_local $localStart");
+                pw.println(global ? "i32.const 8" : "get_local $localStart");
                 pw.println("i32.const " + delta + " ;; delta variable " + id);
                 pw.println("i32.add");
                 pw.println("set_local $localStart");
@@ -111,12 +112,12 @@ public class IDec extends I implements DefSub {
         }
     }
 
-    public void setDelta(AtomicInteger size, AtomicInteger localSize) {
-        delta = localSize.intValue();
+    public void setDelta(Entero size, Entero localSize) {
+        delta = localSize.get();
 
         type.setSizeT();
-        localSize.set(localSize.intValue() + type.getSizeT());
-        size.set(size.intValue() + type.getSizeT());
+        localSize.add(type.getSizeT());
+        size.add(type.getSizeT());
 
         if (type.getKindTBasico() == KindT.POT) {
             // Caso struct simple
@@ -136,9 +137,10 @@ public class IDec extends I implements DefSub {
                 for (IDec iDec : declarations)
                     if (iDec.isIni()) ini = true;
             }
-
         }
     }
+
+
 
     // Generar código para las variables globales
     public void generateCode(PrintWriter pw) {
@@ -149,7 +151,7 @@ public class IDec extends I implements DefSub {
         // Caso Base: Es un tipo basico
         if (valor != null && valor.getType().getKindT() != KindT.VECTIX) {
             // Obtenemos la posicion donde almacenamos elem
-            pw.println("get_local $localStart");
+            pw.println(global ? "i32.const 8 ;; pos inicio variables globales" : "get_local $localStart");
             pw.println("i32.const " + offset + " ;; offset");
             pw.println("i32.add");
 
@@ -226,73 +228,17 @@ public class IDec extends I implements DefSub {
 
     // Getters y setters para comprobar si la variable está inicializada
     public boolean isIni() { return ini; } // getter ini
-    public void setIni(boolean ini) { this.ini = ini; } // setter para el ini
                                                         
     // Getter para el id de la variable
     public String getId() {return id;}
     // Getter para el delta de la variable
     public int getDelta() {return delta;}
     public E getValor() {return valor;}
+    public boolean isGlobal() {
+        return global;
+    }
 
-    public void generateCodeCall(PrintWriter pw, int offset) {
-        // Caso Base : El tipo es un vector con tipo interno distinto de pot
-        if(type.getKindT() == KindT.VECTIX && type.getKindTBasico() != KindT.POT) {
-            // Calculamos la posición donde lo vamos a copiar
-            pw.println("i32.const " + delta);
-            pw.println("get_global $SP offset=" + offset);
-            type.setSizeT();
-            pw.println("i32.const " + type.getSizeT());
-
-            // Llamamos a copy n bytes
-            P.copyn = true;
-            pw.println("call $copyn");
-        }
-        // Caso Recursivo : Tipo Pot
-        else if (type.getKindTBasico() == KindT.POT) {
-            if (type.getKindT() == KindT.VECTIX) {
-                T tBasic = type;
-                // Calculamos cuántos elementos básicos tiene el vector
-                int basicElements = tBasic.getVSize();
-                while (tBasic.getKindT() == KindT.VECTIX){
-                    basicElements *= tBasic.getVSize();
-                    tBasic = tBasic.getTInterno();
-                }
-
-                // Por cada struct interno que tiene el vector de structs (puede ser
-                // vectix<vectix<pot>[2]>[2] y en este caso habría 4 structs)
-                for (int i = 0; i < basicElements; i++) {
-                    for (IDec idec : type.getDec()) {
-                        idec.generateCodeCall(pw,offset);
-                        // Sumamos al offset el tamaño de la declaración
-                        idec.getType().setSizeT();
-                        offset += idec.getType().getSizeT();
-                    }
-                }
-            }
-            // Caso en que sea un struct
-            else {
-                // Por cada declaración calculamos de forma recursiva su código
-                for (IDec idec : type.getDec()) {
-                    idec.generateCodeCall(pw,offset);
-                    // Sumamos al offset el tamaño de la declaración
-                    idec.getType().setSizeT();
-                    offset += idec.getType().getSizeT();
-                }
-            }
-        }
-        // Caso base: Tipos básicos; intix, floatix, boolix
-        else {
-            // Obtenemos la posición en memoria donde copiaremos el
-            // valor del tipo básico.
-            pw.println("get_global $SP offset=" + offset);
-            // Ponemos en la pila el valor del elemento básico
-            pw.println("i32.const " + delta);
-            type.generateCode(pw);
-            pw.println(".load");
-            // Guardamos en la posición que calculamos antes el
-            // valor que tenemos en la pila
-            type.generateCode(pw);
-            pw.println(".store");
-        }
+    public void setGlobal(boolean global) {
+        this.global = global;
     }
 }

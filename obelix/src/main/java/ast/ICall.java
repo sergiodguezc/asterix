@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import asem.ASemUtils;
 import asem.SymbolMap;
 import errors.GestionErroresAsterix;
+import utils.Entero;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -112,7 +113,7 @@ public class ICall extends I {
         }
     }
 
-    public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+    public void setDelta(Entero size, Entero localSize) {
         // Esta instrucción no puede tener variables declaradas, dejamos este
     }
 

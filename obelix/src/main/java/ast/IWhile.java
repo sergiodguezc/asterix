@@ -9,6 +9,7 @@ import org.json.simple.JSONObject;
 
 import asem.SymbolMap;
 import errors.GestionErroresAsterix;
+import utils.Entero;
 
 public class IWhile extends I {
     private E cond;
@@ -102,10 +103,16 @@ public class IWhile extends I {
         return tipo;
 	}
 
-    public void setDelta(AtomicInteger size, AtomicInteger localSize) {
+    public void setDelta(Entero size, Entero localSize) {
+        Entero newSize = new Entero(0);
+        Entero newLocalSize = new Entero(localSize.get());
+
         for (I ins : cuerpoWhile)
-            ins.setDelta(size, localSize);
-		
+            ins.setDelta(newSize, newLocalSize);
+
+        if (localSize.get() + newSize.get() > size.get()) {
+            size.set(localSize.get() + newSize.get());
+        }
 	}
 
 }

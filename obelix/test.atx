@@ -1,42 +1,29 @@
-potion swap(xp : &intix, yp : &intix) {
-    intix temp = xp;
-    xp = yp;
-    yp = temp;
+pot solucion {
+    intix valor = 3;
+    vectix<intix>[3] V = {1,2,3};
+};
+
+potion changeValue(valor : intix, sol : solucion) -> solucion {
+    sol.valor = valor;
+    sol.V = {5,6,7};
+    return sol;
 }
-
-// Función para imprimir el array
-potion printArray(v : vectix<intix>[5]) {
-    forix (intix i : v) {
-        tabellae(i);
-    }
-}
-
-// bubble sort
-potion bubbleSort(v : &vectix<intix>[5]) {
-    intix i = 0;
-    intix j = 0;
-    whilix (i < 5-1) {
-        j = 0;
-        whilix (j < 5-i-1) {
-            if (v[j] > v[j+1]) {
-                swap(v[j], v[j+1]);
-            }
-            j=j+1;
-        }
-        i=i+1;
-    }
-
-    //printArray(v);
-}
-
 
 potion panoramix() -> intix {
-    vectix<intix>[5] v = {-64, 34, 25, 12, 22};
+    solucion sol;
+    solucion sol2;
+    sol2 = changeValue(4,sol);
 
+    forix(intix elem : sol.V) {
+        stilus(elem);
+    }
+    stilus(sol.valor);
 
-    bubbleSort(v);
-    printArray(v);
+    forix(intix elem : sol2.V) {
+        stilus(elem);
+    }
 
+    stilus(sol2.valor);
 
     return 0;
 }
