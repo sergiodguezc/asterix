@@ -74,9 +74,6 @@ public class S implements DefSub {
     public void generateCode(PrintWriter pw) {
         // Cabecera con el nombre de la función
         pw.print("(func $" + id + " ");
-        // Generamos código para los parámetros
-        for (Arg a : args)
-            a.generateCode(pw);
 
         // Generamos ahora el código del resultado si hubiera
         if (isFunction && !isMain) {
@@ -92,6 +89,10 @@ public class S implements DefSub {
         // en cambio, AtomicInteger sí.
         AtomicInteger size = new AtomicInteger(8);
         AtomicInteger localSize = new AtomicInteger(0);
+        for (Arg arg: args) {
+            arg.setDelta(size, localSize);
+        }
+
         for (I ins : cuerpo) {
             ins.setDelta(size, localSize);
         }
@@ -105,17 +106,15 @@ public class S implements DefSub {
 
         // En caso de que sea una función escribimos el valor del retorno al
         // final
-        if (isFunction && !isMain)
+        if (isFunction && !isMain) {
+            pw.println(";; valor de retorno");
             vRet.generateCodeE(pw);
+        }
 
         // Antes de cerrar la función tenemos que llamar a la función
         // $freeStack
-
-        // Me sale un error de que necesita la pila vacía para llamar a
-        // freeStack, pero es que entonces no sé cómo podremos devolver un
-        // valor (¿ igual guardarlo en memoria ?)
-        // TODO: Se han de devolver las cosas dejandolo en la pila (es como viene en el ejemplo del lab)
         pw.println("call $freeStack");
+
         // Cerramos la función
         pw.println(")");
             
@@ -210,5 +209,9 @@ public class S implements DefSub {
             + "set_local $localStart\n"
             + "\n\n ;; instrucciones ";
 	}
+
+    public boolean isFunction() {
+        return isFunction || isMain;
+    }
 
 }

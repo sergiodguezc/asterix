@@ -3,6 +3,7 @@ package ast;
 import asem.SymbolMap;
 
 import java.io.PrintWriter;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONObject;
 
@@ -16,6 +17,9 @@ public class Arg implements ASTNode {
 
     // Si se pasa por referencia o no
     private boolean ref;
+
+    // Delta de los args dentro
+    private int delta;
 
     public Arg (T tipo, String id, boolean ref){
         this.tipo = tipo;
@@ -64,18 +68,31 @@ public class Arg implements ASTNode {
         return tipo;
     }
 
-    // TODO: Guardar en memoria los valores de las variables.
-    // TODO: Aqui no se esta permitiendo nada, para que sea
-    // por valor : Se ha de copiar los valores en el marco de activacion a partir de SP + 8
-    // por referencia : Se ha de copiar la DIRECCION en la posicion del marco de activacion que le corresponde
 	public void generateCode(PrintWriter pw) {
-	    pw.print("(param $" + id  + " ");
-        tipo.generateCode(pw);
-        pw.print(")");
 	}
 
     public boolean isRef() {
         return ref;
+    }
+
+    public void setDelta(AtomicInteger size, AtomicInteger localsize) {
+        if (ref) {
+            delta = localsize.get(); // size del puntero
+            size.getAndAdd(4);
+            localsize.getAndAdd(4);
+        } else {
+            delta = localsize.get(); // size del tipo que copiamos
+
+            // Aumentamos el size y el localsize
+            tipo.setSizeT();
+            size.getAndAdd(tipo.getSizeT());
+            localsize.getAndAdd(tipo.getSizeT());
+        }
+
+    }
+
+    public int getDelta() {
+        return delta;
     }
 }
 

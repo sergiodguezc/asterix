@@ -11,6 +11,7 @@ public class EUn extends E {
 
     private E opnd;
     private String op;
+    private T tipoEUn;
 
     public EUn(E opnd, String op) {
         this.opnd = opnd;
@@ -45,9 +46,9 @@ public class EUn extends E {
                 (op.equals("menos") && tipoOpnd.getKindT() != KindT.INTIX) &&
                 (op.equals("menos") && tipoOpnd.getKindT() != KindT.FLOATIX)) {
             GestionErroresAsterix.errorSemantico("Expresion unaria mal tipada.");
-            return new T(KindT.ERROR);
+            return (tipoEUn = new T(KindT.ERROR));
         } else
-            return tipoOpnd;
+            return (tipoEUn = tipoOpnd);
     }
 
     public void bind(SymbolMap ts) {
@@ -62,9 +63,13 @@ public class EUn extends E {
             pw.println("i32.const 1");
             pw.println("i32.xor");
         } else {
-            opnd().generateCodeE(pw);
             pw.println("i32.const 0");
+            opnd().generateCodeE(pw);
             pw.println("i32.sub");
         }
+    }
+
+    public T getType() {
+        return tipoEUn;
     }
 }

@@ -10,8 +10,7 @@ import java.util.List;
 public class P implements ASTNode {
     private List<DefSub> defsubs;
 
-    public static boolean copyni = false;
-    public static boolean copynf = false;
+    public static boolean copyn = false;
     public static boolean powi = false;
     public static boolean powf = false;
 
@@ -56,8 +55,8 @@ public class P implements ASTNode {
 
     private String generateAuxFunc() {
         String auxCode = auxFunc();
-        if (copyni) {
-           auxCode += "(func $copyni (type $_sig_i32i32i32) ;; copy $n i32 slots from $src to $dest\n"
+        if (copyn) {
+           auxCode += "(func $copyn (type $_sig_i32i32i32) ;; copy $n i32 slots from $src to $dest\n"
                      + "(param $src i32)\n"
                      + "(param $dest i32)\n"
                      + "(param $n i32)\n"
@@ -86,37 +85,6 @@ public class P implements ASTNode {
                      + "end\n"
                      + "end\n"
                      + ")\n";
-        }
-        if (copynf) {
-            auxCode += "(func $copynf (type $_sig_i32i32i32) ;; copy $n i32 slots from $src to $dest\n"
-                    + "(param $src i32)\n"
-                    + "(param $dest i32)\n"
-                    + "(param $n i32)\n"
-                    + "block\n"
-                    + "loop\n"
-                    + "get_local $n\n"
-                    + "i32.eqz\n"
-                    + "br_if 1\n"
-                    + "get_local $n\n"
-                    + "i32.const 1\n"
-                    + "i32.sub\n"
-                    + "set_local $n\n"
-                    + "get_local $dest\n"
-                    + "get_local $src\n"
-                    + "f32.load\n"
-                    + "f32.store\n"
-                    + "get_local $dest\n"
-                    + "i32.const 4\n"
-                    + "i32.add\n"
-                    + "set_local $dest\n"
-                    + "get_local $src\n"
-                    + "i32.const 4\n"
-                    + "i32.add\n"
-                    + "set_local $src\n"
-                    + "br 0\n"
-                    + "end\n"
-                    + "end\n"
-                    + ")\n";
         }
         if (powi) {
             auxCode += "(func $powi (export \"powi\") (param $x i32) (param $y i32) (result i32) ;; pow of integer\n"

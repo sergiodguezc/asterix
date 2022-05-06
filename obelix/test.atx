@@ -1,20 +1,41 @@
-datix numero intix;
-pot Punto {
-    numero x = 2;
-    numero y = 4;
-};
+potion swap(xp : &intix, yp : &intix) {
+    intix temp = xp;
+    xp = yp;
+    yp = temp;
+}
+
+// Función para imprimir el array
+potion printArray(v : vectix<intix>[5]) {
+    forix (intix i : v) {
+        tabellae(i);
+    }
+}
+
+// bubble sort
+potion bubbleSort(v : &vectix<intix>[5]) {
+    intix i = 0;
+    intix j = 0;
+    whilix (i < 5-1) {
+        j = 0;
+        whilix (j < 5-i-1) {
+            if (v[j] > v[j+1]) {
+                swap(v[j], v[j+1]);
+            }
+            j=j+1;
+        }
+        i=i+1;
+    }
+
+    //printArray(v);
+}
+
 
 potion panoramix() -> intix {
-    vectix<Punto>[2] puntos;
+    vectix<intix>[5] v = {-64, 34, 25, 12, 22};
 
-    Punto p1;
-    Punto p2;
 
-    p1.x = 8;
-
-    puntos = {p1,p2};
-
-    tabellae(puntos[0].x);
+    bubbleSort(v);
+    printArray(v);
 
 
     return 0;

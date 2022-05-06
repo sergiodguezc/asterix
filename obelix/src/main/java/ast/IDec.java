@@ -213,9 +213,8 @@ public class IDec extends I implements DefSub {
             pw.println("i32.const " + type.getSizeT() + " ;; tamaño del vector");
 
             // Llamamos a la funcion copyn
-            P.copyni = type.getKindTBasico() == KindT.INTIX;
-            P.copynf = type.getKindTBasico() == KindT.FLOATIX;
-            pw.println((type.getKindTBasico() == KindT.INTIX) ? "call $copyni" : "call $copynf");
+            P.copyn = true;
+            pw.println("call $copyn");
         }
     }
 
@@ -245,9 +244,8 @@ public class IDec extends I implements DefSub {
             pw.println("i32.const " + type.getSizeT());
 
             // Llamamos a copy n bytes
-            P.copyni = type.getKindTBasico() == KindT.INTIX || type.getKindTBasico() == KindT.BOOLIX;
-            P.copynf = type.getKindTBasico() == KindT.FLOATIX;
-            pw.println((type.getKindTBasico() == KindT.FLOATIX) ? "call $copynf" : "call $copyni");
+            P.copyn = true;
+            pw.println("call $copyn");
         }
         // Caso Recursivo : Tipo Pot
         else if (type.getKindTBasico() == KindT.POT) {
