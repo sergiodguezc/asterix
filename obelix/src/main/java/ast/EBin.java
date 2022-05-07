@@ -21,6 +21,32 @@ public class EBin extends E {
         this.op = op;
     }
 
+    // AST
+    public String toString() {
+        return getJSON().toJSONString();
+    }
+
+    @SuppressWarnings("unchecked")
+    public JSONObject getJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("node", "EXPRESION BINARIA");
+        obj.put("operacion", op);
+        obj.put("operando 1", opnd1.getJSON());
+        obj.put("operando 2", opnd2.getJSON());
+        return obj;
+    }
+
+    public KindE kind() {
+        return KindE.EBin;
+    }
+
+    // VINCULACION
+    public void bind(SymbolMap ts) {
+        opnd1.bind(ts);
+        opnd2.bind(ts);
+    }
+
+    // TIPADO
     public T type() {
         T tipoOp1 = opnd1.type();
         T tipoOp2 = null;
@@ -63,7 +89,6 @@ public class EBin extends E {
         return tipoOp1.getKindT() == KindT.VECTIX && tipoOp2.getKindT() == KindT.INTIX;
     }
 
-    // TODO: Comparaciones y casteos varios
     private boolean checkTEFloat(T tipoOp1, T tipoOp2) {
         if (op.equals("pow")) {
             return (tipoOp1.getKindT() == KindT.INTIX || tipoOp1.getKindT() == KindT.FLOATIX)
@@ -77,7 +102,6 @@ public class EBin extends E {
         return tipoOp1.getKindT() == KindT.INTIX && tipoOp2.getKindT() == KindT.INTIX;
     }
 
-    // TODO: Comparaciones y casteos varios
     private boolean checkTEComp(T opnd1, T opnd2) {
         return (opnd1.getKindT() == KindT.INTIX || opnd1.getKindT() == KindT.FLOATIX)
                 && (opnd2.getKindT() == KindT.INTIX || opnd2.getKindT() == KindT.FLOATIX)
@@ -88,41 +112,7 @@ public class EBin extends E {
         return opnd1.getKindT() == KindT.BOOLIX && opnd2.getKindT() == KindT.BOOLIX;
     }
 
-    public String toString() {
-        return getJSON().toJSONString();
-    }
-
-    @SuppressWarnings("unchecked")
-    public JSONObject getJSON() {
-        JSONObject obj = new JSONObject();
-        obj.put("node", "EXPRESION BINARIA");
-        obj.put("operacion", op);
-        obj.put("operando 1", opnd1.getJSON());
-        obj.put("operando 2", opnd2.getJSON());
-        return obj;
-    }
-
-    public T getType() {
-        return tipoExp;
-    }
-
-    public KindE kind() {
-        return KindE.EBin;
-    }
-
-    public E opnd1() {
-        return opnd1;
-    }
-
-    public E opnd2() {
-        return opnd2;
-    }
-
-    public void bind(SymbolMap ts) {
-        opnd1.bind(ts);
-        opnd2.bind(ts);
-    }
-
+    // GENERACION DE CODIGO
 	public void generateCodeE(PrintWriter pw) {
         if(op.equals("accA")) {
             // Generar codigo D para el opnd1
@@ -330,5 +320,18 @@ public class EBin extends E {
                 }
             }
         }
+    }
+
+    // GETTERS AND SETTERS
+    public T getType() {
+        return tipoExp;
+    }
+
+    public E opnd1() {
+        return opnd1;
+    }
+
+    public E opnd2() {
+        return opnd2;
     }
 }

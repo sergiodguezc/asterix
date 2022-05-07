@@ -23,10 +23,7 @@ public class ECte extends E {
         this.kindT = kindT;
     }
 
-    public String getVal() {
-        return v;
-    }
-
+    // AST
     public KindE kind() {
         return KindE.CTE;
     }
@@ -39,11 +36,19 @@ public class ECte extends E {
         return obj;
     }
 
-    @Override
-    public T getType() {
-        return tipoECte;
+    public String toString() {
+        return getJSON().toJSONString();
     }
 
+    // VINCULACION
+
+    // Si es una variable dec hace referencia a la declaracion de esa variable
+    // En caso contrario, dec es null.
+    public void bind(SymbolMap ts) {
+        dec = ts.searchId(v);
+    }
+
+    // TIPADO
     public T type() {
         if (dec != null) {
             kindT = dec.getType().getKindT();
@@ -55,16 +60,7 @@ public class ECte extends E {
         return (tipoECte = new T(KindT.ERROR));
     }
 
-    public String toString() {
-        return getJSON().toJSONString();
-    }
-
-    // Si es una variable dec hace referencia a la declaracion de esa variable
-    // En caso contrario, dec es null.
-    public void bind(SymbolMap ts) {
-        dec = ts.searchId(v);
-    }
-
+    // GENERACION DE CODIGO
     public void generateCodeE(PrintWriter pw) {
         // Este caso corresponde con constantes: 1, 1.0, galo, romano, etc
         if (dec == null) {
@@ -211,4 +207,16 @@ public class ECte extends E {
                 }
             }
     }
+
+    // GETTERS AND SETTERS
+    @Override
+    public T getType() {
+        return tipoECte;
+    }
+
+    public String getVal() {
+        return v;
+    }
+
+
 }

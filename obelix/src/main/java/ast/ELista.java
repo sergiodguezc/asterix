@@ -18,6 +18,7 @@ public class ELista extends E {
         this.V = V;
     }
 
+    // AST
     public KindE kind() {
         return KindE.LISTA;
     }
@@ -39,10 +40,14 @@ public class ELista extends E {
         return getJSON().toJSONString();
     }
 
-    public List<E> getLista() {
-        return V;
+    // VINCULACION
+    public void bind(SymbolMap ts) {
+        for (E elem : V) {
+            elem.bind(ts);
+        }
     }
 
+    // TIPADO
     public T type() {
         boolean error = false;
         if (V.isEmpty())
@@ -59,10 +64,9 @@ public class ELista extends E {
         return (tipoELista = new T(tipoVector, V.size()));
     }
 
-    public void bind(SymbolMap ts) {
-        for (E elem : V) {
-            elem.bind(ts);
-        }
+    // GETTERS AND SETTERS
+    public List<E> getLista() {
+        return V;
     }
 
     public T getType() {

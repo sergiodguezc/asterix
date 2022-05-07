@@ -28,28 +28,14 @@ public class Arg implements ASTNode {
         this.ref = ref;
     }
 
-    public T type() {
-        tipo.type();
-        return tipo;
-    }
-
-    public void bind(SymbolMap ts) {
-        ts.insertId(id,this);
-        tipo.bind(ts);
-    }
-
+    // AST
     public NodeKind nodeKind() {
-		return NodeKind.ARG;
-	}
-
-    public String getId() {
-        return id;
+        return NodeKind.ARG;
     }
 
     public String toString () {
         return getJSON().toJSONString();
     }
-
 
     @SuppressWarnings("unchecked")
     public JSONObject getJSON() {
@@ -64,18 +50,19 @@ public class Arg implements ASTNode {
         return obj;
     }
 
-    // Devuelve el tipo del argumento
-    public T getType() {
+    // VINCULACION
+    public void bind(SymbolMap ts) {
+        ts.insertId(id,this);
+        tipo.bind(ts);
+    }
+
+    // TIPADO
+    public T type() {
+        tipo.type();
         return tipo;
     }
 
-	public void generateCode(PrintWriter pw) {
-	}
-
-    public boolean isRef() {
-        return ref;
-    }
-
+    // GENERACION DE CODIGO
     public void setDelta(Entero size, Entero localsize) {
         if (ref) {
             delta = localsize.get(); // size del puntero
@@ -91,6 +78,22 @@ public class Arg implements ASTNode {
         }
 
     }
+
+    // GETTERS AND SETTERS
+    public String getId() {
+        return id;
+    }
+
+
+    // Devuelve el tipo del argumento
+    public T getType() {
+        return tipo;
+    }
+
+    public boolean isRef() {
+        return ref;
+    }
+
 
     public int getDelta() {
         return delta;

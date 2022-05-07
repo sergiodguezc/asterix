@@ -18,6 +18,7 @@ public class EUn extends E {
         this.op = op;
     }
 
+    // AST
     public String toString() {
         return getJSON().toJSONString();
     }
@@ -35,10 +36,12 @@ public class EUn extends E {
         return obj;
     }
 
-    public E opnd() {
-        return opnd;
+    // VINCULACION
+    public void bind(SymbolMap ts) {
+        opnd.bind(ts);
     }
 
+    // TIPADO
     public T type() {
         T tipoOpnd = opnd.type();
 
@@ -51,10 +54,7 @@ public class EUn extends E {
             return (tipoEUn = tipoOpnd);
     }
 
-    public void bind(SymbolMap ts) {
-        opnd.bind(ts);
-    }
-
+    // GENERACION DE CODIGO
     public void generateCodeE(PrintWriter pw) {
         if (op.equals("not")) {
             // Tenemos que asignarle a la variable el valor opuesto al que tiene
@@ -67,6 +67,11 @@ public class EUn extends E {
             opnd().generateCodeE(pw);
             pw.println("i32.sub");
         }
+    }
+
+    // GETTERS AND SETTERS
+    public E opnd() {
+        return opnd;
     }
 
     public T getType() {

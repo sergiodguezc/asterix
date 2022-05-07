@@ -28,6 +28,7 @@ public class ECall extends E {
         noParams = true;
     }
 
+    // AST
     public KindE kind() {
         return KindE.CALL;
     }
@@ -50,6 +51,19 @@ public class ECall extends E {
         return getJSON().toJSONString();
     }
 
+    // VINCULACION
+    public void bind(SymbolMap ts) {
+        for (E e : args)
+            e.bind(ts);
+        ASTNode potion = ts.searchId(id);
+        if (potion == null || potion.nodeKind() != NodeKind.SUBPROGRAMA) {
+            GestionErroresAsterix.errorSemantico("ERROR: Llamada a función no existente.");
+        } else {
+            this.potion = (S) potion;
+        }
+    }
+
+    // TIPADO
     public T type() {
         T tRet;
         // Comprobamos la existencia del subprograma.
@@ -65,7 +79,7 @@ public class ECall extends E {
         List<Arg> argsS = potion.getArguments();
         if (argsS.size() != args.size()) {
             GestionErroresAsterix.errorSemantico("ERROR: Llamada a una funcion. Numero de parametros incorrecto.");
-            return new T(KindT.ERROR);
+            return (tipoECall = new T(KindT.ERROR));
         }
 
         boolean error = false;
@@ -76,27 +90,13 @@ public class ECall extends E {
             }
         }
         if (error)
-            return new T(KindT.ERROR);
+            return (tipoECall = new T(KindT.ERROR));
 
         // Devolvemos el tipo del valor que devuelve la función.
         return (tipoECall = tRet);
     }
 
-    public void bind(SymbolMap ts) {
-        for (E e : args)
-            e.bind(ts);
-        ASTNode potion = ts.searchId(id);
-        if (potion == null || potion.nodeKind() != NodeKind.SUBPROGRAMA) {
-            GestionErroresAsterix.errorSemantico("ERROR: Llamada a función no existente.");
-        } else {
-            this.potion = (S) potion;
-        }
-    }
-
-    public T getType() {
-        return tipoECall;
-    }
-
+    // GENERACION DE CODIGO
     public void generateCodeE(PrintWriter pw){
         generateCodeD(pw);
     }
@@ -164,6 +164,9 @@ public class ECall extends E {
         }
     }
 
-
+    // GETTERS AND SETTERS
+    public T getType() {
+        return tipoECall;
+    }
 
 }
