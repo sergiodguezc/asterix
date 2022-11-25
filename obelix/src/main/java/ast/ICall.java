@@ -6,29 +6,34 @@ import org.json.simple.JSONObject;
 import asem.ASemUtils;
 import asem.SymbolMap;
 import errors.GestionErroresAsterix;
-import utils.Entero;
+import utils.CodeUtils;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ICall extends I {
-    private List<E> params;
-    private String id;
-    private Boolean noParams;
-    private S potion;
+    private List<E> params; // lista de parámtros de entrada
+    private String id; // identificador de la función
+    private Boolean noParams; // booleano que indica si no tiene parámetros
+    private S potion; // función a la que hace referencia
+    private CodeUtils utils;
 
-    public ICall(List<E> params, String id) {
+    // CONSTRUCTOR
+    public ICall(List<E> params, String id, CodeUtils utils) {
         this.params = params;
         this.id = id;
         noParams = false;
+        this.utils = utils;
     }
 
-    public ICall(String id) {
+    // CONSTRUCTOR
+    public ICall(String id, CodeUtils utils) {
         this.id = id;
         noParams = true;
+        this.utils = utils;
     }
 
+    // AST
     public KindI kind() {
         return KindI.CALL;
     }
@@ -51,6 +56,19 @@ public class ICall extends I {
         return getJSON().toJSONString();
     }
 
+    // VINCULACION
+    public void bind(SymbolMap ts) {
+        for (E e : params)
+            e.bind(ts);
+        ASTNode potion = ts.searchId(id);
+        if (potion == null || potion.nodeKind() != NodeKind.SUBPROGRAMA) {
+            GestionErroresAsterix.errorSemantico("ERROR: Llamada a procedimiento no declarado.");
+        } else {
+            this.potion = (S) potion;
+        }
+    }
+
+    // TIPADO
     public T type() {
         if (potion == null) {
             return new T(KindT.ERROR);
@@ -75,18 +93,8 @@ public class ICall extends I {
         return new T(KindT.INS);
     }
 
-    public void bind(SymbolMap ts) {
-        for (E e : params)
-            e.bind(ts);
-        ASTNode potion = ts.searchId(id);
-        if (potion == null || potion.nodeKind() != NodeKind.SUBPROGRAMA) {
-            GestionErroresAsterix.errorSemantico("ERROR: Llamada a procedimiento no declarado.");
-        } else {
-            this.potion = (S) potion;
-        }
-    }
 
-    @Override
+    // GENERACIÓN DE CÓDIGO
     public void generateCodeI(PrintWriter pw) {
         List<Arg> argumentos = potion.getArguments();
         int offset = 8;
@@ -111,10 +119,6 @@ public class ICall extends I {
         if(potion.isFunction()) {
             pw.println("drop");
         }
-    }
-
-    public void setDelta(Entero size, Entero localSize) {
-        // Esta instrucción no puede tener variables declaradas, dejamos este
     }
 
     private void generateCodeRecursively(E valor, int offset, PrintWriter pw) {
@@ -152,7 +156,7 @@ public class ICall extends I {
             pw.println("i32.const " + tipo.getSizeT());
 
             // Llamamos a la funcion copyn
-            P.copyn = true;
+            utils.showCopyn();
             pw.println("call $copyn");
         }
     }

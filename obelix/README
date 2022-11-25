@@ -1,0 +1,10 @@
+Para ejecutar el compilador, se tiene que ejecutar la
+clase obelix.App con el argumento (nombre de fichero 
+sin extensión). 
+
+Nosotros hemos usado dependencias de gradle, así que igual
+sin ellas no se pueden ejecutar correctamente (al menos
+la generación de salida en json).
+
+Igualmente, hemos adjuntado un jar con el proyecto que
+se puede ejecutar.

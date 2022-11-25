@@ -1,4 +1,4 @@
-\documentclass[a4paper, 10pt]{article}
+\documentclass[a4paper, 9pt]{article}
 
 \usepackage{hyperref}
 \usepackage{amsmath}
@@ -12,7 +12,7 @@
 % Separaciones
 \setlength{\parindent}{0mm}
 \setlength{\parskip}{1mm}
-\geometry{a4paper,margin=1.3in}
+\geometry{a4paper,margin=1.2in}
 
 % Comandos propios
 \newcommand{\atx}{\texttt{Asterix} }
@@ -99,8 +99,8 @@
     
     Las variables dentro de un mismo ámbito no pueden tener el mismo identificador. 
     \atx permite también la creación de variables globales. Para declarar una variable como 
-    global, se usa la palabra reservada \textsf{global} y se escriben fuera de
-    la función main. 
+    global se escriben fuera de las funciones, al inicio del programa (antes 
+    que cualquier declaración de función). 
 
     \subsubsection*{Variables sin inicializar}
     Empleamos el siguiente ejemplo para ilustrar su uso cuando
@@ -138,7 +138,8 @@
         intix izq;
     }
 
-    datix parix par;
+    // Declaracion de la variable con el tipo par
+    par par1;
 
     // Creamos el tipo matriz 3x3
     datix matrix3 vectix<vectix<intix>[3]>[3];
@@ -169,7 +170,7 @@
     es decir, no podemos operar objetos de diferente tipo. No obstante, estos
     operadores tienen las mismas cualidades en ambos tipos.
 
-    \begin{table}[t]
+    \begin{table}[h]
     \begin{center}
     \begin{tabular}{| c | c | c | c | c |}
     \hline
@@ -248,8 +249,7 @@
     
     Consideraciones a tener en cuenta:
     \begin{itemize}
-        \item Se puede definir una función dentro de otra. Hay que tener en
-            cuenta que se ejecutará primero la función más interna.
+        \item Entre los argumentos puede haber llamadas a otra función.
         \item Los argumentos de la llamada de la función, deben corresponderse
             tanto en tipo, número y orden en el que aparecen.
     \end{itemize}
@@ -383,55 +383,54 @@ potion swap(xp : &intix, yp : &intix) {
     xp = yp;
     yp = temp;
 }
- 
+
+
 // bubble sort
 potion bubbleSort(v : &vectix<intix>[5]) {
     intix i = 0;
     intix j = 0;
     whilix (i < 5-1) {
+        j = 0;
         whilix (j < 5-i-1) {
             if (v[j] > v[j+1]) {
                 swap(v[j], v[j+1]);
             }
-            j=j--1;
+            j=j+1;
         }
         i=i+1;
     }
+
 }
- 
-// Función para imprimir el array 
+
+// Función para imprimir el array
 potion printArray(v : vectix<intix>[5]) {
     forix (intix i : v) {
         stilus(i);
     }
 }
- 
+
 potion panoramix() -> intix {
-    vectix<intix>[5] v = {-64, 34, 25, 12, 22};
+    vectix<intix>[5] v = {-64, 34, 25, 15, 22};
+
+
     bubbleSort(v);
     printArray(v);
+
+
     return 0;
 }
     \end{verbatim}
     
     Veamos ahora como sería un programa que multiplica dos matrices 3x3.
     \begin{verbatim}
-// Programa para multiplicar dos matrices, una es una matriz global, la matriz
-// A y la otra la recibimos por consola, la matriz B.
+// Programa para multiplicar dos matrices globales.
 
 datix matrix vectix<vectix<intix>[3]>[3];
 matrix A = {{1, 2, 3}, {1, 2, 3}, {1, 2, 3}};
-
-potion readmatrix(B : &matrix) {
-    forix (vectix<intix>[3] fila : B) {
-        forix (intix elem : fila) {
-            tabellae(elem);
-        }
-    }
-}
+matrix B = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
 
 potion printmatrix(C : matrix) {
-    forix (vectix<intix>[3] fila : B) {
+    forix (vectix<intix>[3] fila : C) {
         forix (intix elem : fila) {
             stilus(elem);
         }
@@ -440,7 +439,7 @@ potion printmatrix(C : matrix) {
 
 potion isInside(valor : intix, C : matrix) -> boolix {
     boolix pertenece = romano; 
-    forix (vectix<intix>[3] fila : B) {
+    forix (vectix<intix>[3] fila : C) {
         forix (intix elem : fila) {
             if (elem == valor) {
                     pertenece = galo;
@@ -450,12 +449,16 @@ potion isInside(valor : intix, C : matrix) -> boolix {
     return pertenece;
 }
 
-potion multmatrix(A : matrix, B : matrix, C : &matrix) {
+potion multmatrix(A : matrix, B : matrix) -> matrix {
     intix i = 0;
     intix j = 0;
     intix k = 0;
+    matrix C;
     whilix (i < 3) {
+        j = 0;
         whilix (j < 3) {
+            k = 0;
+            C[i][j] = 0;
             whilix (k < 3) {
                 C[i][j] = C[i][j] + A[i][k]*B[k][j];
                 k = k+1;
@@ -464,23 +467,18 @@ potion multmatrix(A : matrix, B : matrix, C : &matrix) {
         }
         i = i+1;
     }
+    return C;
 }
 
 potion panoramix() -> intix {
-    matrix B;
-    matrix C; // C = A * B
-    
-    // Leemos la matriz B por consola
-    readmatrix(B);
-    
     // Calculamos el producto
-    multmatrix(A, B, C);
+    matrix C = multmatrix(A, B);
 
     // Escribimos el resultado por consola
     printmatrix(C);
 
     // Vemos si el 4 esta en la matriz C
-    stilus(isInside(4,C));
+    // stilus(isInside(4,C));
     
     return 0;
 }

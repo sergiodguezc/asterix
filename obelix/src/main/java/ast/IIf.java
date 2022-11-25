@@ -2,7 +2,6 @@ package ast;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import asem.SymbolMap;
 import org.json.simple.JSONArray;
@@ -10,17 +9,19 @@ import org.json.simple.JSONObject;
 import utils.Entero;
 
 public class IIf extends I {
-    private E cond;
-    private List<I> cuerpoIf;
-    private List<I> cuerpoElse;
-    private boolean ifelse;
+    private E cond; // expresión que indica la condición
+    private List<I> cuerpoIf; // instrucciones internas del if
+    private List<I> cuerpoElse; // instrucciones internas del else
+    private boolean ifelse; // booleano que indica si hay else o es solo if
 
+    // CONSTRUCTOR
     public IIf(E cond, List<I> cuerpoIf) {
         this.cond = cond;
         this.cuerpoIf = cuerpoIf;
         ifelse = false;
     }
 
+    // CONSTRUCTOR
     public IIf(E cond, List<I> cuerpoIf, List<I> cuerpoElse) {
         this.cond = cond;
         this.cuerpoIf = cuerpoIf;
@@ -28,6 +29,7 @@ public class IIf extends I {
         ifelse = true;
     }
 
+    // AST
     public KindI kind() {
         return KindI.IF;
     }
@@ -60,6 +62,24 @@ public class IIf extends I {
         return getJSON().toJSONString();
     }
 
+    // VINCULACIÓN
+    public void bind(SymbolMap ts) {
+        cond.bind(ts);
+        // Ambito del cuerpo del if
+        ts.openBlock();
+        for(I ins : cuerpoIf)
+            ins.bind(ts);
+        ts.closeBlock();
+        // Ambito del cuerpo del else
+        if(ifelse) {
+            ts.openBlock();
+            for(I ins : cuerpoElse)
+                ins.bind(ts);
+            ts.closeBlock();
+        }
+    }
+
+    // TIPADO
     public T type() {
         T resultado = new T(KindT.INS);
 
@@ -78,23 +98,8 @@ public class IIf extends I {
         return resultado;
     }
 
-    public void bind(SymbolMap ts) {
-        cond.bind(ts);
-        // Ambito del cuerpo del if
-        ts.openBlock();
-        for(I ins : cuerpoIf)
-            ins.bind(ts);
-        ts.closeBlock();
-        // Ambito del cuerpo del else
-        if(ifelse) {
-            ts.openBlock();
-            for(I ins : cuerpoElse)
-                ins.bind(ts);
-            ts.closeBlock();
-        }
-    }
 
-	@Override
+    // GENERACIÓN DE CÓDIGO
 	public void generateCodeI(PrintWriter pw) {
         // Primero creamos el código de la condición
         cond.generateCodeE(pw);

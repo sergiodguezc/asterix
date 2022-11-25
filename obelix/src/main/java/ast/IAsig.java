@@ -2,26 +2,32 @@ package ast;
 
 import asem.ASemUtils;
 import asem.SymbolMap;
-import com.rits.cloning.Cloner;
 import errors.GestionErroresAsterix;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONObject;
-import utils.Entero;
+import utils.CodeUtils;
 
 public class IAsig extends I {
 
+    // Expresión de la izquierda
     private E id;
+    // Expresión de la derecha que vamos a asignar a la
+    // de la izquierda.
     private E valor;
 
-    public IAsig(E id, E valor) {
+    private CodeUtils utils;
+
+    // CONSTRUCTOR
+    public IAsig(E id, E valor, CodeUtils utils) {
         this.id = id;
         this.valor = valor;
+        this.utils = utils;
     }
 
+    // AST
     public KindI kind() {
         return KindI.ASIG;
     }
@@ -39,11 +45,13 @@ public class IAsig extends I {
         return getJSON().toJSONString();
     }
 
+    // VINCULACION
     public void bind(SymbolMap ts) {
         id.bind(ts);
         valor.bind(ts);
     }
 
+    // TIPADO
 	public T type() {
         // Tenemos que comprobar que esta bien tipado
         T tipoId = id.type();
@@ -56,7 +64,8 @@ public class IAsig extends I {
 		return new T(KindT.ERROR);
 	}
 
-	@Override
+
+    // GENERACIÓN DE CÓDIGO
 	public void generateCodeI(PrintWriter pw) {
         pw.println(";; instruccion asignacion");
         // Tipos son básicos
@@ -123,13 +132,9 @@ public class IAsig extends I {
 
                 // Llamamos a la función copyn
                 pw.println(";; llamamos a copyn");
-                P.copyn = true;
+                utils.showCopyn();
                 pw.println("call $copyn");
             }
         }
-	}
-
-    public void setDelta(Entero size, Entero localSize) {
-        // Las asignaciones no crean variables. No hacemos nada.
 	}
 }

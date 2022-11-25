@@ -13,7 +13,7 @@ public class CodeGenerator {
 
     public CodeGenerator(P programa, String filename) {
         this.programa = programa;
-        output = new File(filename + ".wat");
+        output = new File(filename);
         try {
 			pw = new PrintWriter(output);
 		} catch (FileNotFoundException e) {

@@ -2,10 +2,7 @@ package ast;
 
 import asem.SymbolMap;
 
-import java.io.PrintWriter;
-
 import org.json.simple.JSONObject;
-import utils.Entero;
 
 public class IAlias extends I {
     private String id;
@@ -16,6 +13,7 @@ public class IAlias extends I {
         this.tipo = tipo;
     }
 
+    // AST
     public KindI kind() {
         return KindI.ALIAS;
     }
@@ -29,10 +27,16 @@ public class IAlias extends I {
         return obj;
     }
 
-    public T getType() {
-        return tipo;
+    public String toString() {
+        return getJSON().toJSONString();
     }
 
+    // VINCULACION
+    public void bind(SymbolMap ts) {
+        ts.insertId(id, this);
+    }
+
+    // TIPADO
     // En este caso, devolvemos el tipo al que ha hecho alias.
     public T type() {
         // Recursion al tipo al que hace referencia
@@ -40,27 +44,9 @@ public class IAlias extends I {
         return tipo;
     }
 
-    public void bind(SymbolMap ts) {
-        ts.insertId(id, this);
+    // GETTERS Y SETTERS
+    public T getType() {
+        return tipo;
     }
-
-    public String toString() {
-        return getJSON().toJSONString();
-    }
-
-	public void generateCodeI(PrintWriter pw) {
-
-	}
-
-	public void setDelta(Entero size, Entero localSize) {
-        // Los alias no declaran variables. No hacemos nada.		
-		
-	}
-
-    // Esta función es necesaria para crear los códigos de las instrucciones
-    // globales. 
-	public void generateCode(PrintWriter pw) {
-		
-	}
 
 }

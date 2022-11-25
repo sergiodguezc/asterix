@@ -1,21 +1,14 @@
 package ast;
 
 import asem.SymbolMap;
-import com.rits.cloning.Cloner;
 import errors.GestionErroresAsterix;
 import org.json.simple.JSONObject;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 public class T implements ASTNode {
     private KindT kindT;
-
-    public String getId() {
-        return id;
-    }
-
     private String id; // Identificador que hace referencia a un alias o a un struct
     private int N; // Longitud del vector
     private T tipo; // Tipo del vector o del alias (significado doble)
@@ -51,26 +44,7 @@ public class T implements ASTNode {
         this.decs = decs;
     }
 
-    public int getVSize() {
-        return N;
-    }
-
-    public KindT getKindT() {
-        return kindT;
-    }
-
-    public void bind(SymbolMap ts) {
-        if (id != null) { // Caso que sea un alias
-            astDef = ts.searchId(id);
-        } else if (kindT == KindT.VECTIX) {
-            tipo.bind(ts);
-        }
-    }
-
-    public List<IDec> getDec() {
-        return decs;
-    }
-
+    // AST
     public NodeKind nodeKind() {
         return NodeKind.TIPO;
     }
@@ -93,17 +67,16 @@ public class T implements ASTNode {
         return obj;
     }
 
-    public T getType() {
-        return this;
+    // VINCULACION
+    public void bind(SymbolMap ts) {
+        if (id != null) { // Caso que sea un alias
+            astDef = ts.searchId(id);
+        } else if (kindT == KindT.VECTIX) {
+            tipo.bind(ts);
+        }
     }
 
-    public T getTInterno() {
-        return tipo;
-    }
-    public void setTInterno(T tipo) {
-        this.tipo = tipo;
-    }
-
+    // TIPADO
     // Si es un ALIAS : Devuelve el tipo al que hace referencia
     // Si es un VECTIX : Devuelve el tipo de los elementos del vector
     // En cc : Devolvemos el tipo
@@ -153,6 +126,7 @@ public class T implements ASTNode {
         }
     }
 
+    // GENERACION DE CODIGO
     // Creamos las traducciones, estas traducciones se escribiran por ejemplo
     // en los param de las funciones o cuando apliquemos operaciones sobre estos
     // tipos: sum, sub, mul, etc.
@@ -160,6 +134,22 @@ public class T implements ASTNode {
         pw.print((kindT == KindT.FLOATIX) ? "f32" : "i32");
     }
 
+    // GETTERS Y SETTERS
+    // Método público para devolver el tamaño del tipo en bytes.
+    public int getSizeT() {
+        return sizeT;
+    }
+    public KindT getKindTBasico() {return (tipo == null) ? kindT : tipo.getKindTBasico();}
+    public int getVSize() {
+        return N;
+    }
+    public KindT getKindT() {
+        return kindT;
+    }
+    public String getId() {return id;}
+    public List<IDec> getDec() {return decs;}
+    public T getType() {return this;}
+    public T getTInterno() {return tipo;}
     // Método que calcula el tamaño de los tipos en bytes de forma recursiva.
     public void setSizeT() {
         sizeT = 0;
@@ -174,14 +164,5 @@ public class T implements ASTNode {
             }
         }
         else sizeT = 4;
-    }
-
-    // Método público para devolver el tamaño del tipo en bytes.
-    public int getSizeT() {
-        return sizeT;
-    }
-
-    public KindT getKindTBasico() {
-        return (tipo == null) ? kindT : tipo.getKindTBasico();
     }
 }

@@ -2,13 +2,13 @@ package ast;
 
 import asem.ASemUtils;
 import asem.SymbolMap;
-import com.rits.cloning.Cloner;
 import errors.GestionErroresAsterix;
 
 import java.io.PrintWriter;
 import java.util.List;
 
 import org.json.simple.JSONObject;
+import utils.CodeUtils;
 import utils.Entero;
 
 public class IDec extends I {
@@ -21,23 +21,26 @@ public class IDec extends I {
 
     private List<IDec> declarations; // En caso de que sea un struct
 
+    private CodeUtils utils;
+
     // Variable no inicializada
-    public IDec(T type, String id) {
-        Cloner c = new Cloner();
-        this.type = c.deepClone(type);
+    public IDec(T type, String id, CodeUtils utils) {
+        this.type = type;
         this.id = id;
         ini = false;
+        this.utils = utils;
     }
 
     // Variable inicializada
-    public IDec(T type, String id, E valor) {
-        Cloner c = new Cloner();
-        this.type = c.deepClone(type);
+    public IDec(T type, String id, E valor, CodeUtils utils) {
+        this.type = type;
         this.id = id;
         this.valor = valor;
         ini = true;
+        this.utils = utils;
     }
 
+    // AST
     public KindI kind() {
         return KindI.DEC;
     }
@@ -48,12 +51,16 @@ public class IDec extends I {
         obj.put("node", "INSTRUCCION DECLARACION");
         obj.put("id", getId());
         obj.put("tipo", type.getJSON());
-        if (!isIni())
-            return obj;
-        obj.put("valor", valor.getJSON());
+        if (isIni() && type.getKindTBasico() != KindT.POT)
+            obj.put("valor", valor.getJSON());
         return obj;
     }
 
+    public String toString() {
+        return getJSON().toJSONString();
+    }
+
+    // VINCULACION
     public void bind(SymbolMap ts) {
         type.bind(ts);
         if (isIni())
@@ -61,10 +68,7 @@ public class IDec extends I {
         ts.insertId(id, this);
     }
 
-    public String toString() {
-        return getJSON().toJSONString();
-    }
-
+    // TIPADO
     public T type() {
         type.type();
         if (isIni()) {
@@ -78,10 +82,7 @@ public class IDec extends I {
         return type;
     }
 
-    public T getType() {
-        return type;
-    }
-
+    // GENERACION DE CODIGOO
     // Generamos el código para guardar el valor de las variables inicializadas
     // en memoria
     public void generateCodeI(PrintWriter pw) {
@@ -128,8 +129,7 @@ public class IDec extends I {
             }
             // Caso vector de structs
             if (type.getKindT() == KindT.VECTIX) {
-                Cloner c = new Cloner();
-                T tBasic = c.deepClone(type);
+                T tBasic = type;
                 while (tBasic.getKindT() != KindT.POT) {
                     tBasic = tBasic.getTInterno();
                 }
@@ -138,13 +138,6 @@ public class IDec extends I {
                     if (iDec.isIni()) ini = true;
             }
         }
-    }
-
-
-
-    // Generar código para las variables globales
-    public void generateCode(PrintWriter pw) {
-
     }
 
     private void generateCodeRecursively(PrintWriter pw, int offset, E valor) {
@@ -175,8 +168,7 @@ public class IDec extends I {
             }
         // Caso en que el vector sea de structs
         } else if (valor == null && type.getKindT() == KindT.VECTIX && type.getKindTBasico() == KindT.POT) {
-                Cloner c = new Cloner();
-                T tBasic = c.deepClone(type);
+                T tBasic = type;
                 int basicElements = tBasic.getVSize();
                 while (tBasic.getKindT() == KindT.VECTIX){
                     basicElements *= tBasic.getVSize();
@@ -215,10 +207,12 @@ public class IDec extends I {
             pw.println("i32.const " + type.getSizeT() + " ;; tamaño del vector");
 
             // Llamamos a la funcion copyn
-            P.copyn = true;
+            utils.showCopyn();
             pw.println("call $copyn");
         }
     }
+
+    // GETTER Y SETTERS
 
     // Getter de las declaraciones del struct, también nos sirve para diferenciar el
     // caso en que es uno y en los que es una variable normal.
@@ -226,19 +220,34 @@ public class IDec extends I {
         return declarations;
     }
 
-    // Getters y setters para comprobar si la variable está inicializada
-    public boolean isIni() { return ini; } // getter ini
+    // Getter para comprobar si la variable está inicializada
+    public boolean isIni() {
+        return ini;
+    } // getter ini
                                                         
     // Getter para el id de la variable
-    public String getId() {return id;}
+    public String getId() {
+        return id;
+    }
+
     // Getter para el delta de la variable
-    public int getDelta() {return delta;}
-    public E getValor() {return valor;}
+    public int getDelta() {
+        return delta;
+    }
+
+    public E getValor() {
+        return valor;
+    }
+
     public boolean isGlobal() {
         return global;
     }
 
     public void setGlobal(boolean global) {
         this.global = global;
+    }
+
+    public T getType() {
+        return type;
     }
 }

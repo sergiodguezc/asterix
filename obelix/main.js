@@ -53,7 +53,6 @@ async function start() {
 
 async function run() {
     await readInput(1);
-    //await readInput(9);
     start();
 }
 

@@ -4,8 +4,8 @@ potion panoramix() -> intix {
     intix M;
     intix N;
 
-    stilus(M);
-    stilus(N);
+    tabellae(M);
+    tabellae(N);
 
     whilix (!(M == N)) {
         if (M <= N) {
@@ -15,7 +15,7 @@ potion panoramix() -> intix {
         }
     }
 
-    tabellae(M);
+    stilus(M);
 
     return 0;
 }

@@ -16,34 +16,43 @@ import ast.P;
 import code.CodeGenerator;
 import errors.GestionErroresAsterix;
 
+// LA EJECUCIÓN SE REALIZA AÑADIENDO COMO ARGUMENTOS EL NOMBRE DEL FICHERO SIN
+// EXTENSIÓN.
+
 public class App {
     public static void main(String[] args) throws Exception {
-        Reader input = new InputStreamReader(new FileInputStream("test.atx"));
+        // Lectura del archivo .atx
+        Reader input = new InputStreamReader(new FileInputStream(args[0] + ".atx"));
+
+        // Realizamos el analisis lexico
         AnalizadorLexicoAsterix alex = new AnalizadorLexicoAsterix(input);
+
+        // Realizamos el analisis sintactico
         AnalizadorSintacticoAsterix asint = new AnalizadorSintacticoAsterix(alex);
         P programa = (P) asint.parse().value;
+
+        // Realizamos el analisis semantico
         AnalizadorSemanticoAsterix asem = new AnalizadorSemanticoAsterix(programa);
         asem.analizaSemantica();
-        CodeGenerator cg = new CodeGenerator(programa,"test");
 
-        if (GestionErroresAsterix.numErroresSemanticos + GestionErroresAsterix.numErroresSintacticos == 0 )
-            cg.generateCode();
+        // Si no ha habido errores se genera el codigo (.wat) y el JSON con el AST (.json)
+        if (GestionErroresAsterix.numErroresSemanticos + GestionErroresAsterix.numErroresSintacticos == 0) {
+            (new CodeGenerator(programa, args[0] + ".wat")).generateCode();
 
-        if (args.length>1) {
-            if (GestionErroresAsterix.numErroresSemanticos + GestionErroresAsterix.numErroresSintacticos == 0 ) {
-                try (FileWriter file = new FileWriter(args[1])) {
-                    try {
-                        file.write(programa.toString());
-                        file.flush();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            // Generamos el JSON en caso de que no haya errores
+            try (FileWriter file = new FileWriter(args[0] + ".json")) {
+                try {
+                    file.write(programa.toString());
+                    file.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
-                System.err.println("*** Errores en el código, no se genera salida.");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+        }
+        else {
+            System.err.println("*** Errores en el código, no se genera salida.");
         }
     }
 }

@@ -3,10 +3,8 @@ package ast;
 import asem.SymbolMap;
 
 import java.io.PrintWriter;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONObject;
-import utils.Entero;
 
 public class IES extends I {
     private E valor;
@@ -17,6 +15,7 @@ public class IES extends I {
         this.label = label;
     }
 
+    // AST
 	public KindI kind() {
 		return KindI.ES;
 	}
@@ -34,6 +33,12 @@ public class IES extends I {
         return getJSON().toJSONString();
     }
 
+    // VINCULACION
+    public void bind(SymbolMap ts) {
+        valor.bind(ts);
+    }
+
+    // TIPADO
 	public T type() {
         T tipoValor = valor.type();
 
@@ -47,10 +52,7 @@ public class IES extends I {
 		return new T(KindT.INS);
 	}
 
-    public void bind(SymbolMap ts) {
-        valor.bind(ts);
-    }
-
+    // GENERACION DE CODIGO
 	@Override
 	public void generateCodeI(PrintWriter pw) {
         // Mostrar valor por consola
@@ -77,10 +79,5 @@ public class IES extends I {
             valor.getType().generateCode(pw); // Guardamos en memoria el valor leido
             pw.println(".store");
         }
-	}
-
-	public void setDelta(Entero size, Entero localSize) {
-        // Las funciones de entrada salida no declaran variables
-		
 	}
 }

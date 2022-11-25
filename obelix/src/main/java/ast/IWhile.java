@@ -2,7 +2,6 @@ package ast;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -21,6 +20,7 @@ public class IWhile extends I {
         this.cuerpoWhile = cuerpoWhile;
     }
 
+    // AST
     public KindI kind() {
         return KindI.WHILE;
     }
@@ -44,6 +44,17 @@ public class IWhile extends I {
         return obj;
     }
 
+    // VINCULACION
+    public void bind(SymbolMap ts) {
+        cond.bind(ts);
+        ts.openBlock();
+        for (I ins : cuerpoWhile) {
+            ins.bind(ts);
+        }
+        ts.closeBlock();
+    }
+
+    // TIPADO
     public T type() {
         T tipocond = cond.type();
         boolean error = false;
@@ -62,15 +73,7 @@ public class IWhile extends I {
         return tipo;
     }
 
-    public void bind(SymbolMap ts) {
-        cond.bind(ts);
-        ts.openBlock();
-        for (I ins : cuerpoWhile) {
-            ins.bind(ts);
-        }
-        ts.closeBlock();
-    }
-
+    // GENERACION DE CODIGO
 	public void generateCodeI(PrintWriter pw) {
         // Abrimos un bloque nuevo para el bucle
         pw.println(";; intruccion while");
@@ -99,10 +102,6 @@ public class IWhile extends I {
         pw.println(")");
 	}
 
-	public T getType() {
-        return tipo;
-	}
-
     public void setDelta(Entero size, Entero localSize) {
         Entero newSize = new Entero(0);
         Entero newLocalSize = new Entero(localSize.get());
@@ -115,4 +114,8 @@ public class IWhile extends I {
         }
 	}
 
+    // GETTERS Y SETTERS
+    public T getType() {
+        return tipo;
+    }
 }

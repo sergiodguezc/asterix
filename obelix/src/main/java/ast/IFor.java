@@ -9,7 +9,6 @@ import utils.Entero;
 
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class IFor extends I {
     private T tipo;
@@ -25,6 +24,7 @@ public class IFor extends I {
         this.cuerpoFor = cuerpoFor;
     }
 
+    // AST
     public KindI kind() {
         return KindI.FOR;
     }
@@ -44,14 +44,30 @@ public class IFor extends I {
         return obj;
     }
 
-    public T getType() {
-        return tipo;
-    }
-
     public String toString() {
         return getJSON().toJSONString();
     }
 
+    // VINCULACION
+    public void bind(SymbolMap ts) {
+        // Abro el ambito del for
+        ts.openBlock();
+
+        // Llamadas recursivas a bind()
+        tipo.bind(ts);
+
+        ts.insertId(id, this);
+
+        // Llamadas recursivas a bind()
+        lista.bind(ts);
+        for (I ins : cuerpoFor)
+            ins.bind(ts);
+
+        // Cierro el ambito del for
+        ts.closeBlock();
+    }
+
+    // TIPADO
     // Devolvemos el tipo de la declaración de la variable auxiliar. Lo necesitamos
     // cuando hacemos bind() en otros puntos del AST.
     public T type() {
@@ -75,24 +91,7 @@ public class IFor extends I {
         return tipo;
     }
 
-    public void bind(SymbolMap ts) {
-        // Abro el ambito del for
-        ts.openBlock();
-
-        // Llamadas recursivas a bind()
-        tipo.bind(ts);
-
-        ts.insertId(id, this);
-
-        // Llamadas recursivas a bind()
-        lista.bind(ts);
-        for (I ins : cuerpoFor)
-            ins.bind(ts);
-
-        // Cierro el ambito del for
-        ts.closeBlock();
-    }
-
+    // GENERACION DE CODIGO
 	public void generateCodeI(PrintWriter pw) {
         // Antes de abrir el bloque para el bucle tenemos que poner a 0 el
         // iterador del for.
@@ -177,7 +176,9 @@ public class IFor extends I {
             size.set(localSize.get() + newSize.get());
         }
 	}
-    
+
+    // GETTERS Y SETTERS
+
     // Getters y setters para los delta
 	public int getItDelta() {
 		return itDelta;
@@ -185,5 +186,9 @@ public class IFor extends I {
 
     public E getLista() {
         return lista;
+    }
+
+    public T getType() {
+        return tipo;
     }
 }

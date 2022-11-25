@@ -17,8 +17,8 @@ public abstract class I implements ASTNode{
     // representa la posicion de la memoria desde el inicio hasta la última
     // variable que añadamos, en cambio, localSize representa la posicion 
     // relativa frente a la cual se calcula el delta.
-    public abstract void setDelta(Entero size, Entero localSize);
+    public void setDelta(Entero size, Entero localSize){}
 
     // Para generar el codigo de instrucciones
-    public abstract void generateCodeI(PrintWriter pw);
+    public void generateCodeI(PrintWriter pw){}
 }

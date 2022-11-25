@@ -1,23 +1,22 @@
 // Programa para implementar la busqueda binaria
 
-pot sol {
+pot solucion {
 	intix x;
 	boolix encontrado = romano;
 };
 
-potion binarySearch(N : intix, V: vectix<intix>[10], x : intix) -> boolix {
+potion binarySearch(N : intix, V: vectix<intix>[10], sol : &solucion) -> boolix {
 	intix mitad;
 	intix ini = 0;
 	intix fin = N - 1;
-	boolix encontrado = romano;
-	
-	whilix (!encontrado && ini <= fin) {
+
+	whilix (!sol.encontrado && ini <= fin) {
 		mitad = (ini + fin)/2;
-		if(x == V[mitad]) {
-			encontrado = galo;
+		if(sol.x == V[mitad]) {
+			sol.encontrado = galo;
 		}
 		else {
-			if(x < V[mitad]) {
+			if(sol.x < V[mitad]) {
 				fin = mitad - 1;
 			}
 			else {
@@ -25,20 +24,22 @@ potion binarySearch(N : intix, V: vectix<intix>[10], x : intix) -> boolix {
 			}
 		}
 	}
-	
-	return encontrado;
+
+	return sol.encontrado;
 }
 
 potion panoramix() -> intix {
-	vectix<intix>[10] V = {1,2,3,4,5,6,7,8,9};
-	
+	vectix<intix>[10] V = {0,1,2,3,4,5,6,7,8,9};
+    solucion sol;
+
 	// Pide el numero por entrada
-	tabellae(sol.x);
-	
+	stilus(sol.x);
+
 	// Saca por consola
 	// galo = si x se encuentra en V
 	// romano = si x no se encuentra en V
-	stilus(binarySearch(10,V,x));
+	tabellae(binarySearch(10,V,sol));
 
 	return 0;
 }
+

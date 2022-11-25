@@ -7,6 +7,7 @@ import org.json.simple.JSONObject;
 
 import asem.SymbolMap;
 import errors.GestionErroresAsterix;
+import utils.CodeUtils;
 
 public class EBin extends E {
     private E opnd1;
@@ -14,11 +15,13 @@ public class EBin extends E {
     private String op;
     // Tipo de la expresion
     private T tipoExp;
+    private CodeUtils utils;
 
-    public EBin(E opnd1, E opnd2, String op) {
+    public EBin(E opnd1, E opnd2, String op, CodeUtils utils) {
         this.opnd1 = opnd1;
         this.opnd2 = opnd2;
         this.op = op;
+        this.utils = utils;
     }
 
     // AST
@@ -283,10 +286,10 @@ public class EBin extends E {
         // todos los ejecutables.
         else if (op.equals("pow")) {
             if (tipoExp.getKindT() == KindT.FLOATIX) {
-                P.powf = true;
+                utils.showPowf();
                 pw.println("call $powf");
             } else {
-                P.powi = true;
+                utils.showPowi();
                 pw.println("call $powi");
             }
         }

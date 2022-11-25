@@ -1,0 +1,27 @@
+datix numero intix;
+pot Punto {
+    numero x = 2;
+    numero y = 4;
+};
+
+pot Recta {
+    vectix<Punto>[2] V;
+};
+
+potion panoramix() -> intix {
+    vectix<Recta>[2] rectas;
+
+    rectas[0].V[0].x = 1;
+    rectas[0].V[0].y = 8;
+    rectas[0].V[1].x = 5;
+    rectas[0].V[1].y = 7;
+
+    forix (Recta r : rectas){
+        forix (Punto p : r.V) {
+            stilus(p.x);
+            stilus(p.y);
+        }
+    }
+
+    return 0;
+}

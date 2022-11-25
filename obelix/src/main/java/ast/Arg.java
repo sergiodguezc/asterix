@@ -2,9 +2,6 @@ package ast;
 
 import asem.SymbolMap;
 
-import java.io.PrintWriter;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.json.simple.JSONObject;
 import utils.Entero;
 

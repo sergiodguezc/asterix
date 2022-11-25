@@ -52,6 +52,48 @@ public class S implements ASTNode {
         isFunction = true;
     }
 
+    // AST
+    public NodeKind nodeKind() {
+        return NodeKind.SUBPROGRAMA;
+    }
+
+    public String toString() {
+        return getJSON().toJSONString();
+    }
+
+    @SuppressWarnings("unchecked")
+    public JSONObject getJSON() {
+        JSONObject obj = new JSONObject();
+        obj.put("node", "SUBPROGRAMA");
+        if (isMain) {
+            obj.put("id", "panoramix");
+        } else {
+            obj.put("id", id);
+            if (isFunction) {
+                obj.put("tRet", tRet.getJSON());
+                obj.put("vRet", vRet.getJSON());
+            }
+            if (!args.isEmpty()) {
+                JSONArray argsjson = new JSONArray();
+                for (Arg a : args) {
+                    argsjson.add(a.getJSON());
+                }
+                obj.put("args", argsjson);
+            }
+
+        }
+        if (!cuerpo.isEmpty()) {
+            JSONArray cuerpojson = new JSONArray();
+            for (I i : cuerpo) {
+                cuerpojson.add(i.getJSON());
+            }
+            obj.put("cuerpo", cuerpojson);
+        }
+
+        return obj;
+    }
+
+    // VINCULACION
     public void bind(SymbolMap ts) {
         // Insertamos identificador al ambito general del programa
         ts.insertId(id, this);
@@ -71,6 +113,27 @@ public class S implements ASTNode {
         ts.closeBlock();
     }
 
+    // TIPADO
+    public T type() {
+        for (Arg a : args)
+            a.type();
+        for (I ins : cuerpo)
+            ins.type();
+
+        boolean error = false;
+        if(isFunction) {
+            T tipoVRet = vRet.type();
+            tRet.type();
+            if (!ASemUtils.checkEqualTypes(tipoVRet, tRet)) {
+                error = true;
+                GestionErroresAsterix.errorSemantico("El tipo del valor de retorno no coincide con el tipo de la función.");
+            }
+
+        }
+        return !error ? new T(KindT.INS) : new T(KindT.ERROR);
+    }
+
+    // GENERACION DE CODIGO
     public void generateCode(PrintWriter pw) {
         // Cabecera con el nombre de la función
         pw.print("(func $" + id + " ");
@@ -125,65 +188,29 @@ public class S implements ASTNode {
             
     }
 
-
-	public NodeKind nodeKind() {
-        return NodeKind.SUBPROGRAMA;
+    // Método privado que devuelve el encabezado de cada función en wat. Todas
+    // necesitan las dos variables locales localStart y temp, del mismo modo
+    // tienen que hacer las operaciones con los punteros globales.
+    private String generateEncabezado(Entero size) {
+        return "(local $temp i32)\n"
+                + "(local $localStart i32)\n"
+                + "i32.const " + size + " ;; let this be the stack size needed (params+locals+2)*4\n"
+                + "call $reserveStack  ;; returns old MP (dynamic link)\n"
+                + "set_local $temp\n"
+                + "get_global $MP\n"
+                + "get_local $temp\n"
+                + "i32.store\n"
+                + "get_global $MP\n"
+                + "get_global $SP\n"
+                + "i32.store offset=4\n"
+                + "get_global $MP\n"
+                + "i32.const 8\n"
+                + "i32.add\n"
+                + "set_local $localStart\n"
+                + "\n\n ;; instrucciones ";
     }
 
-    public String toString() {
-        return getJSON().toJSONString();
-    }
-
-    @SuppressWarnings("unchecked")
-    public JSONObject getJSON() {
-        JSONObject obj = new JSONObject();
-        obj.put("node", "SUBPROGRAMA");
-        if (isMain) {
-            obj.put("id", "panoramix");
-        } else {
-            obj.put("id", id);
-            if (isFunction) {
-                obj.put("tRet", tRet.getJSON());
-                obj.put("vRet", vRet.getJSON());
-            }
-            if (!args.isEmpty()) {
-                JSONArray argsjson = new JSONArray();
-                for (Arg a : args) {
-                    argsjson.add(a.getJSON());
-                }
-                obj.put("args", argsjson);
-            }
-
-        }
-        if (!cuerpo.isEmpty()) {
-            JSONArray cuerpojson = new JSONArray();
-            for (I i : cuerpo) {
-                cuerpojson.add(i.getJSON());
-            }
-            obj.put("cuerpo", cuerpojson);
-        }
-
-        return obj;
-    }
-
-    public T type() {
-        for (Arg a : args)
-            a.type();
-        for (I ins : cuerpo)
-            ins.type();
-
-        boolean error = false;
-        if(isFunction) {
-            T tipoVRet = vRet.type();
-            tRet.type();
-            if (!ASemUtils.checkEqualTypes(tipoVRet, tRet)) {
-                error = true;
-                GestionErroresAsterix.errorSemantico("El tipo del valor de retorno no coincide con el tipo de la función.");
-            }
-
-        }
-        return !error ? new T(KindT.INS) : new T(KindT.ERROR);
-    }
+    // GETTERS Y SETTERS
 
     public List<Arg> getArguments() {
         return args;
@@ -192,28 +219,6 @@ public class S implements ASTNode {
     public T getType() {
         return tRet;
     }
-
-    // Método privado que devuelve el encabezado de cada función en wat. Todas
-    // necesitan las dos variables locales localStart y temp, del mismo modo
-    // tienen que hacer las operaciones con los punteros globales.
-	private String generateEncabezado(Entero size) {
-		return "(local $temp i32)\n"
-            + "(local $localStart i32)\n"
-            + "i32.const " + size + " ;; let this be the stack size needed (params+locals+2)*4\n"
-            + "call $reserveStack  ;; returns old MP (dynamic link)\n"
-            + "set_local $temp\n"
-            + "get_global $MP\n"
-            + "get_local $temp\n"
-            + "i32.store\n"
-            + "get_global $MP\n"
-            + "get_global $SP\n"
-            + "i32.store offset=4\n"
-            + "get_global $MP\n"
-            + "i32.const 8\n"
-            + "i32.add\n"
-            + "set_local $localStart\n"
-            + "\n\n ;; instrucciones ";
-	}
 
     public boolean isFunction() {
         return isFunction || isMain;

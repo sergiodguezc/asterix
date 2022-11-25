@@ -1,0 +1,26 @@
+// Programa para implementar la sucesión de fibonacci de forma recursiva
+
+intix N = 20;
+
+potion fibonacci (n : intix) -> intix {
+    intix fib;
+
+	if(n == 0 || n == 1) {
+	    fib = n;
+	}
+	else {
+	    fib = fibonacci(n - 1) + fibonacci(n - 2);
+	}
+
+	return fib;
+}
+
+potion panoramix() -> intix {
+    intix i = 0;
+    whilix (i < N) {
+        stilus(fibonacci(i));
+        i = i + 1;
+    }
+
+	return 0;
+}

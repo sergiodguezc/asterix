@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import asem.ASemUtils;
 import asem.SymbolMap;
 import errors.GestionErroresAsterix;
+import utils.CodeUtils;
 
 import java.io.PrintWriter;
 import java.util.List;
@@ -16,16 +17,19 @@ public class ECall extends E {
     private S potion;
     boolean noParams;
     private T tipoECall;
+    private CodeUtils utils;
 
-    public ECall(List<E> args, String id) {
+    public ECall(List<E> args, String id, CodeUtils utils) {
         this.args = args;
         this.id = id;
         noParams = false;
+        this.utils = utils;
     }
 
-    public ECall(String id) {
+    public ECall(String id, CodeUtils utils) {
         this.id = id;
         noParams = true;
+        this.utils = utils;
     }
 
     // AST
@@ -159,7 +163,7 @@ public class ECall extends E {
             pw.println("i32.const " + tipo.getSizeT());
 
             // Llamamos a la funcion copyn
-            P.copyn = true;
+            utils.showCopyn();
             pw.println("call $copyn");
         }
     }

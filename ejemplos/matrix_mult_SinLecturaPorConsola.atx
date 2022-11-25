@@ -1,0 +1,59 @@
+// Programa para multiplicar dos matrices globales.
+
+datix matrix vectix<vectix<intix>[3]>[3];
+matrix A = {{1, 2, 3}, {1, 2, 3}, {1, 2, 3}};
+matrix B = {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+
+potion printmatrix(C : matrix) {
+    forix (vectix<intix>[3] fila : C) {
+        forix (intix elem : fila) {
+            stilus(elem);
+        }
+    }
+}
+
+potion isInside(valor : intix, C : matrix) -> boolix {
+    boolix pertenece = romano; 
+    forix (vectix<intix>[3] fila : C) {
+        forix (intix elem : fila) {
+            if (elem == valor) {
+                    pertenece = galo;
+            }
+        }
+    }
+    return pertenece;
+}
+
+potion multmatrix(A : matrix, B : matrix) -> matrix {
+    intix i = 0;
+    intix j = 0;
+    intix k = 0;
+    matrix C;
+    whilix (i < 3) {
+        j = 0;
+        whilix (j < 3) {
+            k = 0;
+            C[i][j] = 0;
+            whilix (k < 3) {
+                C[i][j] = C[i][j] + A[i][k]*B[k][j];
+                k = k+1;
+            }
+            j = j+1;
+        }
+        i = i+1;
+    }
+    return C;
+}
+
+potion panoramix() -> intix {
+    // Calculamos el producto
+    matrix C = multmatrix(A, B);
+
+    // Escribimos el resultado por consola
+    printmatrix(C);
+
+    // Vemos si el 4 esta en la matriz C
+    // stilus(isInside(4,C));
+    
+    return 0;
+}

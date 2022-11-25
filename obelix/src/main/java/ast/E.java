@@ -13,11 +13,8 @@ public abstract class E implements ASTNode {
     public NodeKind nodeKind() {return NodeKind.EXPRESION;}
     public String toString() {return "";}
 
-    // TODO: Deberiamos considerar dos tipos de generacion de codigo para las Expresiones
-    // TODO: Codigo E, que es evaluacion de las expresiones
     public void generateCodeE(PrintWriter pw){}
 
-    // TODO: Codigo D, que es designador (para las asignaciones)
     public void generateCodeD(PrintWriter pw){}
 
     // Código designador para los accesos a struct

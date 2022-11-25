@@ -3,32 +3,39 @@ potion swap(xp : &intix, yp : &intix) {
     xp = yp;
     yp = temp;
 }
- 
+
+
 // bubble sort
 potion bubbleSort(v : &vectix<intix>[5]) {
     intix i = 0;
     intix j = 0;
     whilix (i < 5-1) {
+        j = 0;
         whilix (j < 5-i-1) {
             if (v[j] > v[j+1]) {
                 swap(v[j], v[j+1]);
             }
-            j=j--1;
+            j=j+1;
         }
         i=i+1;
     }
+
 }
- 
-// Función para imprimir el array 
+
+// Función para imprimir el array
 potion printArray(v : vectix<intix>[5]) {
     forix (intix i : v) {
         stilus(i);
     }
 }
- 
+
 potion panoramix() -> intix {
-    vectix<intix>[5] v = {-64, 34, 25, 12, 22};
+    vectix<intix>[5] v = {-64, 34, 25, 15, 22};
+
+
     bubbleSort(v);
     printArray(v);
+
+
     return 0;
 }
